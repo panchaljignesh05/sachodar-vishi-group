@@ -4,19 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>સાચોદર વિસી ગ્રુપ</title>
+  
+  <!-- સત્તાવાર લોગો (Home screen અને Browser આઇકોન) -->
+  <link rel="icon" type="image/jpeg" href="IMG-20261031-WA9497.jpg">
+  <link rel="apple-touch-icon" href="IMG-20261031-WA9497.jpg">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; background-color: #f1f5f9; }
+    body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
   </style>
 </head>
-<body class="pb-12">
+<body class="pb-14">
 
-  <!-- હેડર -->
-  <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white p-4 shadow-lg text-center relative">
+  <!-- હેડર (તમારા લોગો સાથે) -->
+  <header class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center">
+    <!-- લોગો ફોટો -->
+    <img src="IMG-20261031-WA9497.jpg" alt="સાચોદર વિસી લોગો" class="w-16 h-16 rounded-full border-2 border-amber-300 shadow-md mb-1.5 object-cover">
+    
     <h1 class="text-xl font-bold tracking-wide">સાચોદર વિસી ગ્રુપ</h1>
     <p class="text-xs text-orange-100 italic mt-0.5">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
-    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+    
+    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 transition">
       <i class="fa-solid fa-lock"></i> <span id="adminText">લૉગિન</span>
     </button>
   </header>
@@ -26,62 +35,83 @@
     <!-- ડૅશબોર્ડ કાર્ડ -->
     <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-4 shadow-md">
       <div class="flex justify-between items-center text-sm border-b border-orange-400 pb-2">
-        <span class="font-bold">મહિનો: ૧ / ૧૬</span>
-        <span class="bg-white/20 px-2 py-0.5 rounded text-xs">માસિક: ₹૧,૫૦૦</span>
+        <span class="font-bold text-base flex items-center gap-1">
+          <i class="fa-solid fa-calendar-check"></i> ચાલુ મહિનો: ૭ / ૧૬
+        </span>
+        <span class="bg-white/20 px-2 py-0.5 rounded text-xs font-semibold">માસિક: ₹૧,૫૦૦</span>
       </div>
-      <div class="grid grid-cols-3 gap-2 text-center py-3">
-        <div>
-          <p class="text-xs text-orange-200">કુલ સભ્યો</p>
-          <p class="text-lg font-bold">૧૬</p>
+
+      <div class="grid grid-cols-2 gap-2 text-center py-3 border-b border-orange-400/50">
+        <div class="bg-black/10 rounded-xl p-2">
+          <p class="text-xs text-orange-200">આગામી લકી ડ્રો</p>
+          <p class="text-sm font-bold text-white mt-0.5" id="drawDateDisplay">૧૦ તારીખ</p>
         </div>
-        <div>
-          <p class="text-xs text-orange-200">કુલ પૂલ રકમ</p>
-          <p class="text-lg font-bold">₹૨૪,૦૦૦</p>
-        </div>
-        <div>
-          <p class="text-xs text-orange-200">આગામી ડ્રો</p>
-          <p class="text-xs font-bold mt-1" id="nextDateText">૧૫ તારીખ</p>
+        <div class="bg-black/10 rounded-xl p-2">
+          <p class="text-xs text-orange-200">ચુકવણી છેલ્લી મુદત</p>
+          <p class="text-sm font-bold text-amber-200 mt-0.5" id="dueDateDisplay">૧૫ તારીખ સુધીમાં</p>
         </div>
       </div>
-      <div class="bg-black/20 rounded-xl p-2.5 flex justify-between text-xs text-center">
-        <div>જમા થયેલ: <b class="text-green-300 font-bold" id="collectedText">₹૧૫,૦૦૦</b></div>
-        <div>બાકી રકમ: <b class="text-red-300 font-bold" id="pendingText">₹૯,૦૦૦</b></div>
+
+      <!-- એડમિન માટે તારીખ બદલવાનું બટન -->
+      <div id="adminDateControls" class="hidden pt-2 text-center">
+        <button onclick="editDates()" class="bg-white text-orange-600 px-3 py-1 rounded-lg text-xs font-bold shadow flex items-center gap-1 mx-auto">
+          <i class="fa-solid fa-pen"></i> તારીખ બદલો
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 text-center pt-3 text-xs">
+        <div class="bg-black/20 rounded-xl p-2">
+          જમા થયેલ: <b class="text-green-300 font-bold block text-sm" id="collectedText">₹૦</b>
+        </div>
+        <div class="bg-black/20 rounded-xl p-2">
+          બાકી રકમ: <b class="text-red-300 font-bold block text-sm" id="pendingText">₹૨૪,૦૦૦</b>
+        </div>
       </div>
     </div>
 
     <!-- લાઇવ વિડીયો ડ્રો બટન -->
-    <a href="https://meet.jit.si/SachodarVisiGroupLiveDraw" target="_blank" class="w-full bg-teal-600 hover:bg-teal-700 text-white p-3.5 rounded-xl shadow font-bold text-sm flex items-center justify-center gap-2">
+    <a href="https://meet.jit.si/SachodarVisiGroupLiveDraw" target="_blank" class="w-full bg-teal-600 hover:bg-teal-700 text-white p-3.5 rounded-xl shadow-md font-bold text-sm flex items-center justify-center gap-2">
       <i class="fa-solid fa-video"></i> લાઇવ ડ્રોમાં જોડાઓ (વિડીયો કૉલ)
     </a>
 
     <!-- લકી ડ્રો વિભાગ -->
-    <div class="bg-white rounded-2xl p-4 shadow border border-orange-200 text-center">
-      <h2 class="text-sm font-bold text-gray-700 mb-2 flex items-center justify-center gap-1">
-        <i class="fa-solid fa-dice text-orange-500"></i> ઓટોમેટિક નિષ્પક્ષ લકી ડ્રો
-      </h2>
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-200 text-center">
+      <div class="flex justify-between items-center mb-1">
+        <h2 class="text-sm font-bold text-gray-800 flex items-center gap-1">
+          <i class="fa-solid fa-dice text-orange-500"></i> માસિક લકી ડ્રો (મહિનો ૭)
+        </h2>
+        <span class="text-[11px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold" id="eligibleCountBadge">૧૦ સભ્યો બાકી</span>
+      </div>
+      <p class="text-[11px] text-gray-500 mb-2">પહેલા ૬ મહિનાના વિજેતાઓનું નામ આપોઆપ બાકાત રહેશે.</p>
+
       <div id="drawBox" class="h-20 flex items-center justify-center bg-orange-50 rounded-xl border-2 border-dashed border-orange-300 my-2">
         <span id="winnerName" class="text-xl font-black text-orange-600">ડ્રો માટે તૈયાર</span>
       </div>
-      <button onclick="startDraw()" id="drawBtn" class="w-full mt-2 bg-orange-600 text-white font-bold py-2.5 rounded-xl text-sm shadow">
+
+      <button onclick="startDraw()" id="drawBtn" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-sm shadow transition">
         ડ્રો શરૂ કરો
       </button>
-      <p id="adminOnlyMsg" class="text-xs text-gray-400 mt-1 hidden">માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.</p>
+      <p id="adminOnlyMsg" class="text-xs text-gray-400 mt-1">નોંધ: માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.</p>
     </div>
 
     <!-- ૧૬ સભ્યોની યાદી અને ચુકવણી -->
-    <div class="bg-white rounded-2xl p-4 shadow border border-gray-200">
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
       <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-gray-800 text-sm">સભ્યોની યાદી અને ચુકવણી (૧૬)</h3>
-        <span class="text-xs text-gray-500" id="adminNotice">જોવાની પરવાનગી</span>
+        <div>
+          <h3 class="font-bold text-gray-800 text-sm">સભ્યોની ચુકવણી ખાતાવહી (મહિનો ૭)</h3>
+          <p class="text-[11px] text-gray-500">મુદત: ૧૫ તારીખ સુધીમાં જમા કરાવવી</p>
+        </div>
+        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded" id="adminNotice">જોવાની પરવાનગી</span>
       </div>
-      <div class="space-y-2 max-h-80 overflow-y-auto" id="membersList">
-        <!-- સભ્યો અહીં જાતે ઉમેરાશે -->
+      <div class="space-y-2 max-h-80 overflow-y-auto pr-1" id="membersList">
+        <!-- સભ્યો અહીં જાતે લોડ થશે -->
       </div>
     </div>
 
-    <!-- ૧૬ મહિનાનો રેકોર્ડ -->
-    <div class="bg-white rounded-2xl p-4 shadow border border-gray-200">
-      <h3 class="font-bold text-gray-800 text-sm mb-3">૧૬ મહિનાનો વિજેતા રેકોર્ડ</h3>
+    <!-- ૧૬ મહિનાનો સંપૂર્ણ રેકોર્ડ -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
+      <h3 class="font-bold text-gray-800 text-sm mb-1">૧૬ મહિનાનો વિજેતા ઇતિહાસ</h3>
+      <p class="text-[11px] text-gray-500 mb-3">પહેલા ૬ મહિના પૂર્ણ થયેલ છે.</p>
       <div class="space-y-2 text-xs" id="historyList">
         <!-- ઇતિહાસ અહીં દેખાશે -->
       </div>
@@ -92,13 +122,49 @@
   <script>
     let isAdmin = false;
     let monthlyAmount = 1500;
-    let members = Array.from({length: 16}, (_, i) => ({
-      id: i + 1,
-      name: `સભ્યશ્રી ${i + 1}`,
-      paid: i < 10,
-      won: false,
-      wonMonth: null
-    }));
+    let currentMonth = 7;
+
+    let drawDate = localStorage.getItem('sachodar_drawDate') || "૧૦ તારીખ";
+    let dueDate = localStorage.getItem('sachodar_dueDate') || "૧૫ તારીખ સુધીમાં";
+
+    let members = [
+      { id: 1, name: "સભ્યશ્રી ૧", paid: false, won: true, wonMonth: 1 },
+      { id: 2, name: "સભ્યશ્રી ૨", paid: false, won: true, wonMonth: 2 },
+      { id: 3, name: "સભ્યશ્રી ૩", paid: false, won: true, wonMonth: 3 },
+      { id: 4, name: "સભ્યશ્રી ૪", paid: false, won: true, wonMonth: 4 },
+      { id: 5, name: "સભ્યશ્રી ૫", paid: false, won: true, wonMonth: 5 },
+      { id: 6, name: "સભ્યશ્રી ૬", paid: false, won: true, wonMonth: 6 },
+      { id: 7, name: "સભ્યશ્રી ૭", paid: false, won: false, wonMonth: null },
+      { id: 8, name: "સભ્યશ્રી ૮", paid: false, won: false, wonMonth: null },
+      { id: 9, name: "સભ્યશ્રી ૯", paid: false, won: false, wonMonth: null },
+      { id: 10, name: "સભ્યશ્રી ૧૦", paid: false, won: false, wonMonth: null },
+      { id: 11, name: "સભ્યશ્રી ૧૧", paid: false, won: false, wonMonth: null },
+      { id: 12, name: "સભ્યશ્રી ૧૨", paid: false, won: false, wonMonth: null },
+      { id: 13, name: "સભ્યશ્રી ૧૩", paid: false, won: false, wonMonth: null },
+      { id: 14, name: "સભ્યશ્રી ૧૪", paid: false, won: false, wonMonth: null },
+      { id: 15, name: "સભ્યશ્રી ૧૫", paid: false, won: false, wonMonth: null },
+      { id: 16, name: "સભ્યશ્રી ૧૬", paid: false, won: false, wonMonth: null }
+    ];
+
+    function updateDateDisplays() {
+      document.getElementById('drawDateDisplay').innerText = drawDate;
+      document.getElementById('dueDateDisplay').innerText = dueDate;
+    }
+
+    function editDates() {
+      if(!isAdmin) return;
+      const newDraw = prompt("નવી ડ્રો તારીખ દાખલ કરો:", drawDate);
+      if(newDraw) {
+        drawDate = newDraw;
+        localStorage.setItem('sachodar_drawDate', newDraw);
+      }
+      const newDue = prompt("ચુકવણીની છેલ્લી તારીખ દાખલ કરો:", dueDate);
+      if(newDue) {
+        dueDate = newDue;
+        localStorage.setItem('sachodar_dueDate', newDue);
+      }
+      updateDateDisplays();
+    }
 
     function renderMembers() {
       const container = document.getElementById('membersList');
@@ -108,19 +174,19 @@
       members.forEach((m, idx) => {
         if(m.paid) paidCount++;
         const div = document.createElement('div');
-        div.className = "flex justify-between items-center p-2 rounded-lg bg-gray-50 text-xs border border-gray-100";
+        div.className = "flex justify-between items-center p-2.5 rounded-xl bg-gray-50 text-xs border border-gray-100";
         div.innerHTML = `
           <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-600 font-bold flex items-center justify-center">${m.id}</span>
+            <span class="w-7 h-7 rounded-full ${m.won ? 'bg-amber-100 text-amber-800' : 'bg-orange-100 text-orange-600'} font-bold flex items-center justify-center text-xs shadow-sm">${m.id}</span>
             <div>
-              <p class="font-bold text-gray-800">${m.name} ${m.won ? `<span class="text-amber-600 text-[10px]">(વિજેતા)</span>` : ''}</p>
-              <p class="text-[10px] text-gray-400">₹${monthlyAmount}</p>
+              <p class="font-bold text-gray-800 text-sm">${m.name} ${m.won ? `<span class="text-amber-600 text-[10px] font-normal">(મહિનો ${m.wonMonth} વિજેતા)</span>` : ''}</p>
+              <p class="text-[10px] text-gray-400">માસિક રકમ: ₹${monthlyAmount}</p>
             </div>
           </div>
           <div>
             ${isAdmin ? 
-              `<button onclick="togglePayment(${idx})" class="px-2.5 py-1 rounded text-[11px] font-bold ${m.paid ? 'bg-green-600 text-white' : 'bg-red-500 text-white'}">${m.paid ? 'ચુકવાઈ ગઈ' : 'બાકી છે'}</button>` :
-              `<span class="px-2 py-1 rounded text-[11px] font-bold ${m.paid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${m.paid ? 'ચુકવણી પૂર્ણ' : 'બાકી'}</span>`
+              `<button onclick="togglePayment(${idx})" class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${m.paid ? 'bg-green-600 text-white' : 'bg-red-500 text-white'}">${m.paid ? 'ચુકવાઈ ગઈ' : 'બાકી છે'}</button>` :
+              `<span class="px-2.5 py-1 rounded-md text-[11px] font-bold ${m.paid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${m.paid ? 'ચુકવણી પૂર્ણ' : 'બાકી'}</span>`
             }
           </div>
         `;
@@ -129,6 +195,9 @@
 
       document.getElementById('collectedText').innerText = `₹${(paidCount * monthlyAmount).toLocaleString()}`;
       document.getElementById('pendingText').innerText = `₹${((16 - paidCount) * monthlyAmount).toLocaleString()}`;
+
+      const eligibleCount = members.filter(m => !m.won).length;
+      document.getElementById('eligibleCountBadge').innerText = `${eligibleCount} સભ્યો બાકી`;
     }
 
     function renderHistory() {
@@ -136,11 +205,14 @@
       h.innerHTML = '';
       for(let i=1; i<=16; i++) {
         const winner = members.find(m => m.wonMonth === i);
+        const isDone = i < currentMonth || winner;
         h.innerHTML += `
-          <div class="flex justify-between items-center p-2 bg-gray-50 rounded border border-gray-100">
-            <span>મહિનો ${i}</span>
-            <span class="font-bold ${winner ? 'text-green-600' : 'text-gray-400'}">${winner ? winner.name : 'આગામી ડ્રો'}</span>
-            <span>₹${16 * monthlyAmount}</span>
+          <div class="flex justify-between items-center p-2.5 bg-gray-50 rounded-lg border border-gray-100">
+            <span class="font-medium text-gray-600">મહિનો ${i}</span>
+            <span class="font-bold ${isDone ? 'text-green-700' : 'text-gray-400'}">
+              ${winner ? `🏆 ${winner.name}` : (i === currentMonth ? '👉 ચાલુ મહિનો' : 'આગામી')}
+            </span>
+            <span class="text-gray-500 font-semibold">₹${16 * monthlyAmount}</span>
           </div>
         `;
       }
@@ -157,24 +229,32 @@
         isAdmin = false;
         document.getElementById('adminText').innerText = 'લૉગિન';
         document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
+        document.getElementById('adminDateControls').classList.add('hidden');
+        document.getElementById('adminOnlyMsg').innerText = 'નોંધ: માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.';
       } else {
         const pin = prompt("એડમિન પિન દાખલ કરો:");
         if(pin === "1234") {
           isAdmin = true;
-          document.getElementById('adminText').innerText = 'એડમિન ઓકે';
+          document.getElementById('adminText').innerText = 'એડમિન મોડ';
           document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
-          alert("એડમિન લૉગિન સફળ! હવે તમે પેમેન્ટ બદલી શકશો.");
+          document.getElementById('adminDateControls').classList.remove('hidden');
+          document.getElementById('adminOnlyMsg').innerText = 'તમે એડમિન તરીકે લૉગિન છો.';
+          alert("એડમિન લૉગિન સફળ! હવે તમે પેમેન્ટ અને તારીખો બદલી શકશો.");
         } else {
-          alert("ખોટો પિન!");
+          alert("ખોટો પિન! સાચો પિન 1234 છે.");
         }
       }
       renderMembers();
     }
 
     function startDraw() {
+      if(!isAdmin) {
+        alert("ડ્રો શરૂ કરવાનો અધિકાર ફક્ત એડમિન પાસે છે. કૃપા કરીને ઉપરથી એડમિન લૉગિન કરો.");
+        return;
+      }
       const eligible = members.filter(m => !m.won);
       if(eligible.length === 0) {
-        alert("૧૬ મહિના પૂર્ણ થઈ ગયા છે!");
+        alert("તમામ ૧૬ સભ્યો વિજેતા બની ચૂક્યા છે!");
         return;
       }
       const btn = document.getElementById('drawBtn');
@@ -190,17 +270,19 @@
           clearInterval(timer);
           const winner = eligible[Math.floor(Math.random() * eligible.length)];
           winner.won = true;
-          winner.wonMonth = 1;
+          winner.wonMonth = currentMonth;
           box.innerText = `🎉 ${winner.name} 🎉`;
           btn.disabled = false;
           btn.innerText = "ડ્રો પૂર્ણ થયો";
-          alert(`અભિનંદન! આ મહિનાના વિજેતા છે: ${winner.name}\nચૂકવવાપાત્ર રકમ: ₹૨૪,૦૦૦`);
+          alert(`અભિનંદન! મહિનો ${currentMonth} ના વિજેતા છે:\n${winner.name}\nમળવાપાત્ર રકમ: ₹૨૪,૦૦૦`);
+          currentMonth++;
           renderMembers();
           renderHistory();
         }
       }, 100);
     }
 
+    updateDateDisplays();
     renderMembers();
     renderHistory();
   </script>
