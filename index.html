@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>સાચોદર વિસી ગ્રુપ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background-color: #f1f5f9; }
+  </style>
+</head>
+<body class="pb-12">
+
+  <!-- હેડર -->
+  <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white p-4 shadow-lg text-center relative">
+    <h1 class="text-xl font-bold tracking-wide">સાચોદર વિસી ગ્રુપ</h1>
+    <p class="text-xs text-orange-100 italic mt-0.5">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
+    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+      <i class="fa-solid fa-lock"></i> <span id="adminText">લૉગિન</span>
+    </button>
+  </header>
+
+  <main class="max-w-md mx-auto p-4 space-y-4">
+
+    <!-- ડૅશબોર્ડ કાર્ડ -->
+    <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-4 shadow-md">
+      <div class="flex justify-between items-center text-sm border-b border-orange-400 pb-2">
+        <span class="font-bold">મહિનો: ૧ / ૧૬</span>
+        <span class="bg-white/20 px-2 py-0.5 rounded text-xs">માસિક: ₹૧,૫૦૦</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center py-3">
+        <div>
+          <p class="text-xs text-orange-200">કુલ સભ્યો</p>
+          <p class="text-lg font-bold">૧૬</p>
+        </div>
+        <div>
+          <p class="text-xs text-orange-200">કુલ પૂલ રકમ</p>
+          <p class="text-lg font-bold">₹૨૪,૦૦૦</p>
+        </div>
+        <div>
+          <p class="text-xs text-orange-200">આગામી ડ્રો</p>
+          <p class="text-xs font-bold mt-1" id="nextDateText">૧૫ તારીખ</p>
+        </div>
+      </div>
+      <div class="bg-black/20 rounded-xl p-2.5 flex justify-between text-xs text-center">
+        <div>જમા થયેલ: <b class="text-green-300 font-bold" id="collectedText">₹૧૫,૦૦૦</b></div>
+        <div>બાકી રકમ: <b class="text-red-300 font-bold" id="pendingText">₹૯,૦૦૦</b></div>
+      </div>
+    </div>
+
+    <!-- લાઇવ વિડીયો ડ્રો બટન -->
+    <a href="https://meet.jit.si/SachodarVisiGroupLiveDraw" target="_blank" class="w-full bg-teal-600 hover:bg-teal-700 text-white p-3.5 rounded-xl shadow font-bold text-sm flex items-center justify-center gap-2">
+      <i class="fa-solid fa-video"></i> લાઇવ ડ્રોમાં જોડાઓ (વિડીયો કૉલ)
+    </a>
+
+    <!-- લકી ડ્રો વિભાગ -->
+    <div class="bg-white rounded-2xl p-4 shadow border border-orange-200 text-center">
+      <h2 class="text-sm font-bold text-gray-700 mb-2 flex items-center justify-center gap-1">
+        <i class="fa-solid fa-dice text-orange-500"></i> ઓટોમેટિક નિષ્પક્ષ લકી ડ્રો
+      </h2>
+      <div id="drawBox" class="h-20 flex items-center justify-center bg-orange-50 rounded-xl border-2 border-dashed border-orange-300 my-2">
+        <span id="winnerName" class="text-xl font-black text-orange-600">ડ્રો માટે તૈયાર</span>
+      </div>
+      <button onclick="startDraw()" id="drawBtn" class="w-full mt-2 bg-orange-600 text-white font-bold py-2.5 rounded-xl text-sm shadow">
+        ડ્રો શરૂ કરો
+      </button>
+      <p id="adminOnlyMsg" class="text-xs text-gray-400 mt-1 hidden">માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.</p>
+    </div>
+
+    <!-- ૧૬ સભ્યોની યાદી અને ચુકવણી -->
+    <div class="bg-white rounded-2xl p-4 shadow border border-gray-200">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-gray-800 text-sm">સભ્યોની યાદી અને ચુકવણી (૧૬)</h3>
+        <span class="text-xs text-gray-500" id="adminNotice">જોવાની પરવાનગી</span>
+      </div>
+      <div class="space-y-2 max-h-80 overflow-y-auto" id="membersList">
+        <!-- સભ્યો અહીં જાતે ઉમેરાશે -->
+      </div>
+    </div>
+
+    <!-- ૧૬ મહિનાનો રેકોર્ડ -->
+    <div class="bg-white rounded-2xl p-4 shadow border border-gray-200">
+      <h3 class="font-bold text-gray-800 text-sm mb-3">૧૬ મહિનાનો વિજેતા રેકોર્ડ</h3>
+      <div class="space-y-2 text-xs" id="historyList">
+        <!-- ઇતિહાસ અહીં દેખાશે -->
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let isAdmin = false;
+    let monthlyAmount = 1500;
+    let members = Array.from({length: 16}, (_, i) => ({
+      id: i + 1,
+      name: `સભ્યશ્રી ${i + 1}`,
+      paid: i < 10,
+      won: false,
+      wonMonth: null
+    }));
+
+    function renderMembers() {
+      const container = document.getElementById('membersList');
+      container.innerHTML = '';
+      let paidCount = 0;
+
+      members.forEach((m, idx) => {
+        if(m.paid) paidCount++;
+        const div = document.createElement('div');
+        div.className = "flex justify-between items-center p-2 rounded-lg bg-gray-50 text-xs border border-gray-100";
+        div.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-600 font-bold flex items-center justify-center">${m.id}</span>
+            <div>
+              <p class="font-bold text-gray-800">${m.name} ${m.won ? `<span class="text-amber-600 text-[10px]">(વિજેતા)</span>` : ''}</p>
+              <p class="text-[10px] text-gray-400">₹${monthlyAmount}</p>
+            </div>
+          </div>
+          <div>
+            ${isAdmin ? 
+              `<button onclick="togglePayment(${idx})" class="px-2.5 py-1 rounded text-[11px] font-bold ${m.paid ? 'bg-green-600 text-white' : 'bg-red-500 text-white'}">${m.paid ? 'ચુકવાઈ ગઈ' : 'બાકી છે'}</button>` :
+              `<span class="px-2 py-1 rounded text-[11px] font-bold ${m.paid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${m.paid ? 'ચુકવણી પૂર્ણ' : 'બાકી'}</span>`
+            }
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('collectedText').innerText = `₹${(paidCount * monthlyAmount).toLocaleString()}`;
+      document.getElementById('pendingText').innerText = `₹${((16 - paidCount) * monthlyAmount).toLocaleString()}`;
+    }
+
+    function renderHistory() {
+      const h = document.getElementById('historyList');
+      h.innerHTML = '';
+      for(let i=1; i<=16; i++) {
+        const winner = members.find(m => m.wonMonth === i);
+        h.innerHTML += `
+          <div class="flex justify-between items-center p-2 bg-gray-50 rounded border border-gray-100">
+            <span>મહિનો ${i}</span>
+            <span class="font-bold ${winner ? 'text-green-600' : 'text-gray-400'}">${winner ? winner.name : 'આગામી ડ્રો'}</span>
+            <span>₹${16 * monthlyAmount}</span>
+          </div>
+        `;
+      }
+    }
+
+    function togglePayment(idx) {
+      if(!isAdmin) return;
+      members[idx].paid = !members[idx].paid;
+      renderMembers();
+    }
+
+    function toggleAdmin() {
+      if(isAdmin) {
+        isAdmin = false;
+        document.getElementById('adminText').innerText = 'લૉગિન';
+        document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
+      } else {
+        const pin = prompt("એડમિન પિન દાખલ કરો:");
+        if(pin === "1234") {
+          isAdmin = true;
+          document.getElementById('adminText').innerText = 'એડમિન ઓકે';
+          document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
+          alert("એડમિન લૉગિન સફળ! હવે તમે પેમેન્ટ બદલી શકશો.");
+        } else {
+          alert("ખોટો પિન!");
+        }
+      }
+      renderMembers();
+    }
+
+    function startDraw() {
+      const eligible = members.filter(m => !m.won);
+      if(eligible.length === 0) {
+        alert("૧૬ મહિના પૂર્ણ થઈ ગયા છે!");
+        return;
+      }
+      const btn = document.getElementById('drawBtn');
+      const box = document.getElementById('winnerName');
+      btn.disabled = true;
+      btn.innerText = "ડ્રો ચાલી રહ્યો છે...";
+
+      let count = 0;
+      const timer = setInterval(() => {
+        count++;
+        box.innerText = eligible[Math.floor(Math.random() * eligible.length)].name;
+        if(count > 25) {
+          clearInterval(timer);
+          const winner = eligible[Math.floor(Math.random() * eligible.length)];
+          winner.won = true;
+          winner.wonMonth = 1;
+          box.innerText = `🎉 ${winner.name} 🎉`;
+          btn.disabled = false;
+          btn.innerText = "ડ્રો પૂર્ણ થયો";
+          alert(`અભિનંદન! આ મહિનાના વિજેતા છે: ${winner.name}\nચૂકવવાપાત્ર રકમ: ₹૨૪,૦૦૦`);
+          renderMembers();
+          renderHistory();
+        }
+      }, 100);
+    }
+
+    renderMembers();
+    renderHistory();
+  </script>
+</body>
+</html>
