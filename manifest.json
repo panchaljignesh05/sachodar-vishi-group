@@ -1,0 +1,16 @@
+{
+  "name": "સાચોદર વિસી ગ્રુપ",
+  "short_name": "સાચોદર વિસી",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#E65100",
+  "icons": [
+    {
+      "src": "IMG-20261031-WA9497.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
