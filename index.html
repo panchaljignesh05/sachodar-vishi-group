@@ -14,16 +14,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; }
-    /* Dynamic Theme Styles */
     .theme-saffron { --primary-from: #ea580c; --primary-to: #b45309; --accent: #f97316; --bg: #f8fafc; }
     .theme-blue { --primary-from: #1e3a8a; --primary-to: #0369a1; --accent: #0284c7; --bg: #f0f9ff; }
     .theme-green { --primary-from: #14532d; --primary-to: #047857; --accent: #10b981; --bg: #f0fdf4; }
     .theme-dark { --primary-from: #0f172a; --primary-to: #334155; --accent: #eab308; --bg: #0b0f19; color: #f8fafc; }
   </style>
 </head>
-<body id="appBody" class="pb-20 theme-saffron bg-slate-50 transition-colors duration-300">
+<body id="appBody" class="pb-24 theme-saffron bg-slate-50 transition-colors duration-300">
 
-  <!-- હેડર (ડાયનેમિક થીમ અને લોગો સાથે) -->
+  <!-- હેડર -->
   <header id="appHeader" class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center transition-all duration-300">
     <img src="IMG-20261031-WA9497.jpg" alt="સાચોદર વિસી લોગો" class="w-16 h-16 rounded-full border-2 border-amber-300 shadow-md mb-1.5 object-cover">
     <h1 class="text-xl font-bold tracking-wide">સાચોદર વિસી ગ્રુપ</h1>
@@ -40,15 +39,38 @@
 
   <main class="max-w-md mx-auto p-4 space-y-4">
 
-    <!-- એડમિન માસ્ટર બટન્સ (જ્યારે એડમિન લૉગિન હોય ત્યારે જ દેખાશે) -->
+    <!-- એડમિન માસ્ટર બેનર -->
     <div id="adminPanelBanner" class="hidden bg-amber-500 text-slate-900 rounded-2xl p-3 shadow-md flex justify-between items-center">
       <div class="flex items-center gap-2 text-xs font-bold">
         <i class="fa-solid fa-sliders text-base"></i>
-        <span>એડમિન કંટ્રોલ પેનલ સક્રિય</span>
+        <span>એડમિન કંટ્રોલ સક્રિય</span>
       </div>
       <button onclick="openSettingsModal()" class="bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow flex items-center gap-1">
-        <i class="fa-solid fa-gear"></i> સેટિંગ્સ & થીમ
+        <i class="fa-solid fa-gear"></i> સેટિંગ્સ & UPI
       </button>
+    </div>
+
+    <!-- 🌟 વિજેતાને સીધા પૈસા ચૂકવવાનું વિશેષ કાર્ડ (Direct Pay to Winner) -->
+    <div id="winnerPayCard" class="bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 rounded-2xl p-4 shadow-lg border-2 border-amber-300 text-center space-y-2">
+      <div class="flex items-center justify-center gap-2 font-black text-sm">
+        <i class="fa-solid fa-crown text-base text-yellow-950"></i>
+        <span id="winnerBannerTitle">મહિનો ૭ વિજેતાની ચુકવણી</span>
+      </div>
+      
+      <p class="text-xs text-yellow-950/80 font-medium" id="winnerBannerSubtitle">
+        ડ્રો પછી વિજેતા જાહેર થશે. બાકીના તમામ સભ્યો સીધા વિજેતાના ખાતામાં ₹૧,૫૦૦ ટ્રાન્સફર કરશે.
+      </p>
+
+      <div id="winnerActiveBox" class="hidden bg-white/90 backdrop-blur rounded-xl p-3 shadow-sm text-left flex justify-between items-center">
+        <div>
+          <p class="text-[11px] text-slate-500 font-semibold">ચુકવણી મેળવનાર વિજેતા:</p>
+          <p class="text-base font-black text-slate-900" id="currentWinnerNameDisplay">વિજેતાનું નામ</p>
+          <p class="text-xs text-slate-600 font-medium" id="currentWinnerUpiDisplay">UPI: -</p>
+        </div>
+        <a id="btnPayWinner" href="#" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow-md flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-bolt"></i> ₹૧,૫૦૦ ચૂકવો
+        </a>
+      </div>
     </div>
 
     <!-- મુખ્ય ડૅશબોર્ડ કાર્ડ -->
@@ -73,7 +95,7 @@
 
       <div class="grid grid-cols-2 gap-2 text-center pt-3 text-xs">
         <div class="bg-black/20 rounded-xl p-2">
-          મહિનો ૭ જમા રકમ: <b class="text-green-300 font-bold block text-sm" id="collectedText">₹૦</b>
+          વિજેતાને જમા રકમ: <b class="text-green-300 font-bold block text-sm" id="collectedText">₹૦</b>
         </div>
         <div class="bg-black/20 rounded-xl p-2">
           બાકી રકમ: <b class="text-red-300 font-bold block text-sm" id="pendingText">₹૨૪,૦૦૦</b>
@@ -94,7 +116,7 @@
         </h2>
         <span class="text-[11px] bg-orange-100 text-orange-700 px-2.5 py-0.5 rounded-full font-bold" id="eligibleCountBadge">૧૦ સભ્યો બાકી</span>
       </div>
-      <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">પહેલા ૬ મહિનાના વિજેતાઓ સિસ્ટમમાંથી આપોઆપ બાકાત છે.</p>
+      <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">ડ્રો ખૂલતાં જ વિજેતાના ખાતામાં ચૂકવણી માટેનું UPI બટન સક્રિય થશે.</p>
 
       <div id="drawBox" class="h-20 flex items-center justify-center bg-orange-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-orange-300 my-2">
         <span id="winnerName" class="text-xl font-black text-orange-600">ડ્રો માટે તૈયાર</span>
@@ -106,12 +128,12 @@
       <p id="adminOnlyMsg" class="text-[11px] text-slate-400 mt-1">નોંધ: માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.</p>
     </div>
 
-    <!-- ૧૬ સભ્યોની યાદી, સંપર્ક અને ચુકવણી -->
+    <!-- ૧૬ સભ્યોની યાદી, UPI અને ચુકવણી -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
       <div class="flex justify-between items-center mb-3">
         <div>
-          <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી અને ચુકવણી</h3>
-          <p class="text-[11px] text-slate-500">મહિનો ૭ હિસાબ</p>
+          <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી & UPI ચુકવણી</h3>
+          <p class="text-[11px] text-slate-500">મહિનો ૭ સ્થિતિ</p>
         </div>
         <span class="text-xs text-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg" id="adminNotice">જોવાની પરવાનગી</span>
       </div>
@@ -141,16 +163,16 @@
       
       <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
         <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-          <i class="fa-solid fa-palette text-orange-500"></i> એડમિન સેટિંગ્સ & કંટ્રોલ
+          <i class="fa-solid fa-palette text-orange-500"></i> એડમિન સેટિંગ્સ & UPI ID
         </h3>
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <!-- ૧. કલર થીમ બદલો -->
+      <!-- ૧. થીમ -->
       <div class="space-y-2">
-        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૧. એપનો મુખ્ય કલર (Theme) બદલો:</label>
+        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૧. એપ કલર થીમ:</label>
         <div class="grid grid-cols-2 gap-2">
           <button onclick="changeTheme('saffron')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-orange-500 bg-orange-50 text-orange-700">
             <span class="w-4 h-4 rounded-full bg-orange-600"></span> શાહી કેસરી
@@ -167,36 +189,28 @@
         </div>
       </div>
 
-      <!-- ૨. ડ્રો તારીખ અને સમય -->
+      <!-- ૨. તારીખ & સમય -->
       <div class="space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3">
         <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૨. આગામી ડ્રો તારીખ & સમય:</label>
-        <input type="text" id="inputDrawDate" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="દા.ત. ૧૦ નવેમ્બર, રાત્રે ૮:૩૦">
+        <input type="text" id="inputDrawDate" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white">
       </div>
 
       <!-- ૩. ચુકવણી મુદત -->
       <div class="space-y-2">
         <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૩. ચુકવણી છેલ્લી મુદત:</label>
-        <input type="text" id="inputDueDate" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="દા.ત. ૧૫ નવેમ્બર સુધીમાં">
+        <input type="text" id="inputDueDate" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white">
       </div>
 
-      <!-- ૪. માસિક રકમ -->
-      <div class="space-y-2">
-        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૪. માસિક રકમ (₹):</label>
-        <input type="number" id="inputAmount" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="1500">
-      </div>
-
-      <!-- ૫. સભ્યનું નામ/નંબર એડિટ -->
+      <!-- ૪. સભ્યની UPI ID / નામ / ફોન એડિટર -->
       <div class="space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3">
-        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૫. સભ્યનું નામ અથવા નંબર બદલો:</label>
-        <div class="flex gap-2">
-          <select id="selectMemberToEdit" class="text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white flex-1" onchange="loadMemberToForm()">
-            <!-- Options dynamically loaded -->
-          </select>
-        </div>
-        <input type="text" id="editMemberName" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="સભ્યનું પૂરું નામ">
+        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૪. સભ્યની વિગત અને UPI ID સુધારો:</label>
+        <select id="selectMemberToEdit" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" onchange="loadMemberToForm()">
+        </select>
+        <input type="text" id="editMemberName" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="સભ્યનું નામ">
         <input type="text" id="editMemberPhone" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="મોબાઇલ નંબર">
+        <input type="text" id="editMemberUpi" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="UPI ID (દા.ત. 9867255687@upi)">
         <button onclick="saveMemberEdit()" class="w-full bg-slate-800 text-white text-xs font-bold py-2 rounded-xl shadow">
-          સભ્યની વિગત અપડેટ કરો
+          આ સભ્યની UPI અને વિગત સાચવો
         </button>
       </div>
 
@@ -216,43 +230,66 @@
     let isAdmin = false;
     let currentMonth = 7;
 
-    // LocalStorage Data
     let currentTheme = localStorage.getItem('sachodar_theme') || 'saffron';
     let monthlyAmount = parseInt(localStorage.getItem('sachodar_amount')) || 1500;
     let drawDate = localStorage.getItem('sachodar_drawDate') || "૧૦ તારીખ, રાત્રે ૮:૩૦";
     let dueDate = localStorage.getItem('sachodar_dueDate') || "૧૫ તારીખ સુધીમાં";
 
-    // ૧૬ સભ્યોનું ડિફોલ્ટ લિસ્ટ
+    // ૧૬ સભ્યોનું લિસ્ટ (ડિફોલ્ટ UPI ID તેમના મોબાઇલ નંબર આધારિત છે)
     let defaultMembers = [
-      { id: 1, name: "હરેશભાઈ", phone: "9867255687", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 2, name: "પંકજભાઈ", phone: "9820506270", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 3, name: "ચિરાગ", phone: "9819086110", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 4, name: "કરન", phone: "7405746630", paid: false, won: true, wonMonth: 4, wonLabel: "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)" },
-      { id: 5, name: "વિનોદભાઈ", phone: "7405746630", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 6, name: "સુરેશકાકા", phone: "6359230006", paid: false, won: true, wonMonth: 5, wonLabel: "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)" },
-      { id: 7, name: "દર્શનભાઈ", phone: "6359230006", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 8, name: "રાજુભાઈ", phone: "9408266159", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 9, name: "કલ્પેશભાઈ", phone: "9924426511", paid: false, won: true, wonMonth: 3, wonLabel: "જુલાઈ ૨૦૨૬ (વીશી ૩)" },
-      { id: 10, name: "પરેશભાઈ", phone: "9320817044", paid: false, won: true, wonMonth: 6, wonLabel: "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)" },
-      { id: 11, name: "જીગ્નેશભાઈ A", phone: "9320817044", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 12, name: "દીપકભાઈ", phone: "9427351563", paid: false, won: true, wonMonth: 1, wonLabel: "મે ૨૦૨૬ (વીશી ૧)" },
-      { id: 13, name: "કિરણભાઈ", phone: "8155985076", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 14, name: "ભૂપેશભાઈ", phone: "9824378160", paid: false, won: true, wonMonth: 2, wonLabel: "જૂન ૨૦૨૬ (વીશી ૨)" },
-      { id: 15, name: "કેતનભાઇ", phone: "9924649432", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 16, name: "જીગ્નેશભાઈ", phone: "9723000669", paid: false, won: false, wonMonth: null, wonLabel: "" }
+      { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "9867255687@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "9820506270@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 3, name: "ચિરાગ", phone: "9819086110", upi: "9819086110@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 4, name: "કરન", phone: "7405746630", upi: "7405746630@upi", paid: false, won: true, wonMonth: 4, wonLabel: "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)" },
+      { id: 5, name: "વિનોદભાઈ", phone: "7405746630", upi: "7405746630@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 6, name: "સુરેશકાકા", phone: "6359230006", upi: "6359230006@upi", paid: false, won: true, wonMonth: 5, wonLabel: "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)" },
+      { id: 7, name: "દર્શનભાઈ", phone: "6359230006", upi: "6359230006@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 8, name: "રાજુભાઈ", phone: "9408266159", upi: "9408266159@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 9, name: "કલ્પેશભાઈ", phone: "9924426511", upi: "9924426511@upi", paid: false, won: true, wonMonth: 3, wonLabel: "જુલાઈ ૨૦૨૬ (વીશી ૩)" },
+      { id: 10, name: "પરેશભાઈ", phone: "9320817044", upi: "9320817044@upi", paid: false, won: true, wonMonth: 6, wonLabel: "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)" },
+      { id: 11, name: "જીગ્નેશભાઈ A", phone: "9320817044", upi: "9320817044@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 12, name: "દીપકભાઈ", phone: "9427351563", upi: "9427351563@upi", paid: false, won: true, wonMonth: 1, wonLabel: "મે ૨૦૨૬ (વીશી ૧)" },
+      { id: 13, name: "કિરણભાઈ", phone: "8155985076", upi: "8155985076@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 14, name: "ભૂપેશભાઈ", phone: "9824378160", upi: "9824378160@upi", paid: false, won: true, wonMonth: 2, wonLabel: "જૂન ૨૦૨૬ (વીશી ૨)" },
+      { id: 15, name: "કેતનભાઇ", phone: "9924649432", upi: "9924649432@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 16, name: "જીગ્નેશભાઈ", phone: "9723000669", upi: "9723000669@upi", paid: false, won: false, wonMonth: null, wonLabel: "" }
     ];
 
     let members = defaultMembers;
-    const savedMembers = localStorage.getItem('sachodar_members_data');
+    const savedMembers = localStorage.getItem('sachodar_members_data_v2');
     if (savedMembers) {
       try { members = JSON.parse(savedMembers); } catch(e){}
     }
 
-    // પેમેન્ટ સ્થિતિ લોડ કરવી
     const savedPayments = localStorage.getItem('sachodar_payments_m7');
     if (savedPayments) {
       const parsed = JSON.parse(savedPayments);
       members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
+    }
+
+    // મહિનો ૭ નો વિજેતા નક્કી થયો છે કે નહીં તે ચકાસવું
+    let currentWinner = members.find(m => m.wonMonth === currentMonth);
+
+    function updateWinnerBanner() {
+      const bannerSub = document.getElementById('winnerBannerSubtitle');
+      const activeBox = document.getElementById('winnerActiveBox');
+      const nameDisp = document.getElementById('currentWinnerNameDisplay');
+      const upiDisp = document.getElementById('currentWinnerUpiDisplay');
+      const btnPay = document.getElementById('btnPayWinner');
+
+      if (currentWinner) {
+        bannerSub.classList.add('hidden');
+        activeBox.classList.remove('hidden');
+        nameDisp.innerText = `🏆 ${currentWinner.name}`;
+        upiDisp.innerText = `UPI: ${currentWinner.upi}`;
+
+        // UPI ડીપ લિંક (Google Pay, PhonePe, Paytm ખુલે તે માટે)
+        const upiUrl = `upi://pay?pa=${currentWinner.upi}&pn=${encodeURIComponent(currentWinner.name)}&am=${monthlyAmount}&cu=INR&tn=${encodeURIComponent('સાચોદર વિસી મહિનો ૭')}`;
+        btnPay.href = upiUrl;
+      } else {
+        bannerSub.classList.remove('hidden');
+        activeBox.classList.add('hidden');
+      }
     }
 
     function applyTheme(themeName) {
@@ -264,7 +301,7 @@
       const body = document.getElementById('appBody');
       const meta = document.getElementById('metaThemeColor');
 
-      body.className = `pb-20 theme-${themeName} transition-colors duration-300`;
+      body.className = `pb-24 theme-${themeName} transition-colors duration-300`;
 
       if (themeName === 'saffron') {
         header.className = "bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center";
@@ -285,21 +322,19 @@
       }
     }
 
-    function changeTheme(themeName) {
-      applyTheme(themeName);
-    }
+    function changeTheme(themeName) { applyTheme(themeName); }
 
     function updateDisplays() {
       document.getElementById('drawDateDisplay').innerText = drawDate;
       document.getElementById('dueDateDisplay').innerText = dueDate;
       document.getElementById('monthlyAmountBadge').innerText = `માસિક: ₹${monthlyAmount.toLocaleString()}`;
+      updateWinnerBanner();
     }
 
     function openSettingsModal() {
       if (!isAdmin) return;
       document.getElementById('inputDrawDate').value = drawDate;
       document.getElementById('inputDueDate').value = dueDate;
-      document.getElementById('inputAmount').value = monthlyAmount;
 
       const sel = document.getElementById('selectMemberToEdit');
       sel.innerHTML = '';
@@ -321,6 +356,7 @@
       if (m) {
         document.getElementById('editMemberName').value = m.name;
         document.getElementById('editMemberPhone').value = m.phone;
+        document.getElementById('editMemberUpi').value = m.upi || `${m.phone}@upi`;
       }
     }
 
@@ -330,23 +366,25 @@
       if (m) {
         const newName = document.getElementById('editMemberName').value.trim();
         const newPhone = document.getElementById('editMemberPhone').value.trim();
+        const newUpi = document.getElementById('editMemberUpi').value.trim();
+
         if (newName) m.name = newName;
         if (newPhone) m.phone = newPhone;
+        if (newUpi) m.upi = newUpi;
 
-        localStorage.setItem('sachodar_members_data', JSON.stringify(members));
-        alert(`${m.id}. ${m.name} ની વિગતો અપડેટ થઈ ગઈ!`);
+        localStorage.setItem('sachodar_members_data_v2', JSON.stringify(members));
+        alert(`${m.id}. ${m.name} ની UPI ID અને વિગત સેવ થઈ ગઈ!`);
         renderMembers();
+        updateWinnerBanner();
       }
     }
 
     function saveAllSettings() {
       const newDraw = document.getElementById('inputDrawDate').value.trim();
       const newDue = document.getElementById('inputDueDate').value.trim();
-      const newAmt = parseInt(document.getElementById('inputAmount').value);
 
       if (newDraw) { drawDate = newDraw; localStorage.setItem('sachodar_drawDate', newDraw); }
       if (newDue) { dueDate = newDue; localStorage.setItem('sachodar_dueDate', newDue); }
-      if (newAmt && newAmt > 0) { monthlyAmount = newAmt; localStorage.setItem('sachodar_amount', newAmt); }
 
       updateDisplays();
       renderMembers();
@@ -365,8 +403,7 @@
         const div = document.createElement('div');
         div.className = "p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 text-xs border border-slate-100 dark:border-slate-700 flex flex-col gap-2";
         
-        // Reminder WhatsApp Link
-        const reminderMsg = encodeURIComponent(`જય શ્રી કૃષ્ણ ${m.name},\nસાચોદર વિસી ગ્રુપ (મહિનો ૭) ની માસિક રકમ ₹${monthlyAmount} જમા કરાવવાની છેલ્લી મુદત ${dueDate} છે.\nવિગતો એપમાં ચેક કરો: https://panchaljignesh05.github.io/sachodar-vishi-group/`);
+        const individualUpiUrl = `upi://pay?pa=${m.upi || m.phone + '@upi'}&pn=${encodeURIComponent(m.name)}&am=${monthlyAmount}&cu=INR&tn=${encodeURIComponent('સાચોદર વિસી')}`;
 
         div.innerHTML = `
           <div class="flex justify-between items-center">
@@ -384,11 +421,9 @@
                   <a href="https://wa.me/91${m.phone}" target="_blank" class="text-green-600 hover:text-green-700">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                   </a>
-                  ${(!m.paid && isAdmin) ? `
-                    <a href="https://wa.me/91${m.phone}?text=${reminderMsg}" target="_blank" class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold hover:bg-emerald-200">
-                      યાદ અપાવો
-                    </a>
-                  ` : ''}
+                  <a href="${individualUpiUrl}" class="text-[10px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-qrcode text-[9px]"></i> UPI Pay
+                  </a>
                 </div>
               </div>
             </div>
@@ -470,7 +505,7 @@
           document.getElementById('adminPanelBanner').classList.remove('hidden');
           document.getElementById('adminBadge').classList.remove('hidden');
           document.getElementById('adminOnlyMsg').innerText = 'તમે એડમિન તરીકે લૉગિન છો.';
-          alert("એડમિન લૉગિન સફળ! હવે તમે સેટિંગ્સમાંથી કલર, તારીખ, સમય અને સભ્યોની વિગતો બદલી શકશો.");
+          alert("એડમિન લૉગિન સફળ! હવે તમે UPI ID અને સેટિંગ્સ બદલી શકશો.");
         } else {
           alert("ખોટો પિન! સાચો પિન 1234 છે.");
         }
@@ -503,12 +538,16 @@
           winner.won = true;
           winner.wonMonth = currentMonth;
           winner.wonLabel = `નવેમ્બર ૨૦૨૬ (વીશી ૭)`;
+          currentWinner = winner;
+          
           box.innerText = `🎉 ${winner.name} 🎉`;
           btn.disabled = false;
           btn.innerText = "ડ્રો પૂર્ણ થયો";
-          alert(`અભિનંદન! મહિનો ${currentMonth} (નવેમ્બર ૨૦૨૬) ના વિજેતા છે:\n${winner.name}\nમળવાપાત્ર રકમ: ₹${(16 * monthlyAmount).toLocaleString()}`);
           
-          localStorage.setItem('sachodar_members_data', JSON.stringify(members));
+          alert(`અભિનંદન! મહિનો ૭ (નવેમ્બર ૨૦૨૬) ના વિજેતા છે:\n${winner.name}\n\nહવે બાકીના તમામ સભ્યો એપમાંથી સીધા વિજેતાને ₹૧,૫૦૦ Google Pay / PhonePe દ્વારા ચૂકવી શકશે!`);
+          
+          localStorage.setItem('sachodar_members_data_v2', JSON.stringify(members));
+          updateDisplays();
           renderMembers();
           renderHistory();
         }
