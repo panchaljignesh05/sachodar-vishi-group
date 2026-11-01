@@ -50,7 +50,7 @@
       </button>
     </div>
 
-    <!-- 🌟 વિજેતાને સીધા પૈસા ચૂકવવાનું વિશેષ કાર્ડ (Direct Pay to Winner) -->
+    <!-- વિજેતાને સીધા પૈસા ચૂકવવાનું વિશેષ કાર્ડ -->
     <div id="winnerPayCard" class="bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 rounded-2xl p-4 shadow-lg border-2 border-amber-300 text-center space-y-2">
       <div class="flex items-center justify-center gap-2 font-black text-sm">
         <i class="fa-solid fa-crown text-base text-yellow-950"></i>
@@ -58,7 +58,7 @@
       </div>
       
       <p class="text-xs text-yellow-950/80 font-medium" id="winnerBannerSubtitle">
-        ડ્રો પછી વિજેતા જાહેર થશે. બાકીના તમામ સભ્યો સીધા વિજેતાના ખાતામાં ₹૧,૫૦૦ ટ્રાન્સફર કરશે.
+        ૧૦ તારીખે ડ્રો પછી વિજેતા જાહેર થશે. બાકીના તમામ સભ્યો સીધા વિજેતાના ખાતામાં ₹૧,૫૦૦ ટ્રાન્સફર કરશે.
       </p>
 
       <div id="winnerActiveBox" class="hidden bg-white/90 backdrop-blur rounded-xl p-3 shadow-sm text-left flex justify-between items-center">
@@ -85,7 +85,7 @@
       <div class="grid grid-cols-2 gap-2 text-center py-3 border-b border-white/20">
         <div class="bg-black/15 rounded-xl p-2.5">
           <p class="text-xs text-white/80">આગામી લકી ડ્રો & સમય</p>
-          <p class="text-sm font-bold text-white mt-0.5" id="drawDateDisplay">૧૦ તારીખ, રાત્રે ૮:૩૦</p>
+          <p class="text-sm font-bold text-white mt-0.5" id="drawDateDisplay">૧૦ તારીખ, રાત્રે ૧૦:૦૦ પછી</p>
         </div>
         <div class="bg-black/15 rounded-xl p-2.5">
           <p class="text-xs text-white/80">ચુકવણી છેલ્લી મુદત</p>
@@ -103,6 +103,12 @@
       </div>
     </div>
 
+    <!-- 🔔 નોટિફિકેશન & કેલેન્ડર રીમાઇન્ડર બટન (નવું ફીચર) -->
+    <button onclick="setCalendarReminder()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold p-3.5 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 transition border border-amber-300/40">
+      <i class="fa-solid fa-bell text-yellow-200 text-base animate-bounce"></i>
+      <span>આગામી ડ્રોનું રીમાઇન્ડર સેટ કરો (Notification Alarm)</span>
+    </button>
+
     <!-- લાઇવ વિડીયો ડ્રો બટન -->
     <a href="https://meet.jit.si/SachodarVisiGroupLiveDraw" target="_blank" class="w-full bg-teal-600 hover:bg-teal-700 text-white p-3.5 rounded-xl shadow-md font-bold text-sm flex items-center justify-center gap-2 transition">
       <i class="fa-solid fa-video"></i> લાઇવ ડ્રોમાં જોડાઓ (વિડીયો કૉલ)
@@ -116,7 +122,7 @@
         </h2>
         <span class="text-[11px] bg-orange-100 text-orange-700 px-2.5 py-0.5 rounded-full font-bold" id="eligibleCountBadge">૧૦ સભ્યો બાકી</span>
       </div>
-      <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">ડ્રો ખૂલતાં જ વિજેતાના ખાતામાં ચૂકવણી માટેનું UPI બટન સક્રિય થશે.</p>
+      <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">ડ્રો ખૂલતાં જ વિજેતાના ખાતામાં ચૂકવણી માટેનું બટન સક્રિય થશે.</p>
 
       <div id="drawBox" class="h-20 flex items-center justify-center bg-orange-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-orange-300 my-2">
         <span id="winnerName" class="text-xl font-black text-orange-600">ડ્રો માટે તૈયાર</span>
@@ -155,9 +161,7 @@
 
   </main>
 
-  <!-- ========================================== -->
-  <!-- એડમિન માસ્ટર સેટિંગ્સ મોડલ (Popup Box) -->
-  <!-- ========================================== -->
+  <!-- એડમિન સેટિંગ્સ મોડલ -->
   <div id="settingsModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-5 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4">
       
@@ -201,16 +205,15 @@
         <input type="text" id="inputDueDate" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white">
       </div>
 
-      <!-- ૪. સભ્યની UPI ID / નામ / ફોન એડિટર -->
+      <!-- ૪. સભ્યની વિગત -->
       <div class="space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3">
         <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૪. સભ્યની વિગત અને UPI ID સુધારો:</label>
-        <select id="selectMemberToEdit" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" onchange="loadMemberToForm()">
-        </select>
+        <select id="selectMemberToEdit" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" onchange="loadMemberToForm()"></select>
         <input type="text" id="editMemberName" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="સભ્યનું નામ">
         <input type="text" id="editMemberPhone" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="મોબાઇલ નંબર">
-        <input type="text" id="editMemberUpi" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="UPI ID (દા.ત. 9867255687@upi)">
+        <input type="text" id="editMemberUpi" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="UPI ID">
         <button onclick="saveMemberEdit()" class="w-full bg-slate-800 text-white text-xs font-bold py-2 rounded-xl shadow">
-          આ સભ્યની UPI અને વિગત સાચવો
+          આ સભ્યની વિગત સાચવો
         </button>
       </div>
 
@@ -232,10 +235,9 @@
 
     let currentTheme = localStorage.getItem('sachodar_theme') || 'saffron';
     let monthlyAmount = parseInt(localStorage.getItem('sachodar_amount')) || 1500;
-    let drawDate = localStorage.getItem('sachodar_drawDate') || "૧૦ તારીખ, રાત્રે ૮:૩૦";
+    let drawDate = localStorage.getItem('sachodar_drawDate') || "૧૦ તારીખ, રાત્રે ૧૦:૦૦ પછી";
     let dueDate = localStorage.getItem('sachodar_dueDate') || "૧૫ તારીખ સુધીમાં";
 
-    // ૧૬ સભ્યોનું લિસ્ટ (ડિફોલ્ટ UPI ID તેમના મોબાઇલ નંબર આધારિત છે)
     let defaultMembers = [
       { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "9867255687@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
       { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "9820506270@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
@@ -267,8 +269,18 @@
       members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
     }
 
-    // મહિનો ૭ નો વિજેતા નક્કી થયો છે કે નહીં તે ચકાસવું
     let currentWinner = members.find(m => m.wonMonth === currentMonth);
+
+    // 🔔 Google Calendar રીમાઇન્ડર ફંક્શન
+    function setCalendarReminder() {
+      const title = encodeURIComponent("સાચોદર વિસી લકી ડ્રો (મહિનો ૭)");
+      const details = encodeURIComponent("સાચોદર વિસી ગ્રુપ લાઈવ ડ્રો અને મીટિંગ.\nવીડિયો કૉલમાં જોડાવા માટે: https://meet.jit.si/SachodarVisiGroupLiveDraw\nએપ ખોલવા માટે: https://panchaljignesh05.github.io/sachodar-vishi-group/");
+      const location = encodeURIComponent("Online Video Call");
+      // ૧૦ નવેમ્બર ૨૦૨૬, રાત્રે ૧૦:૦૦ વાગ્યે (IST = UTC+5:30)
+      const dates = "20261110T163000Z/20261110T170000Z";
+      const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
+      window.open(calUrl, '_blank');
+    }
 
     function updateWinnerBanner() {
       const bannerSub = document.getElementById('winnerBannerSubtitle');
@@ -283,7 +295,6 @@
         nameDisp.innerText = `🏆 ${currentWinner.name}`;
         upiDisp.innerText = `UPI: ${currentWinner.upi}`;
 
-        // UPI ડીપ લિંક (Google Pay, PhonePe, Paytm ખુલે તે માટે)
         const upiUrl = `upi://pay?pa=${currentWinner.upi}&pn=${encodeURIComponent(currentWinner.name)}&am=${monthlyAmount}&cu=INR&tn=${encodeURIComponent('સાચોદર વિસી મહિનો ૭')}`;
         btnPay.href = upiUrl;
       } else {
@@ -373,7 +384,7 @@
         if (newUpi) m.upi = newUpi;
 
         localStorage.setItem('sachodar_members_data_v2', JSON.stringify(members));
-        alert(`${m.id}. ${m.name} ની UPI ID અને વિગત સેવ થઈ ગઈ!`);
+        alert(`${m.id}. ${m.name} ની વિગતો સેવ થઈ ગઈ!`);
         renderMembers();
         updateWinnerBanner();
       }
@@ -505,7 +516,7 @@
           document.getElementById('adminPanelBanner').classList.remove('hidden');
           document.getElementById('adminBadge').classList.remove('hidden');
           document.getElementById('adminOnlyMsg').innerText = 'તમે એડમિન તરીકે લૉગિન છો.';
-          alert("એડમિન લૉગિન સફળ! હવે તમે UPI ID અને સેટિંગ્સ બદલી શકશો.");
+          alert("એડમિન લૉગિન સફળ!");
         } else {
           alert("ખોટો પિન! સાચો પિન 1234 છે.");
         }
