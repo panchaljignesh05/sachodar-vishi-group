@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <!-- 🔔 નોટિફિકેશન & કેલેન્ડર રીમાઇન્ડર બટન (નવું ફીચર) -->
+    <!-- 🔔 નોટિફિકેશન & કેલેન્ડર રીમાઇન્ડર બટન -->
     <button onclick="setCalendarReminder()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold p-3.5 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 transition border border-amber-300/40">
       <i class="fa-solid fa-bell text-yellow-200 text-base animate-bounce"></i>
       <span>આગામી ડ્રોનું રીમાઇન્ડર સેટ કરો (Notification Alarm)</span>
@@ -238,6 +238,7 @@
     let drawDate = localStorage.getItem('sachodar_drawDate') || "૧૦ તારીખ, રાત્રે ૧૦:૦૦ પછી";
     let dueDate = localStorage.getItem('sachodar_dueDate') || "૧૫ તારીખ સુધીમાં";
 
+    // ૧૬ સભ્યોનું સાચું લિસ્ટ (ભૂપેશભાઈનો સુધારેલો નંબર 9824378168 સાથે)
     let defaultMembers = [
       { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "9867255687@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
       { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "9820506270@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
@@ -252,15 +253,18 @@
       { id: 11, name: "જીગ્નેશભાઈ A", phone: "9320817044", upi: "9320817044@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
       { id: 12, name: "દીપકભાઈ", phone: "9427351563", upi: "9427351563@upi", paid: false, won: true, wonMonth: 1, wonLabel: "મે ૨૦૨૬ (વીશી ૧)" },
       { id: 13, name: "કિરણભાઈ", phone: "8155985076", upi: "8155985076@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 14, name: "ભૂપેશભાઈ", phone: "9824378160", upi: "9824378160@upi", paid: false, won: true, wonMonth: 2, wonLabel: "જૂન ૨૦૨૬ (વીશી ૨)" },
+      { id: 14, name: "ભૂપેશભાઈ", phone: "9824378168", upi: "9824378168@upi", paid: false, won: true, wonMonth: 2, wonLabel: "જૂન ૨૦૨૬ (વીશી ૨)" },
       { id: 15, name: "કેતનભાઇ", phone: "9924649432", upi: "9924649432@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
       { id: 16, name: "જીગ્નેશભાઈ", phone: "9723000669", upi: "9723000669@upi", paid: false, won: false, wonMonth: null, wonLabel: "" }
     ];
 
+    // જૂનો ડેટા સાફ કરીને સાચા નંબરો લોડ કરવા
     let members = defaultMembers;
-    const savedMembers = localStorage.getItem('sachodar_members_data_v2');
+    const savedMembers = localStorage.getItem('sachodar_members_data_v3');
     if (savedMembers) {
       try { members = JSON.parse(savedMembers); } catch(e){}
+    } else {
+      localStorage.setItem('sachodar_members_data_v3', JSON.stringify(defaultMembers));
     }
 
     const savedPayments = localStorage.getItem('sachodar_payments_m7');
@@ -271,12 +275,10 @@
 
     let currentWinner = members.find(m => m.wonMonth === currentMonth);
 
-    // 🔔 Google Calendar રીમાઇન્ડર ફંક્શન
     function setCalendarReminder() {
       const title = encodeURIComponent("સાચોદર વિસી લકી ડ્રો (મહિનો ૭)");
       const details = encodeURIComponent("સાચોદર વિસી ગ્રુપ લાઈવ ડ્રો અને મીટિંગ.\nવીડિયો કૉલમાં જોડાવા માટે: https://meet.jit.si/SachodarVisiGroupLiveDraw\nએપ ખોલવા માટે: https://panchaljignesh05.github.io/sachodar-vishi-group/");
       const location = encodeURIComponent("Online Video Call");
-      // ૧૦ નવેમ્બર ૨૦૨૬, રાત્રે ૧૦:૦૦ વાગ્યે (IST = UTC+5:30)
       const dates = "20261110T163000Z/20261110T170000Z";
       const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
       window.open(calUrl, '_blank');
@@ -383,7 +385,7 @@
         if (newPhone) m.phone = newPhone;
         if (newUpi) m.upi = newUpi;
 
-        localStorage.setItem('sachodar_members_data_v2', JSON.stringify(members));
+        localStorage.setItem('sachodar_members_data_v3', JSON.stringify(members));
         alert(`${m.id}. ${m.name} ની વિગતો સેવ થઈ ગઈ!`);
         renderMembers();
         updateWinnerBanner();
@@ -557,7 +559,7 @@
           
           alert(`અભિનંદન! મહિનો ૭ (નવેમ્બર ૨૦૨૬) ના વિજેતા છે:\n${winner.name}\n\nહવે બાકીના તમામ સભ્યો એપમાંથી સીધા વિજેતાને ₹૧,૫૦૦ Google Pay / PhonePe દ્વારા ચૂકવી શકશે!`);
           
-          localStorage.setItem('sachodar_members_data_v2', JSON.stringify(members));
+          localStorage.setItem('sachodar_members_data_v3', JSON.stringify(members));
           updateDisplays();
           renderMembers();
           renderHistory();
