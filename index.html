@@ -321,4 +321,256 @@
         dash.className = "bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-4 shadow-md";
         meta.content = "#ea580c";
       } else if (themeName === 'blue') {
-        header.className = "bg-gradient-to-r from-blue-900 via-blue-700 to-sky-80
+        header.className = "bg-gradient-to-r from-blue-900 via-blue-700 to-sky-800 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center";
+        dash.className = "bg-gradient-to-br from-blue-700 to-sky-700 text-white rounded-2xl p-4 shadow-md";
+        meta.content = "#1e3a8a";
+      } else if (themeName === 'green') {
+        header.className = "bg-gradient-to-r from-emerald-900 via-emerald-700 to-teal-800 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center";
+        dash.className = "bg-gradient-to-br from-emerald-700 to-teal-700 text-white rounded-2xl p-4 shadow-md";
+        meta.content = "#047857";
+      } else if (themeName === 'dark') {
+        header.className = "bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-amber-400 p-4 shadow-lg text-center relative flex flex-col items-center justify-center border-b border-amber-500/30";
+        dash.className = "bg-gradient-to-br from-slate-900 to-slate-800 text-amber-200 rounded-2xl p-4 shadow-md border border-amber-500/30";
+        meta.content = "#0f172a";
+      }
+    }
+
+    function changeTheme(themeName) { applyTheme(themeName); }
+
+    function updateDisplays() {
+      document.getElementById('drawDateDisplay').innerText = drawDate;
+      document.getElementById('dueDateDisplay').innerText = dueDate;
+      document.getElementById('monthlyAmountBadge').innerText = `માસિક: ₹${monthlyAmount.toLocaleString()}`;
+      updateWinnerBanner();
+    }
+
+    function openSettingsModal() {
+      if (!isAdmin) return;
+      document.getElementById('inputDrawDate').value = drawDate;
+      document.getElementById('inputDueDate').value = dueDate;
+
+      const sel = document.getElementById('selectMemberToEdit');
+      sel.innerHTML = '';
+      members.forEach(m => {
+        sel.innerHTML += `<option value="${m.id}">${m.id}. ${m.name}</option>`;
+      });
+      loadMemberToForm();
+
+      document.getElementById('settingsModal').classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    function loadMemberToForm() {
+      const id = parseInt(document.getElementById('selectMemberToEdit').value);
+      const m = members.find(item => item.id === id);
+      if (m) {
+        document.getElementById('editMemberName').value = m.name;
+        document.getElementById('editMemberPhone').value = m.phone;
+        document.getElementById('editMemberUpi').value = m.upi || `${m.phone}@upi`;
+      }
+    }
+
+    function saveMemberEdit() {
+      const id = parseInt(document.getElementById('selectMemberToEdit').value);
+      const m = members.find(item => item.id === id);
+      if (m) {
+        const newName = document.getElementById('editMemberName').value.trim();
+        const newPhone = document.getElementById('editMemberPhone').value.trim();
+        const newUpi = document.getElementById('editMemberUpi').value.trim();
+
+        if (newName) m.name = newName;
+        if (newPhone) m.phone = newPhone;
+        if (newUpi) m.upi = newUpi;
+
+        localStorage.setItem('sachodar_members_data_v4', JSON.stringify(members));
+        alert(`${m.id}. ${m.name} ની વિગતો સેવ થઈ ગઈ!`);
+        renderMembers();
+        updateWinnerBanner();
+      }
+    }
+
+    function saveAllSettings() {
+      const newDraw = document.getElementById('inputDrawDate').value.trim();
+      const newDue = document.getElementById('inputDueDate').value.trim();
+
+      if (newDraw) { drawDate = newDraw; localStorage.setItem('sachodar_drawDate', newDraw); }
+      if (newDue) { dueDate = newDue; localStorage.setItem('sachodar_dueDate', newDue); }
+
+      updateDisplays();
+      renderMembers();
+      renderHistory();
+      closeSettingsModal();
+      alert("બધા ફેરફારો સાચવી લેવાયા છે!");
+    }
+
+    function renderMembers() {
+      const container = document.getElementById('membersList');
+      container.innerHTML = '';
+      let paidCount = 0;
+
+      members.forEach((m, idx) => {
+        if(m.paid) paidCount++;
+        const div = document.createElement('div');
+        div.className = "p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 text-xs border border-slate-100 dark:border-slate-700 flex flex-col gap-2";
+        
+        const individualUpiUrl = `upi://pay?pa=${m.upi || m.phone + '@upi'}&pn=${encodeURIComponent(m.name)}&am=${monthlyAmount}&cu=INR&tn=${encodeURIComponent('સાચોદર વિસી')}`;
+
+        div.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full ${m.won ? 'bg-amber-100 text-amber-800' : 'bg-orange-100 text-orange-600'} font-bold flex items-center justify-center text-xs shadow-sm">${m.id}</span>
+              <div>
+                <p class="font-bold text-slate-900 dark:text-slate-100 text-sm flex items-center gap-1.5">
+                  ${m.name}
+                  ${m.won ? `<span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.2 rounded font-medium">🏆 ${m.wonLabel}</span>` : ''}
+                </p>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <a href="tel:${m.phone}" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-phone text-[10px]"></i> ${m.phone}
+                  </a>
+                  <a href="https://wa.me/91${m.phone}" target="_blank" class="text-green-600 hover:text-green-700">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                  </a>
+                  <a href="${individualUpiUrl}" class="text-[10px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-qrcode text-[9px]"></i> UPI Pay
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div>
+              ${isAdmin ? 
+                `<button onclick="togglePayment(${idx})" class="px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm ${m.paid ? 'bg-green-600 text-white' : 'bg-red-500 text-white'}">${m.paid ? 'ચુકવાઈ ગઈ' : 'બાકી છે'}</button>` :
+                `<span class="px-2.5 py-1 rounded-md text-[11px] font-bold ${m.paid ? 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300' : 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'}">${m.paid ? 'ચુકવણી પૂર્ણ' : 'બાકી'}</span>`
+              }
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('collectedText').innerText = `₹${(paidCount * monthlyAmount).toLocaleString()}`;
+      document.getElementById('pendingText').innerText = `₹${((16 - paidCount) * monthlyAmount).toLocaleString()}`;
+
+      const eligibleCount = members.filter(m => !m.won).length;
+      document.getElementById('eligibleCountBadge').innerText = `${eligibleCount} સભ્યો બાકી`;
+    }
+
+    function renderHistory() {
+      const h = document.getElementById('historyList');
+      h.innerHTML = '';
+      
+      const monthNames = [
+        "મે ૨૦૨૬ (વીશી ૧)", "જૂન ૨૦૨૬ (વીશી ૨)", "જુલાઈ ૨૦૨૬ (વીશી ૩)", "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)",
+        "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)", "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)", "નવેમ્બર ૨૦૨૬ (વીશી ૭)", "ડિસેમ્બર ૨૦૨૬ (વીશી ૮)",
+        "જાન્યુઆરી ૨૦૨૭ (વીશી ૯)", "ફેબ્રુઆરી ૨૦૨૭ (વીશી ૧૦)", "માર્ચ ૨૦૨૭ (વીશી ૧૧)", "એપ્રિલ ૨૦૨૭ (વીશી ૧૨)",
+        "મે ૨૦૨૭ (વીશી ૧૩)", "જૂન ૨૦૨૭ (વીશી ૧૪)", "જુલાઈ ૨૦૨૭ (વીશી ૧૫)", "ઑગસ્ટ ૨૦૨૭ (વીશી ૧૬)"
+      ];
+
+      for(let i=1; i<=16; i++) {
+        const winner = members.find(m => m.wonMonth === i);
+        const isCurrent = (i === currentMonth);
+        const isDone = (i < currentMonth);
+
+        h.innerHTML += `
+          <div class="flex justify-between items-center p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-700 ${isCurrent ? 'bg-orange-50/70 dark:bg-orange-950/40 border-orange-200' : ''}">
+            <div>
+              <span class="font-medium text-slate-700 dark:text-slate-300">${monthNames[i-1]}</span>
+            </div>
+            <div class="text-right">
+              <span class="font-bold ${isDone ? 'text-green-700 dark:text-green-400' : (isCurrent ? 'text-orange-600 font-extrabold' : 'text-slate-400')}">
+                ${winner ? `🏆 ${winner.name}` : (isCurrent ? '👉 આ મહિને ડ્રો' : 'આગામી')}
+              </span>
+              <span class="text-slate-500 block text-[10px]">₹${(16 * monthlyAmount).toLocaleString()}</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function togglePayment(idx) {
+      if(!isAdmin) return;
+      members[idx].paid = !members[idx].paid;
+      
+      const payMap = {};
+      members.forEach(m => payMap[m.id] = m.paid);
+      localStorage.setItem('sachodar_payments_m7', JSON.stringify(payMap));
+      
+      renderMembers();
+    }
+
+    function toggleAdmin() {
+      if(isAdmin) {
+        isAdmin = false;
+        document.getElementById('adminText').innerText = 'લૉગિન';
+        document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
+        document.getElementById('adminPanelBanner').classList.add('hidden');
+        document.getElementById('adminBadge').classList.add('hidden');
+        document.getElementById('adminOnlyMsg').innerText = 'નોંધ: માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.';
+      } else {
+        const pin = prompt("એડમિન પિન દાખલ કરો:");
+        if(pin === "1234") {
+          isAdmin = true;
+          document.getElementById('adminText').innerText = 'એડમિન મોડ';
+          document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
+          document.getElementById('adminPanelBanner').classList.remove('hidden');
+          document.getElementById('adminBadge').classList.remove('hidden');
+          document.getElementById('adminOnlyMsg').innerText = 'તમે એડમિન તરીકે લૉગિન છો.';
+          alert("એડમિન લૉગિન સફળ!");
+        } else {
+          alert("ખોટો પિન! સાચો પિન 1234 છે.");
+        }
+      }
+      renderMembers();
+    }
+
+    function startDraw() {
+      if(!isAdmin) {
+        alert("ડ્રો શરૂ કરવાનો અધિકાર ફક્ત એડમિન પાસે છે. કૃપા કરીને ઉપરથી એડમિન લૉગિન (પિન 1234) કરો.");
+        return;
+      }
+      const eligible = members.filter(m => !m.won);
+      if(eligible.length === 0) {
+        alert("તમામ ૧૬ સભ્યો વિજેતા બની ચૂક્યા છે!");
+        return;
+      }
+      const btn = document.getElementById('drawBtn');
+      const box = document.getElementById('winnerName');
+      btn.disabled = true;
+      btn.innerText = "ડ્રો ચાલી રહ્યો છે...";
+
+      let count = 0;
+      const timer = setInterval(() => {
+        count++;
+        box.innerText = eligible[Math.floor(Math.random() * eligible.length)].name;
+        if(count > 25) {
+          clearInterval(timer);
+          const winner = eligible[Math.floor(Math.random() * eligible.length)];
+          winner.won = true;
+          winner.wonMonth = currentMonth;
+          winner.wonLabel = `નવેમ્બર ૨૦૨૬ (વીશી ૭)`;
+          currentWinner = winner;
+          
+          box.innerText = `🎉 ${winner.name} 🎉`;
+          btn.disabled = false;
+          btn.innerText = "ડ્રો પૂર્ણ થયો";
+          
+          alert(`અભિનંદન! મહિનો ૭ (નવેમ્બર ૨૦૨૬) ના વિજેતા છે:\n${winner.name}\n\nહવે બાકીના તમામ સભ્યો એપમાંથી સીધા વિજેતાને ₹૧,૫૦૦ Google Pay / PhonePe દ્વારા ચૂકવી શકશે!`);
+          
+          localStorage.setItem('sachodar_members_data_v4', JSON.stringify(members));
+          updateDisplays();
+          renderMembers();
+          renderHistory();
+        }
+      }, 100);
+    }
+
+    applyTheme(currentTheme);
+    updateDisplays();
+    renderMembers();
+    renderHistory();
+  </script>
+</body>
+</html>
