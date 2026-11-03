@@ -50,7 +50,7 @@
       </button>
     </div>
 
-    <!-- વિજેતાને સીધા પૈસા ચૂકવવાનું વિશેષ કાર્ડ -->
+    <!-- વિજેતાને સીધા પૈસા ચૂકવવાનું વિશેષ કાર્ડ (Direct Pay to Winner) -->
     <div id="winnerPayCard" class="bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 rounded-2xl p-4 shadow-lg border-2 border-amber-300 text-center space-y-2">
       <div class="flex items-center justify-center gap-2 font-black text-sm">
         <i class="fa-solid fa-crown text-base text-yellow-950"></i>
@@ -61,11 +61,11 @@
         ૧૦ તારીખે ડ્રો પછી વિજેતા જાહેર થશે. બાકીના તમામ સભ્યો સીધા વિજેતાના ખાતામાં ₹૧,૫૦૦ ટ્રાન્સફર કરશે.
       </p>
 
-      <div id="winnerActiveBox" class="hidden bg-white/90 backdrop-blur rounded-xl p-3 shadow-sm text-left flex justify-between items-center">
+      <div id="winnerActiveBox" class="hidden bg-white/95 backdrop-blur rounded-xl p-3 shadow-sm text-left flex justify-between items-center">
         <div>
           <p class="text-[11px] text-slate-500 font-semibold">ચુકવણી મેળવનાર વિજેતા:</p>
           <p class="text-base font-black text-slate-900" id="currentWinnerNameDisplay">વિજેતાનું નામ</p>
-          <p class="text-xs text-slate-600 font-medium" id="currentWinnerUpiDisplay">UPI: -</p>
+          <p class="text-xs text-blue-700 font-mono font-bold" id="currentWinnerUpiDisplay">UPI: -</p>
         </div>
         <a id="btnPayWinner" href="#" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow-md flex items-center gap-1.5 transition">
           <i class="fa-solid fa-bolt"></i> ₹૧,૫૦૦ ચૂકવો
@@ -109,7 +109,7 @@
       <span>આગામી ડ્રોનું રીમાઇન્ડર સેટ કરો (Notification Alarm)</span>
     </button>
 
-    <!-- 🟢 WhatsApp ગ્રુપ લાઈવ ડ્રો બટન (સત્તાવાર લિંક સાથે) -->
+    <!-- 🟢 WhatsApp ગ્રુપ લાઈવ ડ્રો બટન -->
     <a href="https://chat.whatsapp.com/C1kkzwpNif1LdXRiK6r5m6" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl shadow-md font-bold text-sm flex items-center justify-center gap-2 transition">
       <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp ગ્રુપમાં લાઈવ ડ્રો (વીડિયો કૉલ)
     </a>
@@ -122,7 +122,7 @@
         </h2>
         <span class="text-[11px] bg-orange-100 text-orange-700 px-2.5 py-0.5 rounded-full font-bold" id="eligibleCountBadge">૧૦ સભ્યો બાકી</span>
       </div>
-      <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">ડ્રો ખૂલતાં જ વિજેતાના ખાતામાં ચૂકવણી માટેનું બટન સક્રિય થશે.</p>
+      <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">ડ્રો ખૂલતાં જ વિજેતાના ખાતામાં ચૂકવણી માટેનું UPI બટન સક્રિય થશે.</p>
 
       <div id="drawBox" class="h-20 flex items-center justify-center bg-orange-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-orange-300 my-2">
         <span id="winnerName" class="text-xl font-black text-orange-600">ડ્રો માટે તૈયાર</span>
@@ -134,11 +134,11 @@
       <p id="adminOnlyMsg" class="text-[11px] text-slate-400 mt-1">નોંધ: માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.</p>
     </div>
 
-    <!-- ૧૬ સભ્યોની યાદી, UPI અને ચુકવણી -->
+    <!-- ૧૬ સભ્યોની યાદી, સાચી UPI અને ચુકવણી -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
       <div class="flex justify-between items-center mb-3">
         <div>
-          <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી & UPI ચુકવણી</h3>
+          <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી & સત્તાવાર UPI ID</h3>
           <p class="text-[11px] text-slate-500">મહિનો ૭ સ્થિતિ</p>
         </div>
         <span class="text-xs text-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg" id="adminNotice">જોવાની પરવાનગી</span>
@@ -238,32 +238,33 @@
     let drawDate = localStorage.getItem('sachodar_drawDate') || "૧૦ તારીખ, રાત્રે ૧૦:૦૦ પછી";
     let dueDate = localStorage.getItem('sachodar_dueDate') || "૧૫ તારીખ સુધીમાં";
 
-    // ૧૬ સભ્યોનું સાચું લિસ્ટ (ભૂપેશભાઈનો સાચો નંબર 9824378168 સાથે)
+    // ૧૬ સભ્યોનું સત્તાવાર લિસ્ટ - સાચી UPI ID સાથે
     let defaultMembers = [
-      { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "9867255687@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "9820506270@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 3, name: "ચિરાગ", phone: "9819086110", upi: "9819086110@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 4, name: "કરન", phone: "7405746630", upi: "7405746630@upi", paid: false, won: true, wonMonth: 4, wonLabel: "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)" },
-      { id: 5, name: "વિનોદભાઈ", phone: "7405746630", upi: "7405746630@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 6, name: "સુરેશકાકા", phone: "6359230006", upi: "6359230006@upi", paid: false, won: true, wonMonth: 5, wonLabel: "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)" },
-      { id: 7, name: "દર્શનભાઈ", phone: "6359230006", upi: "6359230006@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 8, name: "રાજુભાઈ", phone: "9408266159", upi: "9408266159@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 9, name: "કલ્પેશભાઈ", phone: "9924426511", upi: "9924426511@upi", paid: false, won: true, wonMonth: 3, wonLabel: "જુલાઈ ૨૦૨૬ (વીશી ૩)" },
-      { id: 10, name: "પરેશભાઈ", phone: "9320817044", upi: "9320817044@upi", paid: false, won: true, wonMonth: 6, wonLabel: "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)" },
-      { id: 11, name: "જીગ્નેશભાઈ A", phone: "9320817044", upi: "9320817044@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 12, name: "દીપકભાઈ", phone: "9427351563", upi: "9427351563@upi", paid: false, won: true, wonMonth: 1, wonLabel: "મે ૨૦૨૬ (વીશી ૧)" },
-      { id: 13, name: "કિરણભાઈ", phone: "8155985076", upi: "8155985076@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 14, name: "ભૂપેશભાઈ", phone: "9824378168", upi: "9824378168@upi", paid: false, won: true, wonMonth: 2, wonLabel: "જૂન ૨૦૨૬ (વીશી ૨)" },
-      { id: 15, name: "કેતનભાઇ", phone: "9924649432", upi: "9924649432@upi", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 16, name: "જીગ્નેશભાઈ", phone: "9723000669", upi: "9723000669@upi", paid: false, won: false, wonMonth: null, wonLabel: "" }
+      { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "hareshpanchal43-3@okicici", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "kp0994219@okicici", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 3, name: "ચિરાગ", phone: "9819086110", upi: "chirag11137-1@okhdfcbank", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 4, name: "કરણ", phone: "7405746630", upi: "7405746630-2@ybl", paid: false, won: true, wonMonth: 4, wonLabel: "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)" },
+      { id: 5, name: "કરણ વિનોદભાઈ", phone: "7405746630", upi: "7405746630-2@ybl", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 6, name: "સુરેશકાકા", phone: "6359230006", upi: "6359230006@pthdfc", paid: false, won: true, wonMonth: 5, wonLabel: "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)" },
+      { id: 7, name: "દર્શનભાઈ", phone: "6359230006", upi: "6359230006@pthdfc", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 8, name: "રાજુભાઈ", phone: "9408266159", upi: "mohitpanchal21.mp1@okhdfcbank", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 9, name: "કલ્પેશભાઈ", phone: "9924426511", upi: "panchalkalpesh955@okicici", paid: false, won: true, wonMonth: 3, wonLabel: "જુલાઈ ૨૦૨૬ (વીશી ૩)" },
+      { id: 10, name: "પરેશભાઈ", phone: "9320817044", upi: "jpmachinery80@okicici", paid: false, won: true, wonMonth: 6, wonLabel: "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)" },
+      { id: 11, name: "જીગ્નેશભાઈ. એ.", phone: "9320817044", upi: "jpmachinery80@okicici", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 12, name: "દિપકભાઈ", phone: "9427351563", upi: "panchaldipak917@okaxis", paid: false, won: true, wonMonth: 1, wonLabel: "મે ૨૦૨૬ (વીશી ૧)" },
+      { id: 13, name: "કિરણભાઈ", phone: "8155985076", upi: "ashapanchal385@okaxis", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 14, name: "ભુપેશભાઇ", phone: "9824378168", upi: "9824378168@ptyes", paid: false, won: true, wonMonth: 2, wonLabel: "જૂન ૨૦૨૬ (વીશી ૨)" },
+      { id: 15, name: "કેતનભાઈ", phone: "9924649432", upi: "ketanpanchal521@okaxis", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 16, name: "જીગ્નેશભાઈ. પી.", phone: "9723000669", upi: "panchaljignesh05@oksbi", paid: false, won: false, wonMonth: null, wonLabel: "" }
     ];
 
+    // સાચો નવો ડેટા આપોઆપ લોડ કરવો
     let members = defaultMembers;
-    const savedMembers = localStorage.getItem('sachodar_members_data_v4');
+    const savedMembers = localStorage.getItem('sachodar_members_data_v5');
     if (savedMembers) {
       try { members = JSON.parse(savedMembers); } catch(e){}
     } else {
-      localStorage.setItem('sachodar_members_data_v4', JSON.stringify(defaultMembers));
+      localStorage.setItem('sachodar_members_data_v5', JSON.stringify(defaultMembers));
     }
 
     const savedPayments = localStorage.getItem('sachodar_payments_m7');
@@ -274,7 +275,6 @@
 
     let currentWinner = members.find(m => m.wonMonth === currentMonth);
 
-    // 🔔 Google Calendar રીમાઇન્ડર
     function setCalendarReminder() {
       const title = encodeURIComponent("સાચોદર વિસી લકી ડ્રો (મહિનો ૭)");
       const details = encodeURIComponent("સાચોદર વિસી ગ્રુપ લાઈવ ડ્રો WhatsApp ગ્રુપમાં.\nગ્રુપ લિંક: https://chat.whatsapp.com/C1kkzwpNif1LdXRiK6r5m6\nએપ લિંક: https://panchaljignesh05.github.io/sachodar-vishi-group/");
@@ -297,6 +297,7 @@
         nameDisp.innerText = `🏆 ${currentWinner.name}`;
         upiDisp.innerText = `UPI: ${currentWinner.upi}`;
 
+        // સત્તાવાર UPI લિંક - ૧૦૦% સાચી
         const upiUrl = `upi://pay?pa=${currentWinner.upi}&pn=${encodeURIComponent(currentWinner.name)}&am=${monthlyAmount}&cu=INR&tn=${encodeURIComponent('સાચોદર વિસી મહિનો ૭')}`;
         btnPay.href = upiUrl;
       } else {
@@ -369,7 +370,7 @@
       if (m) {
         document.getElementById('editMemberName').value = m.name;
         document.getElementById('editMemberPhone').value = m.phone;
-        document.getElementById('editMemberUpi').value = m.upi || `${m.phone}@upi`;
+        document.getElementById('editMemberUpi').value = m.upi || '';
       }
     }
 
@@ -385,7 +386,7 @@
         if (newPhone) m.phone = newPhone;
         if (newUpi) m.upi = newUpi;
 
-        localStorage.setItem('sachodar_members_data_v4', JSON.stringify(members));
+        localStorage.setItem('sachodar_members_data_v5', JSON.stringify(members));
         alert(`${m.id}. ${m.name} ની વિગતો સેવ થઈ ગઈ!`);
         renderMembers();
         updateWinnerBanner();
@@ -416,7 +417,8 @@
         const div = document.createElement('div');
         div.className = "p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 text-xs border border-slate-100 dark:border-slate-700 flex flex-col gap-2";
         
-        const individualUpiUrl = `upi://pay?pa=${m.upi || m.phone + '@upi'}&pn=${encodeURIComponent(m.name)}&am=${monthlyAmount}&cu=INR&tn=${encodeURIComponent('સાચોદર વિસી')}`;
+        // વ્યક્તિગત સભ્ય માટે સાચી UPI લિંક
+        const individualUpiUrl = `upi://pay?pa=${m.upi}&pn=${encodeURIComponent(m.name)}&am=${monthlyAmount}&cu=INR&tn=${encodeURIComponent('સાચોદર વિસી')}`;
 
         div.innerHTML = `
           <div class="flex justify-between items-center">
@@ -434,10 +436,11 @@
                   <a href="https://wa.me/91${m.phone}" target="_blank" class="text-green-600 hover:text-green-700">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                   </a>
-                  <a href="${individualUpiUrl}" class="text-[10px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
-                    <i class="fa-solid fa-qrcode text-[9px]"></i> UPI Pay
+                  <a href="${individualUpiUrl}" class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-qrcode text-[9px]"></i> Pay ₹${monthlyAmount}
                   </a>
                 </div>
+                <p class="text-[10px] text-slate-400 font-mono mt-0.5">UPI: ${m.upi}</p>
               </div>
             </div>
             <div>
@@ -559,7 +562,7 @@
           
           alert(`અભિનંદન! મહિનો ૭ (નવેમ્બર ૨૦૨૬) ના વિજેતા છે:\n${winner.name}\n\nહવે બાકીના તમામ સભ્યો એપમાંથી સીધા વિજેતાને ₹૧,૫૦૦ Google Pay / PhonePe દ્વારા ચૂકવી શકશે!`);
           
-          localStorage.setItem('sachodar_members_data_v4', JSON.stringify(members));
+          localStorage.setItem('sachodar_members_data_v5', JSON.stringify(members));
           updateDisplays();
           renderMembers();
           renderHistory();
