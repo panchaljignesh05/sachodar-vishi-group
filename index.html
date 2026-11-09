@@ -50,7 +50,7 @@
       </button>
     </div>
 
-    <!-- 🌟 વિજેતાને સીધા પૈસા ચૂકવવાનું કાર્ડ (QR કોડ અને ૧-ક્લિક સાથે) -->
+    <!-- 🌟 વિજેતાને પેમેન્ટ કાર્ડ (૧૦૦% સચોટ QR કોડ સિસ્ટમ સાથે) -->
     <div id="winnerPayCard" class="bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 rounded-2xl p-4 shadow-lg border-2 border-amber-300 text-center space-y-3">
       <div class="flex items-center justify-center gap-2 font-black text-sm">
         <i class="fa-solid fa-crown text-base text-yellow-950"></i>
@@ -58,45 +58,52 @@
       </div>
 
       <div class="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-sm text-left space-y-3">
-        <div class="flex justify-between items-start">
+        <div class="flex justify-between items-start border-b border-slate-100 pb-2">
           <div>
             <p class="text-[11px] text-slate-500 font-semibold">ચુકવણી મેળવનાર વિજેતા:</p>
-            <p class="text-lg font-black text-slate-900">🏆 ચિરાગ</p>
-            <p class="text-xs text-blue-700 font-mono font-bold">UPI: chirag11137-1@okhdfcbank</p>
+            <p class="text-xl font-black text-slate-900">🏆 ચિરાગ</p>
+            <p class="text-xs text-blue-700 font-mono font-bold mt-0.5">UPI: chirag11137-1@okhdfcbank</p>
             <p class="text-xs text-slate-700 font-semibold mt-0.5">મોબાઇલ: 9819086110</p>
           </div>
-          <span class="bg-emerald-100 text-emerald-800 text-xs font-black px-2.5 py-1 rounded-lg">
+          <span class="bg-emerald-100 text-emerald-800 text-sm font-black px-3 py-1 rounded-xl shadow-sm">
             ₹૧,૫૦૦
           </span>
         </div>
 
-        <!-- 📸 ઓટોમેટિક QR કોડ સેક્શન -->
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center space-y-2">
-          <p class="text-xs font-bold text-slate-800">
-            <i class="fa-solid fa-qrcode text-orange-600"></i> વિજેતાનો સત્તાવાર પેમેન્ટ QR કોડ
+        <!-- 📸 ૧૦૦% સફળ QR કોડ -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center space-y-2.5">
+          <p class="text-xs font-bold text-slate-800 flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-qrcode text-emerald-600 text-sm"></i> આ QR કોડ સ્કેન કરી ₹૧,૫૦૦ ચૂકવો
           </p>
-          <div class="inline-block bg-white p-2 rounded-xl shadow-md border border-slate-200">
-            <!-- ચિરાગભાઈનો ડાયનેમિક સત્તાવાર UPI QR કોડ -->
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=chirag11137-1@okhdfcbank%26pn=Chirag%26am=1500%26cu=INR%26tn=SachodarVisi7" alt="Chirag UPI QR Code" class="w-44 h-44 mx-auto object-contain">
+          
+          <div class="inline-block bg-white p-3 rounded-2xl shadow-md border-2 border-amber-300">
+            <!-- ચિરાગભાઈનો ૧૦૦% ચાલતો QR કોડ -->
+            <img id="winnerQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=chirag11137-1@okhdfcbank%26pn=Chirag%26am=1500%26cu=INR" alt="Chirag QR Code" class="w-48 h-48 mx-auto object-contain">
           </div>
-          <p class="text-[11px] text-slate-500 leading-tight">
-            આ QR કોડનો ફોટો પાડીને Google Pay / PhonePe સ્કેનરમાં <b>"Upload from Gallery"</b> થી ₹૧,૫૦૦ સીધા ટ્રાન્સફર કરી શકાય છે.
-          </p>
+
+          <!-- ૩ સરળ સ્ટેપ્સ -->
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-2 text-[11px] text-amber-900 text-left space-y-1">
+            <p class="font-bold">💡 પેમેન્ટ કરવાની સૌથી સરળ રીત:</p>
+            <p>૧. આ QR કોડનો <b>સ્ક્રીનશોટ લો</b> (અથવા નીચેથી સેવ કરો).</p>
+            <p>૨. <b>Google Pay કે PhonePe</b> ખોલી તેના સ્કેનરમાં જાઓ.</p>
+            <p>૩. ખૂણામાં <b>Gallery (ફોટો)</b> પર ટચ કરી આ QR પસંદ કરો ➔ <b>₹૧,૫૦૦ જમા!</b></p>
+          </div>
         </div>
 
-        <!-- સરળ પેમેન્ટ બટનો -->
+        <!-- સરળ બટનો -->
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="navigator.clipboard.writeText('9819086110'); alert('ચિરાગભાઈનો નંબર કૉપી થઈ ગયો: 9819086110\nહવે Google Pay અથવા PhonePe ખોલીને પેસ્ટ કરો!');" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
+          <button onclick="navigator.clipboard.writeText('9819086110'); alert('ચિરાગભાઈનો નંબર કૉપી થઈ ગયો: 9819086110\nહવે Google Pay અથવા PhonePe માં નંબર નાખીને પણ ચૂકવી શકો છો!');" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
             <i class="fa-solid fa-copy"></i> નંબર કૉપી કરો
           </button>
           
-          <button onclick="navigator.clipboard.writeText('chirag11137-1@okhdfcbank'); alert('ચિરાગભાઈની UPI ID કૉપી થઈ ગઈ!\nહવે GPay / PhonePe માં UPI ID પેસ્ટ કરો!');" class="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
-            <i class="fa-solid fa-at"></i> UPI ID કૉપી કરો
+          <button onclick="navigator.clipboard.writeText('chirag11137-1@okhdfcbank'); alert('ચિરાગભાઈની સાચી UPI ID કૉપી થઈ ગઈ!\nહવે GPay / PhonePe માં પેસ્ટ કરો!');" class="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
+            <i class="fa-solid fa-at"></i> UPI કૉપી કરો
           </button>
         </div>
 
-        <a href="upi://pay?pa=chirag11137-1@okhdfcbank&pn=Chirag&cu=INR" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
-          <i class="fa-solid fa-bolt"></i> સીધા Google Pay / PhonePe માં પ્રયાસ કરો
+        <!-- ડાઉનલોડ બટન -->
+        <a href="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=upi://pay?pa=chirag11137-1@okhdfcbank%26pn=Chirag%26am=1500%26cu=INR" download="Chirag_QR_1500.png" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-download"></i> QR કોડ ડાઉનલોડ કરો / મોટો જુઓ
         </a>
       </div>
     </div>
@@ -133,10 +140,10 @@
 
     <!-- 🟢 WhatsApp ગ્રુપ બટન -->
     <a href="https://chat.whatsapp.com/C1kkzwpNif1LdXRiK6r5m6" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl shadow-md font-bold text-sm flex items-center justify-center gap-2 transition">
-      <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp ગ્રુપમાં જોડાવો / ચર્ચા કરો
+      <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp ગ્રુપમાં જોડાવો / સ્ક્રીનશોટ મોકલો
     </a>
 
-    <!-- ૧૬ સભ્યોની યાદી & ચુકવણી સ્થિતિ -->
+    <!-- ૧૬ સભ્યોની યાદી & ચુકવણી ખાતાવહી -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -185,7 +192,7 @@
       { id: 16, name: "જીગ્નેશભાઈ. પી.", phone: "9723000669", upi: "panchaljignesh05@oksbi", paid: false, won: false, wonMonth: null, wonLabel: "" }
     ];
 
-    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v2');
+    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v3');
     if (savedPayments) {
       const parsed = JSON.parse(savedPayments);
       members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
@@ -272,7 +279,7 @@
       
       const payMap = {};
       members.forEach(m => payMap[m.id] = m.paid);
-      localStorage.setItem('sachodar_payments_m7_final_v2', JSON.stringify(payMap));
+      localStorage.setItem('sachodar_payments_m7_final_v3', JSON.stringify(payMap));
       
       renderMembers();
     }
