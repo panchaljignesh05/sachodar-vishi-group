@@ -122,23 +122,17 @@
 
       <div class="grid grid-cols-2 gap-2 text-center pt-3 text-xs">
         <div class="bg-black/20 rounded-xl p-2">
-          વિજેતાને જમા રકમ: <b class="text-green-300 font-bold block text-sm" id="collectedText">₹૧,૫૦૦</b>
+          વિજેતાને જમા રકમ: <b class="text-green-300 font-bold block text-sm" id="collectedText">₹૧૦,૫૦૦</b>
         </div>
         <div class="bg-black/20 rounded-xl p-2">
-          બાકી રકમ: <b class="text-red-300 font-bold block text-sm" id="pendingText">₹૨૨,૫૦૦</b>
+          બાકી રકમ: <b class="text-red-300 font-bold block text-sm" id="pendingText">₹૧૩,૫૦૦</b>
         </div>
       </div>
     </div>
 
-    <!-- 🔔 નોટિફિકેશન & કેલેન્ડર રીમાઇન્ડર બટન -->
-    <button onclick="setCalendarReminder()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold p-3.5 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 transition border border-amber-300/40">
-      <i class="fa-solid fa-bell text-yellow-200 text-base animate-bounce"></i>
-      <span>આગામી ડ્રોનું રીમાઇન્ડર સેટ કરો (Notification Alarm)</span>
-    </button>
-
     <!-- 🟢 WhatsApp ગ્રુપ બટન -->
     <a href="https://chat.whatsapp.com/C1kkzwpNif1LdXRiK6r5m6" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl shadow-md font-bold text-sm flex items-center justify-center gap-2 transition">
-      <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp ગ્રુપમાં લાઈવ ડ્રો (વીડિયો કૉલ)
+      <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp ગ્રુપમાં સ્ક્રીનશોટ મોકલો
     </a>
 
     <!-- 🌟 જમા થયેલ સભ્યોની યાદી (PAID LIST) -->
@@ -154,12 +148,12 @@
           </div>
         </div>
         <span class="bg-emerald-600 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-sm" id="paidCountBadge">
-          ૧ સભ્ય પૂર્ણ
+          ૭ સભ્ય પૂર્ણ
         </span>
       </div>
 
       <div class="space-y-1.5" id="paidMembersListContainer">
-        <!-- જેમના પૈસા જમા થશે તે આપોઆપ અહીં ઉમેરાશે -->
+        <!-- ૭ સભ્યો આપમેળે અહીં લાઈવ દેખાશે -->
       </div>
     </div>
 
@@ -270,37 +264,32 @@
 
     let currentTheme = localStorage.getItem('sachodar_theme') || 'saffron';
 
-    let members = [
-      { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "hareshpanchal43-3@okicici", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "kp0994219@okicici", paid: false, won: false, wonMonth: null, wonLabel: "" },
+    // ૧૬ સભ્યોનું લિસ્ટ (૭ સભ્યોનું પેમેન્ટ સાચું સેટ કરેલું છે)
+    let defaultMembers = [
+      { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "hareshpanchal43-3@okicici", paid: true, won: false, wonMonth: null, wonLabel: "" },
+      { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "kp0994219@okicici", paid: true, won: false, wonMonth: null, wonLabel: "" },
       { id: 3, name: "ચિરાગ", phone: "9819086110", upi: "chirag11137-1@okhdfcbank", paid: true, won: true, wonMonth: 7, wonLabel: "નવેમ્બર ૨૦૨૬ (વીશી ૭)" },
       { id: 4, name: "કરણ", phone: "7405746630", upi: "7405746630-2@ybl", paid: false, won: true, wonMonth: 4, wonLabel: "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)" },
       { id: 5, name: "કરણ વિનોદભાઈ", phone: "7405746630", upi: "7405746630-2@ybl", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 6, name: "સુરેશકાકા", phone: "6359230006", upi: "6359230006@pthdfc", paid: false, won: true, wonMonth: 5, wonLabel: "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)" },
-      { id: 7, name: "દર્શનભાઈ", phone: "6359230006", upi: "6359230006@pthdfc", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 6, name: "સુરેશકાકા", phone: "6359230006", upi: "6359230006@pthdfc", paid: true, won: true, wonMonth: 5, wonLabel: "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)" },
+      { id: 7, name: "દર્શનભાઈ", phone: "6359230006", upi: "6359230006@pthdfc", paid: true, won: false, wonMonth: null, wonLabel: "" },
       { id: 8, name: "રાજુભાઈ", phone: "9408266159", upi: "mohitpanchal21.mp1@okhdfcbank", paid: false, won: false, wonMonth: null, wonLabel: "" },
       { id: 9, name: "કલ્પેશભાઈ", phone: "9924426511", upi: "panchalkalpesh955@okicici", paid: false, won: true, wonMonth: 3, wonLabel: "જુલાઈ ૨૦૨૬ (વીશી ૩)" },
       { id: 10, name: "પરેશભાઈ", phone: "9320817044", upi: "jpmachinery80@okicici", paid: false, won: true, wonMonth: 6, wonLabel: "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)" },
       { id: 11, name: "જીગ્નેશભાઈ. એ.", phone: "9320817044", upi: "jpmachinery80@okicici", paid: false, won: false, wonMonth: null, wonLabel: "" },
       { id: 12, name: "દિપકભાઈ", phone: "9427351563", upi: "panchaldipak917@okaxis", paid: false, won: true, wonMonth: 1, wonLabel: "મે ૨૦૨૬ (વીશી ૧)" },
-      { id: 13, name: "કિરણભાઈ", phone: "8155985076", upi: "ashapanchal385@okaxis", paid: false, won: false, wonMonth: null, wonLabel: "" },
+      { id: 13, name: "કિરણભાઈ", phone: "8155985076", upi: "ashapanchal385@okaxis", paid: true, won: false, wonMonth: null, wonLabel: "" },
       { id: 14, name: "ભુપેશભાઇ", phone: "9824378168", upi: "9824378168@ptyes", paid: false, won: true, wonMonth: 2, wonLabel: "જૂન ૨૦૨૬ (વીશી ૨)" },
       { id: 15, name: "કેતનભાઈ", phone: "9924649432", upi: "ketanpanchal521@okaxis", paid: false, won: false, wonMonth: null, wonLabel: "" },
-      { id: 16, name: "જીગ્નેશભાઈ. પી.", phone: "9723000669", upi: "panchaljignesh05@oksbi", paid: false, won: false, wonMonth: null, wonLabel: "" }
+      { id: 16, name: "જીગ્નેશભાઈ. પી.", phone: "9723000669", upi: "panchaljignesh05@oksbi", paid: true, won: false, wonMonth: null, wonLabel: "" }
     ];
 
-    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v6');
+    // બધાના ફોનમાં ૭ સભ્યો લાઈવ દેખાય તે માટે
+    let members = defaultMembers;
+    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v7');
     if (savedPayments) {
       const parsed = JSON.parse(savedPayments);
       members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
-    }
-
-    function setCalendarReminder() {
-      const title = encodeURIComponent("સાચોદર વિસી લકી ડ્રો");
-      const details = encodeURIComponent("સાચોદર વિસી ગ્રુપ લાઈવ ડ્રો.\nWhatsApp ગ્રુપ: https://chat.whatsapp.com/C1kkzwpNif1LdXRiK6r5m6\nએપ: https://panchaljignesh05.github.io/sachodar-vishi-group/");
-      const dates = "20261110T163000Z/20261110T170000Z";
-      const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}`;
-      window.open(calUrl, '_blank');
     }
 
     function applyTheme(themeName) {
@@ -444,9 +433,6 @@
       document.getElementById('paidCountBadge').innerText = `${paidCount} સભ્ય પૂર્ણ`;
       document.getElementById('collectedText').innerText = `₹${(paidCount * monthlyAmount).toLocaleString()}`;
       document.getElementById('pendingText').innerText = `₹${((16 - paidCount) * monthlyAmount).toLocaleString()}`;
-
-      const eligibleCount = members.filter(m => !m.won).length;
-      document.getElementById('eligibleCountBadge').innerText = `${eligibleCount} સભ્યો બાકી`;
     }
 
     function renderHistory() {
@@ -486,7 +472,7 @@
       
       const payMap = {};
       members.forEach(m => payMap[m.id] = m.paid);
-      localStorage.setItem('sachodar_payments_m7_final_v6', JSON.stringify(payMap));
+      localStorage.setItem('sachodar_payments_m7_final_v7', JSON.stringify(payMap));
       
       renderMembers();
     }
@@ -549,7 +535,6 @@
       }, 100);
     }
 
-    applyTheme(currentTheme);
     renderMembers();
     renderHistory();
   </script>
