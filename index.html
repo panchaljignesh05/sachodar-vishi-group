@@ -136,7 +136,7 @@
     </a>
 
     <!-- ======================================================== -->
-    <!-- 🌟 નવું ફીચર ૧: જમા થયેલ સભ્યોની અલગ લિસ્ટ (PAID LIST) -->
+    <!-- 🌟 ફક્ત એક જ લિસ્ટ: જમા થયેલ સભ્યોની યાદી (PAID LIST) -->
     <!-- ======================================================== -->
     <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 shadow-sm">
       <div class="flex justify-between items-center mb-2.5">
@@ -146,7 +146,7 @@
           </span>
           <div>
             <h3 class="font-black text-emerald-950 text-sm">જમા થયેલ સભ્યોની યાદી</h3>
-            <p class="text-[10px] text-emerald-700 font-semibold">જેમનું પેમેન્ટ આવી ગયું છે</p>
+            <p class="text-[10px] text-emerald-700 font-semibold">જેમ જેમ પેમેન્ટ આવશે તેમ નામ અહીં ઉમેરાશે</p>
           </div>
         </div>
         <span class="bg-emerald-600 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-sm" id="paidCountBadge">
@@ -155,31 +155,7 @@
       </div>
 
       <div class="space-y-1.5" id="paidMembersListContainer">
-        <!-- જેમના પૈસા જમા થશે તે આપોઆપ અહીં ઉમેરાશે -->
-      </div>
-    </div>
-
-    <!-- ======================================================== -->
-    <!-- 🌟 નવું ફીચર ૨: બાકી રહેલા સભ્યોની અલગ લિસ્ટ (PENDING LIST) -->
-    <!-- ======================================================== -->
-    <div class="bg-red-50 border border-red-200 rounded-2xl p-4 shadow-sm">
-      <div class="flex justify-between items-center mb-2.5">
-        <div class="flex items-center gap-2">
-          <span class="w-7 h-7 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-sm">
-            <i class="fa-solid fa-clock"></i>
-          </span>
-          <div>
-            <h3 class="font-black text-red-950 text-sm">ચુકવણી બાકી સભ્યોની યાદી</h3>
-            <p class="text-[10px] text-red-700 font-semibold">૧૫ તારીખ સુધીમાં જમા કરાવવાની બાકી</p>
-          </div>
-        </div>
-        <span class="bg-red-100 text-red-800 text-xs font-black px-2.5 py-1 rounded-full border border-red-300" id="pendingCountBadge">
-          ૧૫ બાકી
-        </span>
-      </div>
-
-      <div class="space-y-1.5" id="pendingMembersListContainer">
-        <!-- જેમના પૈસા બાકી છે તે અહીં દેખાશે -->
+        <!-- જેમના પૈસા જમા થશે તે ૧, ૨, ૩... કરીને આપોઆપ અહીં ઉમેરાશે -->
       </div>
     </div>
 
@@ -232,7 +208,7 @@
       { id: 16, name: "જીગ્નેશભાઈ. પી.", phone: "9723000669", upi: "panchaljignesh05@oksbi", paid: false, won: false, wonMonth: null, wonLabel: "" }
     ];
 
-    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v4');
+    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v5');
     if (savedPayments) {
       const parsed = JSON.parse(savedPayments);
       members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
@@ -241,14 +217,11 @@
     function renderMembers() {
       const container = document.getElementById('membersList');
       const paidContainer = document.getElementById('paidMembersListContainer');
-      const pendingContainer = document.getElementById('pendingMembersListContainer');
 
       container.innerHTML = '';
       paidContainer.innerHTML = '';
-      pendingContainer.innerHTML = '';
 
       let paidCount = 0;
-      let pendingCount = 0;
 
       members.forEach((m, idx) => {
         if(m.paid) {
@@ -267,22 +240,6 @@
             <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-300">પૂર્ણ</span>
           `;
           paidContainer.appendChild(paidDiv);
-        } else {
-          pendingCount++;
-          // ⏳ બાકી સભ્યનું કાર્ડ
-          const pendDiv = document.createElement('div');
-          pendDiv.className = "flex justify-between items-center p-2 rounded-xl bg-white border border-red-200 text-xs shadow-sm";
-          pendDiv.innerHTML = `
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-red-100 text-red-800 font-bold flex items-center justify-center text-[11px]">${m.id}</span>
-              <div>
-                <p class="font-bold text-slate-900">${m.name}</p>
-                <p class="text-[10px] text-red-600 font-semibold">₹૧,૫૦૦ બાકી</p>
-              </div>
-            </div>
-            <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-300">બાકી</span>
-          `;
-          pendingContainer.appendChild(pendDiv);
         }
 
         // મુખ્ય ૧૬ સભ્યોનું લિસ્ટ (એડમિન કંટ્રોલ)
@@ -324,8 +281,6 @@
       }
 
       document.getElementById('paidCountBadge').innerText = `${paidCount} સભ્ય પૂર્ણ`;
-      document.getElementById('pendingCountBadge').innerText = `${pendingCount} બાકી`;
-
       document.getElementById('collectedText').innerText = `₹${(paidCount * monthlyAmount).toLocaleString()}`;
       document.getElementById('pendingText').innerText = `₹${((16 - paidCount) * monthlyAmount).toLocaleString()}`;
     }
@@ -335,68 +290,4 @@
       h.innerHTML = '';
       
       const monthNames = [
-        "મે ૨૦૨૬ (વીશી ૧)", "જૂન ૨૦૨૬ (વીશી ૨)", "જુલાઈ ૨૦૨૬ (વીશી ૩)", "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)",
-        "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)", "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)", "નવેમ્બર ૨૦૨૬ (વીશી ૭)", "ડિસેમ્બર ૨૦૨૬ (વીશી ૮)",
-        "જાન્યુઆરી ૨૦૨૭ (વીશી ૯)", "ફેબ્રુઆરી ૨૦૨૭ (વીશી ૧૦)", "માર્ચ ૨૦૨૭ (વીશી ૧૧)", "એપ્રિલ ૨૦૨૭ (વીશી ૧૨)",
-        "મે ૨૦૨૭ (વીશી ૧૩)", "જૂન ૨૦૨૭ (વીશી ૧૪)", "જુલાઈ ૨૦૨૭ (વીશી ૧૫)", "ઑગસ્ટ ૨૦૨૭ (વીશી ૧૬)"
-      ];
-
-      for(let i=1; i<=16; i++) {
-        const winner = members.find(m => m.wonMonth === i);
-        const isDone = (i <= currentMonth);
-
-        h.innerHTML += `
-          <div class="flex justify-between items-center p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-700">
-            <div>
-              <span class="font-medium text-slate-700 dark:text-slate-300">${monthNames[i-1]}</span>
-            </div>
-            <div class="text-right">
-              <span class="font-bold ${isDone ? 'text-green-700' : 'text-slate-400'}">
-                ${winner ? `🏆 ${winner.name}` : 'આગામી'}
-              </span>
-              <span class="text-slate-500 block text-[10px]">₹${(16 * monthlyAmount).toLocaleString()}</span>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    function togglePayment(idx) {
-      if(!isAdmin) return;
-      members[idx].paid = !members[idx].paid;
-      
-      const payMap = {};
-      members.forEach(m => payMap[m.id] = m.paid);
-      localStorage.setItem('sachodar_payments_m7_final_v4', JSON.stringify(payMap));
-      
-      renderMembers();
-    }
-
-    function toggleAdmin() {
-      if(isAdmin) {
-        isAdmin = false;
-        document.getElementById('adminText').innerText = 'લૉગિન';
-        document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
-        document.getElementById('adminPanelBanner').classList.add('hidden');
-        document.getElementById('adminBadge').classList.add('hidden');
-      } else {
-        const pin = prompt("એડમિન પિન દાખલ કરો:");
-        if(pin === "1234") {
-          isAdmin = true;
-          document.getElementById('adminText').innerText = 'એડમિન મોડ';
-          document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
-          document.getElementById('adminPanelBanner').classList.remove('hidden');
-          document.getElementById('adminBadge').classList.remove('hidden');
-          alert("એડમિન લૉગિન સફળ!");
-        } else {
-          alert("ખોટો પિન! સાચો પિન 1234 છે.");
-        }
-      }
-      renderMembers();
-    }
-
-    renderMembers();
-    renderHistory();
-  </script>
-</body>
-</html>
+        "મે ૨૦૨૬ (વીશી ૧)", "જૂન ૨
