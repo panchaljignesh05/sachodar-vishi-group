@@ -18,22 +18,37 @@
     .theme-blue { --primary-from: #1e3a8a; --primary-to: #0369a1; --accent: #0284c7; --bg: #f0f9ff; }
     .theme-green { --primary-from: #14532d; --primary-to: #047857; --accent: #10b981; --bg: #f0fdf4; }
     .theme-dark { --primary-from: #0f172a; --primary-to: #334155; --accent: #eab308; --bg: #0b0f19; color: #f8fafc; }
+
+    /* 🌅 સાચોદર શાળા માટે સોનેરી સૂર્યાસ્ત (Sunset) બેકગ્રાઉન્ડ ઇફેક્ટ */
+    .village-sunset-header {
+      background: linear-gradient(180deg, rgba(234, 88, 12, 0.72) 0%, rgba(180, 83, 9, 0.85) 55%, rgba(67, 20, 7, 0.94) 100%), 
+                  url('Screenshot_2026-11-14-10-11-55-62_3d9111e2d3171bf4882369f490c087b4.jpg') center/cover no-repeat;
+      backdrop-filter: blur(0.5px);
+    }
   </style>
 </head>
 <body id="appBody" class="pb-28 theme-saffron bg-slate-50 transition-colors duration-300">
 
-  <!-- હેડર -->
-  <header id="appHeader" class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center transition-all duration-300">
-    <img src="IMG-20261031-WA9497.jpg" alt="સાચોદર વિસી લોગો" class="w-16 h-16 rounded-full border-2 border-amber-300 shadow-md mb-1.5 object-cover">
-    <h1 class="text-xl font-bold tracking-wide">સાચોદર વિસી ગ્રુપ</h1>
-    <p class="text-xs text-orange-100 italic mt-0.5">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
-    <div class="flex items-center gap-2 mt-1">
-      <span class="text-[10px] text-amber-200 font-semibold bg-black/20 px-2.5 py-0.5 rounded-full">સત્ર: ૨૦૨૬ / ૨૦૨૭</span>
-      <span id="adminBadge" class="hidden text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-full">એડમિન મોડ</span>
+  <!-- 🌅 હેડર (સાચોદર શાળા + સોનેરી Sunset ઇફેક્ટ + SV લોગો) -->
+  <header id="appHeader" class="village-sunset-header text-white p-5 shadow-2xl text-center relative flex flex-col items-center justify-center border-b-2 border-amber-400/80 transition-all duration-300">
+    
+    <!-- ગોલ્ડન SV લોગો -->
+    <div class="relative mb-2">
+      <img src="IMG-20261031-WA9497.jpg" alt="સાચોદર વિસી લોગો" class="w-20 h-20 rounded-full border-2 border-amber-300 shadow-2xl object-cover ring-4 ring-amber-400/40">
+    </div>
+
+    <h1 class="text-2xl font-black tracking-wide drop-shadow-md text-white">સાચોદર વિસી ગ્રુપ</h1>
+    <p class="text-xs text-amber-100 italic mt-0.5 drop-shadow">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
+    
+    <div class="flex items-center gap-2 mt-2">
+      <span class="text-[10px] text-amber-200 font-bold bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-amber-300/40 shadow-sm">
+        <i class="fa-solid fa-school text-[9px] mr-1 text-amber-300"></i> સાચોદર શાળા સ્મૃતિ | સત્ર: ૨૦૨૬-૨૭
+      </span>
+      <span id="adminBadge" class="hidden text-[10px] bg-emerald-500 text-white font-bold px-2.5 py-1 rounded-full shadow">એડમિન મોડ</span>
     </div>
     
-    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition">
-      <i class="fa-solid fa-lock"></i> <span id="adminText">લૉગિન</span>
+    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-black/40 hover:bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition border border-white/20 shadow">
+      <i class="fa-solid fa-lock text-amber-300"></i> <span id="adminText">લૉગિન</span>
     </button>
   </header>
 
@@ -202,9 +217,7 @@
 
   </main>
 
-  <!-- ========================================== -->
-  <!-- ⚙️ એડમિન માસ્ટર સેટિંગ્સ મોડલ (Popup Box) -->
-  <!-- ========================================== -->
+  <!-- ⚙️ એડમિન માસ્ટર સેટિંગ્સ મોડલ -->
   <div id="settingsModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-5 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4">
       
@@ -264,7 +277,6 @@
 
     let currentTheme = localStorage.getItem('sachodar_theme') || 'saffron';
 
-    // ૧૬ સભ્યોનું લિસ્ટ (૭ સભ્યોનું પેમેન્ટ સાચું સેટ કરેલું છે)
     let defaultMembers = [
       { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "hareshpanchal43-3@okicici", paid: true, won: false, wonMonth: null, wonLabel: "" },
       { id: 2, name: "પંકજભાઈ", phone: "9820506270", upi: "kp0994219@okicici", paid: true, won: false, wonMonth: null, wonLabel: "" },
@@ -284,9 +296,8 @@
       { id: 16, name: "જીગ્નેશભાઈ. પી.", phone: "9723000669", upi: "panchaljignesh05@oksbi", paid: true, won: false, wonMonth: null, wonLabel: "" }
     ];
 
-    // બધાના ફોનમાં ૭ સભ્યો લાઈવ દેખાય તે માટે
     let members = defaultMembers;
-    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v7');
+    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v9');
     if (savedPayments) {
       const parsed = JSON.parse(savedPayments);
       members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
@@ -295,30 +306,18 @@
     function applyTheme(themeName) {
       currentTheme = themeName;
       localStorage.setItem('sachodar_theme', themeName);
-
-      const header = document.getElementById('appHeader');
       const dash = document.getElementById('dashboardCard');
       const body = document.getElementById('appBody');
-      const meta = document.getElementById('metaThemeColor');
-
       body.className = `pb-28 theme-${themeName} transition-colors duration-300`;
 
       if (themeName === 'saffron') {
-        header.className = "bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center";
         dash.className = "bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-4 shadow-md";
-        meta.content = "#ea580c";
       } else if (themeName === 'blue') {
-        header.className = "bg-gradient-to-r from-blue-900 via-blue-700 to-sky-800 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center";
         dash.className = "bg-gradient-to-br from-blue-700 to-sky-700 text-white rounded-2xl p-4 shadow-md";
-        meta.content = "#1e3a8a";
       } else if (themeName === 'green') {
-        header.className = "bg-gradient-to-r from-emerald-900 via-emerald-700 to-teal-800 text-white p-4 shadow-lg text-center relative flex flex-col items-center justify-center";
         dash.className = "bg-gradient-to-br from-emerald-700 to-teal-700 text-white rounded-2xl p-4 shadow-md";
-        meta.content = "#047857";
       } else if (themeName === 'dark') {
-        header.className = "bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-amber-400 p-4 shadow-lg text-center relative flex flex-col items-center justify-center border-b border-amber-500/30";
         dash.className = "bg-gradient-to-br from-slate-900 to-slate-800 text-amber-200 rounded-2xl p-4 shadow-md border border-amber-500/30";
-        meta.content = "#0f172a";
       }
     }
 
@@ -472,7 +471,7 @@
       
       const payMap = {};
       members.forEach(m => payMap[m.id] = m.paid);
-      localStorage.setItem('sachodar_payments_m7_final_v7', JSON.stringify(payMap));
+      localStorage.setItem('sachodar_payments_m7_final_v9', JSON.stringify(payMap));
       
       renderMembers();
     }
@@ -535,6 +534,7 @@
       }, 100);
     }
 
+    applyTheme(currentTheme);
     renderMembers();
     renderHistory();
   </script>
