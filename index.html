@@ -19,35 +19,37 @@
     .theme-green { --primary-from: #14532d; --primary-to: #047857; --accent: #10b981; --bg: #f0fdf4; }
     .theme-dark { --primary-from: #0f172a; --primary-to: #334155; --accent: #eab308; --bg: #0b0f19; color: #f8fafc; }
 
-    /* 🌅 સાચોદર શાળા માટે સોનેરી સૂર્યાસ્ત (Sunset) બેકગ્રાઉન્ડ ઇફેક્ટ */
+    /* 🌅 સાચોદર શાળા સ્પષ્ટ દેખાય તેવો લાઇટ કેસરી Sunset ગ્લો */
     .village-sunset-header {
-      background: linear-gradient(180deg, rgba(234, 88, 12, 0.72) 0%, rgba(180, 83, 9, 0.85) 55%, rgba(67, 20, 7, 0.94) 100%), 
+      background: linear-gradient(180deg, rgba(234, 88, 12, 0.32) 0%, rgba(180, 83, 9, 0.42) 45%, rgba(20, 5, 2, 0.78) 100%), 
                   url('Screenshot_2026-11-14-10-11-55-62_3d9111e2d3171bf4882369f490c087b4.jpg') center/cover no-repeat;
-      backdrop-filter: blur(0.5px);
+    }
+    .custom-text-shadow {
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.85), 0 0 10px rgba(0, 0, 0, 0.5);
     }
   </style>
 </head>
 <body id="appBody" class="pb-28 theme-saffron bg-slate-50 transition-colors duration-300">
 
-  <!-- 🌅 હેડર (સાચોદર શાળા + સોનેરી Sunset ઇફેક્ટ + SV લોગો) -->
-  <header id="appHeader" class="village-sunset-header text-white p-5 shadow-2xl text-center relative flex flex-col items-center justify-center border-b-2 border-amber-400/80 transition-all duration-300">
+  <!-- 🌅 હેડર (શાળા એકદમ ક્લિયર દેખાશે + લાઇટ કેસરી શેડ + SV લોગો) -->
+  <header id="appHeader" class="village-sunset-header text-white p-5 shadow-2xl text-center relative flex flex-col items-center justify-center border-b-2 border-amber-400/90 transition-all duration-300">
     
     <!-- ગોલ્ડન SV લોગો -->
     <div class="relative mb-2">
-      <img src="IMG-20261031-WA9497.jpg" alt="સાચોદર વિસી લોગો" class="w-20 h-20 rounded-full border-2 border-amber-300 shadow-2xl object-cover ring-4 ring-amber-400/40">
+      <img src="IMG-20261031-WA9497.jpg" alt="સાચોદર વિસી લોગો" class="w-20 h-20 rounded-full border-2 border-amber-300 shadow-2xl object-cover ring-4 ring-amber-400/50">
     </div>
 
-    <h1 class="text-2xl font-black tracking-wide drop-shadow-md text-white">સાચોદર વિસી ગ્રુપ</h1>
-    <p class="text-xs text-amber-100 italic mt-0.5 drop-shadow">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
+    <h1 class="text-2xl font-black tracking-wide custom-text-shadow text-white">સાચોદર વિસી ગ્રુપ</h1>
+    <p class="text-xs text-amber-100 font-medium italic mt-0.5 custom-text-shadow">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
     
     <div class="flex items-center gap-2 mt-2">
-      <span class="text-[10px] text-amber-200 font-bold bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-amber-300/40 shadow-sm">
+      <span class="text-[10px] text-amber-200 font-bold bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-amber-300/40 shadow">
         <i class="fa-solid fa-school text-[9px] mr-1 text-amber-300"></i> સાચોદર શાળા સ્મૃતિ | સત્ર: ૨૦૨૬-૨૭
       </span>
       <span id="adminBadge" class="hidden text-[10px] bg-emerald-500 text-white font-bold px-2.5 py-1 rounded-full shadow">એડમિન મોડ</span>
     </div>
     
-    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-black/40 hover:bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition border border-white/20 shadow">
+    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-black/50 hover:bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition border border-white/30 shadow">
       <i class="fa-solid fa-lock text-amber-300"></i> <span id="adminText">લૉગિન</span>
     </button>
   </header>
@@ -297,7 +299,7 @@
     ];
 
     let members = defaultMembers;
-    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v9');
+    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v10');
     if (savedPayments) {
       const parsed = JSON.parse(savedPayments);
       members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
@@ -471,7 +473,7 @@
       
       const payMap = {};
       members.forEach(m => payMap[m.id] = m.paid);
-      localStorage.setItem('sachodar_payments_m7_final_v9', JSON.stringify(payMap));
+      localStorage.setItem('sachodar_payments_m7_final_v10', JSON.stringify(payMap));
       
       renderMembers();
     }
