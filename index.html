@@ -8,30 +8,34 @@
   <link rel="icon" type="image/jpeg" href="IMG-20261031-WA9497.jpg">
   <link rel="apple-touch-icon" href="IMG-20261031-WA9497.jpg">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#E65100" id="metaThemeColor">
+  <meta name="theme-color" content="#ea580c" id="metaThemeColor">
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; }
-    .theme-saffron { --primary-from: #ea580c; --primary-to: #b45309; --accent: #f97316; --bg: #f8fafc; }
-    .theme-blue { --primary-from: #1e3a8a; --primary-to: #0369a1; --accent: #0284c7; --bg: #f0f9ff; }
-    .theme-green { --primary-from: #14532d; --primary-to: #047857; --accent: #10b981; --bg: #f0fdf4; }
-    .theme-dark { --primary-from: #0f172a; --primary-to: #334155; --accent: #eab308; --bg: #0b0f19; color: #f8fafc; }
 
-    /* 🌅 સાચોદર શાળા સ્પષ્ટ દેખાય તેવો લાઇટ કેસરી Sunset ગ્લો */
     .village-sunset-header {
-      background: linear-gradient(180deg, rgba(234, 88, 12, 0.32) 0%, rgba(180, 83, 9, 0.42) 45%, rgba(20, 5, 2, 0.78) 100%), 
-                  url('Screenshot_2026-11-14-10-11-55-62_3d9111e2d3171bf4882369f490c087b4.jpg') center/cover no-repeat;
+      background:
+        linear-gradient(
+          180deg,
+          var(--header-overlay-top, rgba(234, 88, 12, 0.34)) 0%,
+          var(--header-overlay-mid, rgba(180, 83, 9, 0.45)) 45%,
+          rgba(15, 23, 42, 0.82) 100%
+        ),
+        url('Screenshot_2026-11-14-10-11-55-62_3d9111e2d3171bf4882369f490c087b4.jpg') center/cover no-repeat;
     }
     .custom-text-shadow {
       text-shadow: 0 2px 5px rgba(0, 0, 0, 0.85), 0 0 10px rgba(0, 0, 0, 0.5);
     }
   </style>
 </head>
-<body id="appBody" class="pb-28 theme-saffron bg-slate-50 transition-colors duration-300">
+<body id="appBody" class="pb-28 bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
 
-  <!-- 🌅 હેડર (શાળા એકદમ ક્લિયર દેખાશે + લાઇટ કેસરી શેડ + SV લોગો) -->
+  <!-- 🌅 હેડર -->
   <header id="appHeader" class="village-sunset-header text-white p-5 shadow-2xl text-center relative flex flex-col items-center justify-center border-b-2 border-amber-400/90 transition-all duration-300">
     
     <!-- ગોલ્ડન SV લોગો -->
@@ -68,19 +72,19 @@
     </div>
 
     <!-- 🌟 વિજેતાને પેમેન્ટ કાર્ડ (QR કોડ સાથે) -->
-    <div id="winnerPayCard" class="bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 rounded-2xl p-4 shadow-lg border-2 border-amber-300 text-center space-y-3">
+    <div id="winnerPayCard" class="bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 rounded-2xl p-4 shadow-lg border-2 border-amber-300 text-center space-y-3 transition-all duration-300">
       <div class="flex items-center justify-center gap-2 font-black text-sm">
-        <i class="fa-solid fa-crown text-base text-yellow-950"></i>
+        <i class="fa-solid fa-crown text-base"></i>
         <span>મહિનો ૭ વિજેતાની ચુકવણી</span>
       </div>
 
-      <div class="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-sm text-left space-y-3">
-        <div class="flex justify-between items-start border-b border-slate-100 pb-2">
+      <div class="bg-white/95 dark:bg-slate-900/95 dark:text-slate-100 backdrop-blur rounded-2xl p-4 shadow-sm text-left space-y-3">
+        <div class="flex justify-between items-start border-b border-slate-100 dark:border-slate-800 pb-2">
           <div>
-            <p class="text-[11px] text-slate-500 font-semibold">ચુકવણી મેળવનાર વિજેતા:</p>
-            <p class="text-xl font-black text-slate-900">🏆 ચિરાગ</p>
-            <p class="text-xs text-blue-700 font-mono font-bold mt-0.5">UPI: chirag11137-1@okhdfcbank</p>
-            <p class="text-xs text-slate-700 font-semibold mt-0.5">મોબાઇલ: 9819086110</p>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">ચુકવણી મેળવનાર વિજેતા:</p>
+            <p class="text-xl font-black text-slate-900 dark:text-white">🏆 ચિરાગ</p>
+            <p class="text-xs text-blue-700 dark:text-blue-400 font-mono font-bold mt-0.5">UPI: chirag11137-1@okhdfcbank</p>
+            <p class="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-0.5">મોબાઇલ: 9819086110</p>
           </div>
           <span class="bg-emerald-100 text-emerald-800 text-sm font-black px-3 py-1 rounded-xl shadow-sm">
             ₹૧,૫૦૦
@@ -88,8 +92,8 @@
         </div>
 
         <!-- 📸 QR કોડ -->
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center space-y-2.5">
-          <p class="text-xs font-bold text-slate-800 flex items-center justify-center gap-1.5">
+        <div class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-center space-y-2.5">
+          <p class="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-qrcode text-emerald-600 text-sm"></i> આ QR કોડ સ્કેન કરી ₹૧,૫૦૦ ચૂકવો
           </p>
           
@@ -97,7 +101,7 @@
             <img id="winnerQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=chirag11137-1@okhdfcbank%26pn=Chirag%26am=1500%26cu=INR" alt="Chirag QR Code" class="w-48 h-48 mx-auto object-contain">
           </div>
 
-          <div class="bg-amber-50 border border-amber-200 rounded-lg p-2 text-[11px] text-amber-900 text-left space-y-1">
+          <div class="bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-lg p-2 text-[11px] text-amber-900 dark:text-amber-200 text-left space-y-1">
             <p class="font-bold">💡 પેમેન્ટ કરવાની સૌથી સરળ રીત:</p>
             <p>૧. આ QR કોડનો <b>સ્ક્રીનશોટ લો</b>.</p>
             <p>૨. <b>Google Pay કે PhonePe</b> સ્કેનરમાં જઈ ગેલેરીમાંથી આ ફોટો પસંદ કરો ➔ <b>₹૧,૫૦૦ જમા!</b></p>
@@ -153,15 +157,15 @@
     </a>
 
     <!-- 🌟 જમા થયેલ સભ્યોની યાદી (PAID LIST) -->
-    <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 shadow-sm">
+    <div id="paidSectionCard" class="bg-emerald-50 dark:bg-slate-800 border-2 border-emerald-300 dark:border-emerald-700 rounded-2xl p-4 shadow-sm transition-colors duration-300">
       <div class="flex justify-between items-center mb-2.5">
         <div class="flex items-center gap-2">
           <span class="w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-sm">
             <i class="fa-solid fa-check"></i>
           </span>
           <div>
-            <h3 class="font-black text-emerald-950 text-sm">જમા થયેલ સભ્યોની યાદી</h3>
-            <p class="text-[10px] text-emerald-700 font-semibold">જેમ જેમ પેમેન્ટ આવશે તેમ નામ અહીં ઉમેરાશે</p>
+            <h3 class="font-black text-emerald-950 dark:text-emerald-200 text-sm">જમા થયેલ સભ્યોની યાદી</h3>
+            <p class="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold">જેમ જેમ પેમેન્ટ આવશે તેમ નામ અહીં ઉમેરાશે</p>
           </div>
         </div>
         <span class="bg-emerald-600 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-sm" id="paidCountBadge">
@@ -169,22 +173,20 @@
         </span>
       </div>
 
-      <div class="space-y-1.5" id="paidMembersListContainer">
-        <!-- ૭ સભ્યો આપમેળે અહીં લાઈવ દેખાશે -->
-      </div>
+      <div class="space-y-1.5" id="paidMembersListContainer"></div>
     </div>
 
     <!-- 🎲 માસિક લકી ડ્રો વિભાગ -->
-    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
+    <div id="drawSectionCard" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 text-center transition-colors duration-300">
       <div class="flex justify-between items-center mb-1">
         <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1">
-          <i class="fa-solid fa-dice text-orange-500"></i> માસિક લકી ડ્રો સિસ્ટમ
+          <i id="drawIcon" class="fa-solid fa-dice text-orange-500"></i> માસિક લકી ડ્રો સિસ્ટમ
         </h2>
-        <span class="text-[11px] bg-orange-100 text-orange-700 px-2.5 py-0.5 rounded-full font-bold" id="eligibleCountBadge">૯ સભ્યો બાકી</span>
+        <span id="eligibleCountBadge" class="text-[11px] bg-orange-100 text-orange-700 px-2.5 py-0.5 rounded-full font-bold">૯ સભ્યો બાકી</span>
       </div>
       <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">૭ વિજેતાઓ સિસ્ટમમાંથી આપોઆપ બાકાત છે.</p>
 
-      <div id="drawBox" class="h-20 flex items-center justify-center bg-orange-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-orange-300 my-2">
+      <div id="drawBox" class="h-20 flex items-center justify-center bg-orange-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-orange-300 my-2 transition-colors duration-300">
         <span id="winnerName" class="text-xl font-black text-orange-600">ડ્રો માટે તૈયાર</span>
       </div>
 
@@ -194,27 +196,25 @@
       <p id="adminOnlyMsg" class="text-[11px] text-slate-400 mt-1">નોંધ: માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.</p>
     </div>
 
-    <!-- 👥 ૧૬ સભ્યોની યાદી & ચુકવણી ખાતાવહી (એડમિન કંટ્રોલ સાથે) -->
-    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+    <!-- 👥 ૧૬ સભ્યોની યાદી & ચુકવણી ખાતાવહી -->
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-300">
       <div class="flex justify-between items-center mb-3">
         <div>
           <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી & સંપર્ક</h3>
-          <p class="text-[11px] text-slate-500">ટેપ કરીને પેમેન્ટ અપડેટ કરો</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">ટેપ કરીને પેમેન્ટ અપડેટ કરો</p>
         </div>
         <span class="text-xs text-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg" id="adminNotice">જોવાની પરવાનગી</span>
       </div>
-      <div class="space-y-2.5 max-h-96 overflow-y-auto pr-1" id="membersList">
-      </div>
+      <div class="space-y-2.5 max-h-96 overflow-y-auto pr-1" id="membersList"></div>
     </div>
 
     <!-- 📜 ૧૬ મહિનાનો વિજેતા રેકોર્ડ -->
-    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-300">
       <div class="flex justify-between items-center mb-2">
         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ મહિનાનો વિજેતા રેકોર્ડ</h3>
-        <span class="text-[11px] text-emerald-700 bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded font-bold">૭ મહિના પૂર્ણ</span>
+        <span class="text-[11px] text-emerald-700 bg-emerald-50 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded font-bold">૭ મહિના પૂર્ણ</span>
       </div>
-      <div class="space-y-2 text-xs" id="historyList">
-      </div>
+      <div class="space-y-2 text-xs" id="historyList"></div>
     </div>
 
   </main>
@@ -225,7 +225,7 @@
       
       <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
         <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-          <i class="fa-solid fa-palette text-orange-500"></i> એડમિન સેટિંગ્સ & UPI ID
+          <i id="settingsModalIcon" class="fa-solid fa-palette text-orange-500"></i> એડમિન સેટિંગ્સ & UPI ID
         </h3>
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -236,17 +236,17 @@
       <div class="space-y-2">
         <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૧. એપ કલર થીમ:</label>
         <div class="grid grid-cols-2 gap-2">
-          <button onclick="changeTheme('saffron')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-orange-500 bg-orange-50 text-orange-700">
-            <span class="w-4 h-4 rounded-full bg-orange-600"></span> શાહી કેસરી
+          <button type="button" id="themeBtn-saffron" onclick="changeTheme('saffron')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-orange-500 bg-orange-50 text-orange-700 transition">
+            <span class="w-4 h-4 rounded-full bg-orange-600 shrink-0"></span> શાહી કેસરી
           </button>
-          <button onclick="changeTheme('blue')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-blue-600 bg-blue-50 text-blue-800">
-            <span class="w-4 h-4 rounded-full bg-blue-700"></span> રોયલ બ્લૂ
+          <button type="button" id="themeBtn-blue" onclick="changeTheme('blue')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-blue-600 bg-blue-50 text-blue-800 transition">
+            <span class="w-4 h-4 rounded-full bg-blue-700 shrink-0"></span> રોયલ બ્લૂ
           </button>
-          <button onclick="changeTheme('green')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-emerald-600 bg-emerald-50 text-emerald-800">
-            <span class="w-4 h-4 rounded-full bg-emerald-700"></span> પ્રીમિયમ ગ્રીન
+          <button type="button" id="themeBtn-green" onclick="changeTheme('green')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-emerald-600 bg-emerald-50 text-emerald-800 transition">
+            <span class="w-4 h-4 rounded-full bg-emerald-700 shrink-0"></span> પ્રીમિયમ ગ્રીન
           </button>
-          <button onclick="changeTheme('dark')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-slate-800 bg-slate-900 text-amber-300">
-            <span class="w-4 h-4 rounded-full bg-amber-400"></span> ગોલ્ડ-બ્લેક (VIP)
+          <button type="button" id="themeBtn-dark" onclick="changeTheme('dark')" class="p-2 rounded-xl border-2 flex items-center gap-2 text-xs font-bold border-slate-800 bg-slate-900 text-amber-300 transition">
+            <span class="w-4 h-4 rounded-full bg-amber-400 shrink-0"></span> ગોલ્ડ-બ્લેક (VIP)
           </button>
         </div>
       </div>
@@ -258,13 +258,13 @@
         <input type="text" id="editMemberName" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="સભ્યનું નામ">
         <input type="text" id="editMemberPhone" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="મોબાઇલ નંબર">
         <input type="text" id="editMemberUpi" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="UPI ID">
-        <button onclick="saveMemberEdit()" class="w-full bg-slate-800 text-white text-xs font-bold py-2 rounded-xl shadow">
+        <button type="button" onclick="saveMemberEdit()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold py-2 rounded-xl shadow transition">
           આ સભ્યની વિગત સાચવો
         </button>
       </div>
 
       <div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex gap-2">
-        <button onclick="closeSettingsModal()" class="w-full bg-orange-600 text-white font-bold py-2.5 rounded-xl text-xs shadow">
+        <button type="button" id="closeSettingsBtn" onclick="closeSettingsModal()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow transition">
           સેટિંગ્સ બંધ કરો
         </button>
       </div>
@@ -273,11 +273,85 @@
   </div>
 
   <script>
+    const CLOUD_CONFIG = {
+      binId: "PASTE_YOUR_BIN_ID_HERE",
+      accessKey: "PASTE_YOUR_ACCESS_KEY_HERE"
+    };
+
     let isAdmin = false;
     let currentMonth = 7;
     let monthlyAmount = 1500;
+    let isSyncingFromCloud = false;
+
+    const THEMES = {
+      saffron: {
+        isDark: false,
+        metaColor: "#ea580c",
+        bodyBg: "bg-slate-50 text-slate-900",
+        headerTop: "rgba(234, 88, 12, 0.34)",
+        headerMid: "rgba(180, 83, 9, 0.45)",
+        headerBorder: "border-amber-400/90",
+        winnerCard: "bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 border-amber-300",
+        dashboardCard: "bg-gradient-to-br from-orange-500 to-orange-600 text-white",
+        drawBtn: "bg-orange-600 hover:bg-orange-700 text-white",
+        drawIcon: "text-orange-500",
+        drawBox: "bg-orange-50 border-orange-300",
+        winnerName: "text-orange-600",
+        badge: "bg-orange-100 text-orange-700",
+        closeBtn: "bg-orange-600 hover:bg-orange-700 text-white"
+      },
+      blue: {
+        isDark: false,
+        metaColor: "#1d4ed8",
+        bodyBg: "bg-sky-50 text-slate-900",
+        headerTop: "rgba(30, 58, 138, 0.42)",
+        headerMid: "rgba(3, 105, 161, 0.50)",
+        headerBorder: "border-sky-300/90",
+        winnerCard: "bg-gradient-to-r from-blue-600 to-sky-600 text-white border-sky-300",
+        dashboardCard: "bg-gradient-to-br from-blue-700 to-sky-700 text-white",
+        drawBtn: "bg-blue-700 hover:bg-blue-800 text-white",
+        drawIcon: "text-blue-600",
+        drawBox: "bg-blue-50 border-blue-300",
+        winnerName: "text-blue-700",
+        badge: "bg-blue-100 text-blue-800",
+        closeBtn: "bg-blue-700 hover:bg-blue-800 text-white"
+      },
+      green: {
+        isDark: false,
+        metaColor: "#047857",
+        bodyBg: "bg-emerald-50/60 text-slate-900",
+        headerTop: "rgba(20, 83, 45, 0.42)",
+        headerMid: "rgba(4, 120, 87, 0.50)",
+        headerBorder: "border-emerald-300/90",
+        winnerCard: "bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-emerald-300",
+        dashboardCard: "bg-gradient-to-br from-emerald-700 to-teal-700 text-white",
+        drawBtn: "bg-emerald-700 hover:bg-emerald-800 text-white",
+        drawIcon: "text-emerald-600",
+        drawBox: "bg-emerald-50 border-emerald-300",
+        winnerName: "text-emerald-700",
+        badge: "bg-emerald-100 text-emerald-800",
+        closeBtn: "bg-emerald-700 hover:bg-emerald-800 text-white"
+      },
+      dark: {
+        isDark: true,
+        metaColor: "#0f172a",
+        bodyBg: "bg-slate-950 text-slate-100",
+        headerTop: "rgba(15, 23, 42, 0.58)",
+        headerMid: "rgba(30, 41, 59, 0.65)",
+        headerBorder: "border-amber-400/90",
+        winnerCard: "bg-gradient-to-r from-slate-900 to-slate-800 text-amber-300 border-amber-400",
+        dashboardCard: "bg-gradient-to-br from-slate-900 to-slate-800 text-amber-200 border border-amber-500/30",
+        drawBtn: "bg-amber-500 hover:bg-amber-400 text-slate-950",
+        drawIcon: "text-amber-400",
+        drawBox: "bg-slate-900 border-amber-500/50",
+        winnerName: "text-amber-400",
+        badge: "bg-amber-500/20 text-amber-300",
+        closeBtn: "bg-amber-500 hover:bg-amber-400 text-slate-950"
+      }
+    };
 
     let currentTheme = localStorage.getItem('sachodar_theme') || 'saffron';
+    if (!THEMES[currentTheme]) currentTheme = 'saffron';
 
     let defaultMembers = [
       { id: 1, name: "હરેશભાઈ", phone: "9867255687", upi: "hareshpanchal43-3@okicici", paid: true, won: false, wonMonth: null, wonLabel: "" },
@@ -299,31 +373,199 @@
     ];
 
     let members = defaultMembers;
-    const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v10');
-    if (savedPayments) {
-      const parsed = JSON.parse(savedPayments);
-      members.forEach((m) => { if(parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
-    }
 
-    function applyTheme(themeName) {
-      currentTheme = themeName;
-      localStorage.setItem('sachodar_theme', themeName);
-      const dash = document.getElementById('dashboardCard');
-      const body = document.getElementById('appBody');
-      body.className = `pb-28 theme-${themeName} transition-colors duration-300`;
+    function applyLocalSavedState() {
+      const savedMemberDetails = localStorage.getItem('sachodar_member_details_v1');
+      if (savedMemberDetails) {
+        const detailsMap = JSON.parse(savedMemberDetails);
+        members.forEach((m) => {
+          if (detailsMap[m.id]) {
+            if (detailsMap[m.id].name) m.name = detailsMap[m.id].name;
+            if (detailsMap[m.id].phone) m.phone = detailsMap[m.id].phone;
+            if (detailsMap[m.id].upi !== undefined) m.upi = detailsMap[m.id].upi;
+          }
+        });
+      }
 
-      if (themeName === 'saffron') {
-        dash.className = "bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-4 shadow-md";
-      } else if (themeName === 'blue') {
-        dash.className = "bg-gradient-to-br from-blue-700 to-sky-700 text-white rounded-2xl p-4 shadow-md";
-      } else if (themeName === 'green') {
-        dash.className = "bg-gradient-to-br from-emerald-700 to-teal-700 text-white rounded-2xl p-4 shadow-md";
-      } else if (themeName === 'dark') {
-        dash.className = "bg-gradient-to-br from-slate-900 to-slate-800 text-amber-200 rounded-2xl p-4 shadow-md border border-amber-500/30";
+      const savedWinners = localStorage.getItem('sachodar_winners_v1');
+      if (savedWinners) {
+        const winMap = JSON.parse(savedWinners);
+        members.forEach((m) => {
+          if (winMap[m.id]) {
+            m.won = !!winMap[m.id].won;
+            m.wonMonth = winMap[m.id].wonMonth ?? null;
+            m.wonLabel = winMap[m.id].wonLabel || "";
+          }
+        });
+      }
+
+      const savedPayments = localStorage.getItem('sachodar_payments_m7_final_v10');
+      if (savedPayments) {
+        const parsed = JSON.parse(savedPayments);
+        members.forEach((m) => { if (parsed[m.id] !== undefined) m.paid = parsed[m.id]; });
       }
     }
 
-    function changeTheme(themeName) { applyTheme(themeName); }
+    function saveAllLocalState() {
+      const payMap = {};
+      const detailsMap = {};
+      const winMap = {};
+      members.forEach((m) => {
+        payMap[m.id] = m.paid;
+        detailsMap[m.id] = { name: m.name, phone: m.phone, upi: m.upi };
+        winMap[m.id] = { won: m.won, wonMonth: m.wonMonth, wonLabel: m.wonLabel };
+      });
+      localStorage.setItem('sachodar_payments_m7_final_v10', JSON.stringify(payMap));
+      localStorage.setItem('sachodar_member_details_v1', JSON.stringify(detailsMap));
+      localStorage.setItem('sachodar_winners_v1', JSON.stringify(winMap));
+      localStorage.setItem('sachodar_theme', currentTheme);
+    }
+
+    function isCloudConfigured() {
+      return (
+        CLOUD_CONFIG.binId &&
+        CLOUD_CONFIG.accessKey &&
+        !CLOUD_CONFIG.binId.startsWith("PASTE_") &&
+        !CLOUD_CONFIG.accessKey.startsWith("PASTE_")
+      );
+    }
+
+    async function pushToCloud() {
+      saveAllLocalState();
+      if (!isCloudConfigured() || isSyncingFromCloud) return;
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_CONFIG.binId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": CLOUD_CONFIG.accessKey
+          },
+          body: JSON.stringify({
+            updatedAt: Date.now(),
+            theme: currentTheme,
+            members: members.map(m => ({
+              id: m.id,
+              name: m.name,
+              phone: m.phone,
+              upi: m.upi,
+              paid: m.paid,
+              won: m.won,
+              wonMonth: m.wonMonth,
+              wonLabel: m.wonLabel
+            }))
+          })
+        });
+      } catch (_) {}
+    }
+
+    async function pullFromCloud() {
+      if (!isCloudConfigured()) return;
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_CONFIG.binId}/latest`, {
+          headers: { "X-Master-Key": CLOUD_CONFIG.accessKey }
+        });
+        if (!res.ok) return;
+        const json = await res.json();
+        const record = json && json.record;
+        if (!record || !Array.isArray(record.members)) return;
+
+        isSyncingFromCloud = true;
+        record.members.forEach((remoteM) => {
+          const localM = members.find(x => x.id === remoteM.id);
+          if (localM) {
+            if (remoteM.name) localM.name = remoteM.name;
+            if (remoteM.phone) localM.phone = remoteM.phone;
+            if (remoteM.upi !== undefined) localM.upi = remoteM.upi;
+            if (remoteM.paid !== undefined) localM.paid = !!remoteM.paid;
+            if (remoteM.won !== undefined) localM.won = !!remoteM.won;
+            if (remoteM.wonMonth !== undefined) localM.wonMonth = remoteM.wonMonth;
+            if (remoteM.wonLabel !== undefined) localM.wonLabel = remoteM.wonLabel;
+          }
+        });
+        if (record.theme && THEMES[record.theme]) {
+          currentTheme = record.theme;
+        }
+        saveAllLocalState();
+        applyTheme(currentTheme);
+        renderMembers();
+        renderHistory();
+      } catch (_) {
+      } finally {
+        isSyncingFromCloud = false;
+      }
+    }
+
+    function applyTheme(themeName) {
+      const cfg = THEMES[themeName] || THEMES.saffron;
+      currentTheme = themeName in THEMES ? themeName : 'saffron';
+      localStorage.setItem('sachodar_theme', currentTheme);
+
+      const htmlEl = document.documentElement;
+      const body = document.getElementById('appBody');
+      const header = document.getElementById('appHeader');
+      const winnerCard = document.getElementById('winnerPayCard');
+      const dash = document.getElementById('dashboardCard');
+      const drawBtn = document.getElementById('drawBtn');
+      const drawIcon = document.getElementById('drawIcon');
+      const drawBox = document.getElementById('drawBox');
+      const winnerName = document.getElementById('winnerName');
+      const eligibleBadge = document.getElementById('eligibleCountBadge');
+      const closeBtn = document.getElementById('closeSettingsBtn');
+      const settingsIcon = document.getElementById('settingsModalIcon');
+      const metaTheme = document.getElementById('metaThemeColor');
+
+      htmlEl.classList.toggle('dark', cfg.isDark);
+      body.className = `pb-28 ${cfg.bodyBg} transition-colors duration-300`;
+
+      header.style.setProperty('--header-overlay-top', cfg.headerTop);
+      header.style.setProperty('--header-overlay-mid', cfg.headerMid);
+      header.className = `village-sunset-header text-white p-5 shadow-2xl text-center relative flex flex-col items-center justify-center border-b-2 ${cfg.headerBorder} transition-all duration-300`;
+
+      if (winnerCard) {
+        winnerCard.className = `${cfg.winnerCard} rounded-2xl p-4 shadow-lg border-2 text-center space-y-3 transition-all duration-300`;
+      }
+      if (dash) {
+        dash.className = `${cfg.dashboardCard} rounded-2xl p-4 shadow-md transition-all duration-300`;
+      }
+      if (drawBtn) {
+        drawBtn.className = `w-full mt-2 ${cfg.drawBtn} font-bold py-2.5 rounded-xl text-sm shadow transition`;
+      }
+      if (drawIcon) {
+        drawIcon.className = `fa-solid fa-dice ${cfg.drawIcon}`;
+      }
+      if (drawBox) {
+        drawBox.className = `h-20 flex items-center justify-center ${cfg.drawBox} rounded-xl border-2 border-dashed my-2 transition-colors duration-300`;
+      }
+      if (winnerName) {
+        winnerName.className = `text-xl font-black ${cfg.winnerName}`;
+      }
+      if (eligibleBadge) {
+        eligibleBadge.className = `text-[11px] ${cfg.badge} px-2.5 py-0.5 rounded-full font-bold`;
+      }
+      if (closeBtn) {
+        closeBtn.className = `w-full ${cfg.closeBtn} font-bold py-2.5 rounded-xl text-xs shadow transition`;
+      }
+      if (settingsIcon) {
+        settingsIcon.className = `fa-solid fa-palette ${cfg.drawIcon}`;
+      }
+      if (metaTheme) {
+        metaTheme.setAttribute('content', cfg.metaColor);
+      }
+
+      Object.keys(THEMES).forEach((key) => {
+        const btn = document.getElementById(`themeBtn-${key}`);
+        if (!btn) return;
+        btn.classList.toggle('ring-4', key === currentTheme);
+        btn.classList.toggle('ring-offset-2', key === currentTheme);
+        btn.classList.toggle('ring-slate-900', key === currentTheme && !cfg.isDark);
+        btn.classList.toggle('ring-amber-300', key === currentTheme && cfg.isDark);
+      });
+    }
+
+    function changeTheme(themeName) {
+      applyTheme(themeName);
+      pushToCloud();
+    }
 
     function openSettingsModal() {
       if (!isAdmin) return;
@@ -333,6 +575,7 @@
         sel.innerHTML += `<option value="${m.id}">${m.id}. ${m.name}</option>`;
       });
       loadMemberToForm();
+      applyTheme(currentTheme);
       document.getElementById('settingsModal').classList.remove('hidden');
     }
 
@@ -362,6 +605,7 @@
         if (newPhone) m.phone = newPhone;
         if (newUpi) m.upi = newUpi;
 
+        pushToCloud();
         alert(`${m.id}. ${m.name} ની વિગતો સેવ થઈ ગઈ!`);
         renderMembers();
       }
@@ -377,16 +621,16 @@
       let paidCount = 0;
 
       members.forEach((m, idx) => {
-        if(m.paid) {
+        if (m.paid) {
           paidCount++;
           const paidDiv = document.createElement('div');
-          paidDiv.className = "flex justify-between items-center p-2 rounded-xl bg-white border border-emerald-200 text-xs shadow-sm";
+          paidDiv.className = "flex justify-between items-center p-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 text-xs shadow-sm";
           paidDiv.innerHTML = `
             <div class="flex items-center gap-2">
               <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-[11px]">${paidCount}</span>
               <div>
-                <p class="font-bold text-slate-900">${m.name} ${m.id === 3 ? '(વિજેતા)' : ''}</p>
-                <p class="text-[10px] text-emerald-700 font-semibold">₹૧,૫૦૦ જમા થયેલ ✔</p>
+                <p class="font-bold text-slate-900 dark:text-slate-100">${m.name} ${m.id === 3 ? '(વિજેતા)' : ''}</p>
+                <p class="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold">₹૧,૫૦૦ જમા થયેલ ✔</p>
               </div>
             </div>
             <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-300">પૂર્ણ</span>
@@ -427,7 +671,7 @@
         container.appendChild(div);
       });
 
-      if(paidCount === 0) {
+      if (paidCount === 0) {
         paidContainer.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-2">હજુ સુધી કોઈ ચુકવણી નોંધાઈ નથી.</p>';
       }
 
@@ -447,7 +691,7 @@
         "મે ૨૦૨૭ (વીશી ૧૩)", "જૂન ૨૦૨૭ (વીશી ૧૪)", "જુલાઈ ૨૦૨૭ (વીશી ૧૫)", "ઑગસ્ટ ૨૦૨૭ (વીશી ૧૬)"
       ];
 
-      for(let i=1; i<=16; i++) {
+      for (let i = 1; i <= 16; i++) {
         const winner = members.find(m => m.wonMonth === i);
         const isDone = (i <= currentMonth);
 
@@ -457,10 +701,10 @@
               <span class="font-medium text-slate-700 dark:text-slate-300">${monthNames[i-1]}</span>
             </div>
             <div class="text-right">
-              <span class="font-bold ${isDone ? 'text-green-700' : 'text-slate-400'}">
+              <span class="font-bold ${isDone ? 'text-green-700 dark:text-emerald-400' : 'text-slate-400'}">
                 ${winner ? `🏆 ${winner.name}` : 'આગામી'}
               </span>
-              <span class="text-slate-500 block text-[10px]">₹${(16 * monthlyAmount).toLocaleString()}</span>
+              <span class="text-slate-500 dark:text-slate-400 block text-[10px]">₹${(16 * monthlyAmount).toLocaleString()}</span>
             </div>
           </div>
         `;
@@ -468,18 +712,14 @@
     }
 
     function togglePayment(idx) {
-      if(!isAdmin) return;
+      if (!isAdmin) return;
       members[idx].paid = !members[idx].paid;
-      
-      const payMap = {};
-      members.forEach(m => payMap[m.id] = m.paid);
-      localStorage.setItem('sachodar_payments_m7_final_v10', JSON.stringify(payMap));
-      
+      pushToCloud();
       renderMembers();
     }
 
     function toggleAdmin() {
-      if(isAdmin) {
+      if (isAdmin) {
         isAdmin = false;
         document.getElementById('adminText').innerText = 'લૉગિન';
         document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
@@ -487,7 +727,7 @@
         document.getElementById('adminBadge').classList.add('hidden');
       } else {
         const pin = prompt("એડમિન પિન દાખલ કરો:");
-        if(pin === "1234") {
+        if (pin === "1234") {
           isAdmin = true;
           document.getElementById('adminText').innerText = 'એડમિન મોડ';
           document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
@@ -502,12 +742,12 @@
     }
 
     function startDraw() {
-      if(!isAdmin) {
+      if (!isAdmin) {
         alert("ડ્રો શરૂ કરવાનો અધિકાર ફક્ત એડમિન પાસે છે. કૃપા કરીને ઉપરથી એડમિન લૉગિન (પિન 1234) કરો.");
         return;
       }
       const eligible = members.filter(m => !m.won);
-      if(eligible.length === 0) {
+      if (eligible.length === 0) {
         alert("તમામ ૧૬ સભ્યો વિજેતા બની ચૂક્યા છે!");
         return;
       }
@@ -520,7 +760,7 @@
       const timer = setInterval(() => {
         count++;
         box.innerText = eligible[Math.floor(Math.random() * eligible.length)].name;
-        if(count > 25) {
+        if (count > 25) {
           clearInterval(timer);
           const winner = eligible[Math.floor(Math.random() * eligible.length)];
           winner.won = true;
@@ -529,6 +769,7 @@
           box.innerText = `🎉 ${winner.name} 🎉`;
           btn.disabled = false;
           btn.innerText = "ડ્રો પૂર્ણ થયો";
+          pushToCloud();
           alert(`અભિનંદન! આગામી વિજેતા છે:\n${winner.name}`);
           renderMembers();
           renderHistory();
@@ -536,9 +777,12 @@
       }, 100);
     }
 
+    applyLocalSavedState();
     applyTheme(currentTheme);
     renderMembers();
     renderHistory();
+    pullFromCloud();
+    setInterval(pullFromCloud, 30000);
   </script>
 </body>
 </html>
