@@ -46,10 +46,16 @@
     <h1 class="text-2xl font-black tracking-wide custom-text-shadow text-white">સાચોદર વિસી ગ્રુપ</h1>
     <p class="text-xs text-amber-100 font-medium italic mt-0.5 custom-text-shadow">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
     
-    <div class="flex items-center gap-2 mt-2">
+    <div class="flex flex-wrap items-center justify-center gap-1.5 mt-2">
       <span class="text-[10px] text-amber-200 font-bold bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-amber-300/40 shadow">
         <i class="fa-solid fa-school text-[9px] mr-1 text-amber-300"></i> સાચોદર શાળા સ્મૃતિ | સત્ર: ૨૦૨૬-૨૭
       </span>
+      <span id="syncStatusBadge" class="text-[10px] bg-black/60 text-amber-200 font-bold px-2.5 py-1 rounded-full border border-white/20 shadow flex items-center gap-1">
+        <i class="fa-solid fa-cloud text-[9px]"></i> <span id="syncStatusText">સિંક થઈ રહ્યું છે...</span>
+      </span>
+      <button type="button" onclick="manualRefreshSync()" id="refreshSyncBtn" title="તાજો ડેટા લાવો" class="text-[10px] bg-black/60 hover:bg-black/80 text-white font-bold px-2.5 py-1 rounded-full border border-white/25 shadow flex items-center gap-1 transition">
+        <i id="refreshSyncIcon" class="fa-solid fa-rotate text-[9px]"></i> રિફ્રેશ
+      </button>
       <span id="adminBadge" class="hidden text-[10px] bg-emerald-500 text-white font-bold px-2.5 py-1 rounded-full shadow">એડમિન મોડ</span>
     </div>
     
@@ -193,18 +199,32 @@
       <button onclick="startDraw()" id="drawBtn" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-sm shadow transition">
         ડ્રો શરૂ કરો
       </button>
+      <button type="button" onclick="undoLastDraw()" id="undoDrawBtn" class="hidden w-full mt-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 font-bold py-2 rounded-xl text-xs transition">
+        <i class="fa-solid fa-rotate-left mr-1"></i> છેલ્લો ડ્રો રદ કરો (Undo)
+      </button>
       <p id="adminOnlyMsg" class="text-[11px] text-slate-400 mt-1">નોંધ: માત્ર એડમિન ડ્રો શરૂ કરી શકે છે.</p>
     </div>
 
     <!-- 👥 ૧૬ સભ્યોની યાદી & ચુકવણી ખાતાવહી -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-300">
-      <div class="flex justify-between items-center mb-3">
+      <div class="flex justify-between items-center mb-2.5">
         <div>
           <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી & સંપર્ક</h3>
           <p class="text-[11px] text-slate-500 dark:text-slate-400">ટેપ કરીને પેમેન્ટ અપડેટ કરો</p>
         </div>
         <span class="text-xs text-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg" id="adminNotice">જોવાની પરવાનગી</span>
       </div>
+
+      <!-- શોધ અને ફિલ્ટર -->
+      <div class="space-y-2 mb-3">
+        <input type="text" id="memberSearchInput" oninput="renderMembers()" placeholder="નામ અથવા નંબર શોધો..." class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+        <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold">
+          <button type="button" id="filterBtn-all" onclick="setMemberFilter('all')" class="py-1.5 rounded-lg bg-slate-800 text-white">બધા (૧૬)</button>
+          <button type="button" id="filterBtn-unpaid" onclick="setMemberFilter('unpaid')" class="py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">બાકી છે</button>
+          <button type="button" id="filterBtn-paid" onclick="setMemberFilter('paid')" class="py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">ચુકવાઈ ગઈ</button>
+        </div>
+      </div>
+
       <div class="space-y-2.5 max-h-96 overflow-y-auto pr-1" id="membersList"></div>
     </div>
 
@@ -282,6 +302,8 @@
     let currentMonth = 7;
     let monthlyAmount = 1500;
     let isSyncingFromCloud = false;
+    let memberFilterMode = "all";
+    let lastDrawnMemberId = null;
 
     const THEMES = {
       saffron: {
@@ -374,6 +396,18 @@
 
     let members = defaultMembers;
 
+    function setSyncBadge(mode, label) {
+      const badge = document.getElementById("syncStatusBadge");
+      const text = document.getElementById("syncStatusText");
+      if (!badge || !text) return;
+      text.innerText = label;
+      badge.className = "text-[10px] font-bold px-2.5 py-1 rounded-full border shadow flex items-center gap-1 " + (
+        mode === "live"
+          ? "bg-emerald-700/85 text-emerald-100 border-emerald-300/40"
+          : "bg-black/60 text-amber-200 border-amber-300/40"
+      );
+    }
+
     function applyLocalSavedState() {
       const savedMemberDetails = localStorage.getItem('sachodar_member_details_v1');
       if (savedMemberDetails) {
@@ -434,7 +468,7 @@
       saveAllLocalState();
       if (!isCloudConfigured() || isSyncingFromCloud) return;
       try {
-        await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_CONFIG.binId}`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_CONFIG.binId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -455,19 +489,34 @@
             }))
           })
         });
-      } catch (_) {}
+        if (res.ok) setSyncBadge("live", "લાઈવ સિંક");
+        else setSyncBadge("offline", "ઓફલાઈન કેશ");
+      } catch (_) {
+        setSyncBadge("offline", "ઓફલાઈન કેશ");
+      }
     }
 
-    async function pullFromCloud() {
-      if (!isCloudConfigured()) return;
+    async function pullFromCloud(showSpin = false) {
+      if (!isCloudConfigured()) {
+        setSyncBadge("offline", "ઓફલાઈન કેશ");
+        return;
+      }
+      const icon = document.getElementById("refreshSyncIcon");
+      if (showSpin && icon) icon.classList.add("fa-spin");
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_CONFIG.binId}/latest`, {
           headers: { "X-Master-Key": CLOUD_CONFIG.accessKey }
         });
-        if (!res.ok) return;
+        if (!res.ok) {
+          setSyncBadge("offline", "ઓફલાઈન કેશ");
+          return;
+        }
         const json = await res.json();
         const record = json && json.record;
-        if (!record || !Array.isArray(record.members)) return;
+        if (!record || !Array.isArray(record.members)) {
+          setSyncBadge("live", "લાઈવ સિંક");
+          return;
+        }
 
         isSyncingFromCloud = true;
         record.members.forEach((remoteM) => {
@@ -489,10 +538,17 @@
         applyTheme(currentTheme);
         renderMembers();
         renderHistory();
+        setSyncBadge("live", "લાઈવ સિંક");
       } catch (_) {
+        setSyncBadge("offline", "ઓફલાઈન કેશ");
       } finally {
         isSyncingFromCloud = false;
+        if (showSpin && icon) icon.classList.remove("fa-spin");
       }
+    }
+
+    function manualRefreshSync() {
+      pullFromCloud(true);
     }
 
     function applyTheme(themeName) {
@@ -611,9 +667,30 @@
       }
     }
 
+    function setMemberFilter(mode) {
+      memberFilterMode = mode;
+      ["all", "unpaid", "paid"].forEach((key) => {
+        const btn = document.getElementById(`filterBtn-${key}`);
+        if (!btn) return;
+        if (key === mode) {
+          btn.className = "py-1.5 rounded-lg bg-slate-800 dark:bg-amber-500 text-white dark:text-slate-950";
+        } else {
+          btn.className = "py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200";
+        }
+      });
+      renderMembers();
+    }
+
+    function buildReminderUrl(member) {
+      const msg = `નમસ્તે ${member.name}, સાચોદર વિસી ગ્રુપ (મહિનો ૭) ની ₹૧,૫૦૦ ની રકમ બાકી છે. કૃપા કરીને સમયસર ચુકવણી કરી સ્ક્રીનશોટ ગ્રુપમાં મોકલશો.`;
+      return `https://wa.me/91${member.phone}?text=${encodeURIComponent(msg)}`;
+    }
+
     function renderMembers() {
       const container = document.getElementById('membersList');
       const paidContainer = document.getElementById('paidMembersListContainer');
+      const searchInput = document.getElementById('memberSearchInput');
+      const q = (searchInput ? searchInput.value : "").trim().toLowerCase();
 
       container.innerHTML = '';
       paidContainer.innerHTML = '';
@@ -638,8 +715,23 @@
           paidContainer.appendChild(paidDiv);
         }
 
+        const matchesFilter =
+          memberFilterMode === "all" ||
+          (memberFilterMode === "paid" && m.paid) ||
+          (memberFilterMode === "unpaid" && !m.paid);
+        const matchesQuery =
+          !q ||
+          m.name.toLowerCase().includes(q) ||
+          String(m.phone).includes(q);
+
+        if (!matchesFilter || !matchesQuery) return;
+
         const div = document.createElement('div');
         div.className = "p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 text-xs border border-slate-100 dark:border-slate-700 flex flex-col gap-2";
+
+        const reminderBtn = !m.paid
+          ? `<a href="${buildReminderUrl(m)}" target="_blank" title="રિમાઈન્ડર મોકલો" class="text-amber-600 hover:text-amber-700 dark:text-amber-400"><i class="fa-solid fa-bell text-xs"></i></a>`
+          : "";
 
         div.innerHTML = `
           <div class="flex justify-between items-center">
@@ -650,13 +742,14 @@
                   ${m.name}
                   ${m.won ? `<span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.2 rounded font-medium">🏆 ${m.wonLabel}</span>` : ''}
                 </p>
-                <div class="flex items-center gap-2 mt-0.5">
+                <div class="flex items-center gap-2.5 mt-0.5">
                   <a href="tel:${m.phone}" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1">
                     <i class="fa-solid fa-phone text-[10px]"></i> ${m.phone}
                   </a>
                   <a href="https://wa.me/91${m.phone}" target="_blank" class="text-green-600 hover:text-green-700">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                   </a>
+                  ${reminderBtn}
                 </div>
               </div>
             </div>
@@ -670,6 +763,10 @@
         `;
         container.appendChild(div);
       });
+
+      if (!container.children.length) {
+        container.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-3">કોઈ સભ્ય મળ્યા નથી.</p>';
+      }
 
       if (paidCount === 0) {
         paidContainer.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-2">હજુ સુધી કોઈ ચુકવણી નોંધાઈ નથી.</p>';
@@ -725,6 +822,7 @@
         document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
         document.getElementById('adminPanelBanner').classList.add('hidden');
         document.getElementById('adminBadge').classList.add('hidden');
+        document.getElementById('undoDrawBtn').classList.add('hidden');
       } else {
         const pin = prompt("એડમિન પિન દાખલ કરો:");
         if (pin === "1234") {
@@ -733,6 +831,9 @@
           document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
           document.getElementById('adminPanelBanner').classList.remove('hidden');
           document.getElementById('adminBadge').classList.remove('hidden');
+          if (lastDrawnMemberId) {
+            document.getElementById('undoDrawBtn').classList.remove('hidden');
+          }
           alert("એડમિન લૉગિન સફળ!");
         } else {
           alert("ખોટો પિન! સાચો પિન 1234 છે.");
@@ -766,15 +867,34 @@
           winner.won = true;
           winner.wonMonth = 8;
           winner.wonLabel = `ડિસેમ્બર ૨૦૨૬ (વીશી ૮)`;
+          lastDrawnMemberId = winner.id;
           box.innerText = `🎉 ${winner.name} 🎉`;
           btn.disabled = false;
           btn.innerText = "ડ્રો પૂર્ણ થયો";
+          document.getElementById('undoDrawBtn').classList.remove('hidden');
           pushToCloud();
           alert(`અભિનંદન! આગામી વિજેતા છે:\n${winner.name}`);
           renderMembers();
           renderHistory();
         }
       }, 100);
+    }
+
+    function undoLastDraw() {
+      if (!isAdmin || !lastDrawnMemberId) return;
+      const target = members.find(m => m.id === lastDrawnMemberId);
+      if (!target) return;
+      if (!confirm(`શું તમે "${target.name}" નો છેલ્લો ડ્રો રદ કરવા માંગો છો?`)) return;
+      target.won = false;
+      target.wonMonth = null;
+      target.wonLabel = "";
+      lastDrawnMemberId = null;
+      document.getElementById('winnerName').innerText = "ડ્રો માટે તૈયાર";
+      document.getElementById('drawBtn').innerText = "ડ્રો શરૂ કરો";
+      document.getElementById('undoDrawBtn').classList.add('hidden');
+      pushToCloud();
+      renderMembers();
+      renderHistory();
     }
 
     applyLocalSavedState();
