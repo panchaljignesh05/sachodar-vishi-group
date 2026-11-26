@@ -331,6 +331,7 @@
           <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center gap-1.5">
             <i class="fa-solid fa-box-archive text-amber-500"></i> જૂનો રેકોર્ડ: સત્ર ૨૦૨૬–૨૦૨૭
           </h3>
+          <p class="text-[11px] font-bold text-amber-700 dark:text-amber-300 mt-0.5">માસિક હપ્તો: ₹૧,૫૦૦ | કુલ વીશી: ₹૨૪,૦૦૦</p>
           <p id="archive2026StatusText" class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">હાલનો ૨૦૨૬–૨૦૨૭ રેકોર્ડ અહીં સુરક્ષિત જોઈ શકાય છે</p>
         </div>
         <button type="button" onclick="toggleArchive2026View()" id="toggleArchive2026Btn" class="text-[11px] font-bold px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/50 dark:text-amber-200 text-amber-900 transition shrink-0">
@@ -494,7 +495,6 @@
     }
 
     function applyWinnerSelection(winner, monthNum) {
-      // જો આ જ મહિનામાં અગાઉ કોઈ અન્ય સભ્ય સેટ થયેલ હોય તો તેનું wonMonth ક્લિયર કરો
       members.forEach((item) => {
         if (item.id !== winner.id && item.wonMonth === monthNum) {
           item.won = false;
@@ -977,11 +977,14 @@
           month: mNum,
           monthLabel: MONTH_LABELS_2026_27[mNum - 1],
           winnerName: w ? w.name : null,
-          amount: 16 * monthlyAmount
+          installment: monthlyAmount,
+          totalAmount: 16 * monthlyAmount
         });
       }
       return {
         session: "૨૦૨૬–૨૦૨૭",
+        installment: monthlyAmount,
+        totalAmount: 16 * monthlyAmount,
         savedAt: new Date().toISOString(),
         winners
       };
@@ -1037,7 +1040,7 @@
       localStorage.setItem("sachodar_archive_2026_2027_v1", JSON.stringify(archive2026Snapshot));
       pushToCloud();
       renderArchive2026();
-      alert("૨૦૨૬–૨૦૨૭ નો રેકોર્ડ આર્કાઇવમાં સુરક્ષિત સાચવી લેવામાં આવ્યો છે.");
+      alert("૨૦૨૬–૨૦૨૭ નો રેકોર્ડ (હપ્તો ₹૧,૫૦૦ | કુલ વીશી ₹૨૪,૦૦૦) આર્કાઇવમાં સુરક્ષિત સાચવી લેવામાં આવ્યો છે.");
     }
 
     function setSyncBadge(mode, label) {
