@@ -48,6 +48,9 @@
     .header-more-dropdown.open {
       display: flex;
     }
+    #adminBtn {
+      display: none !important;
+    }
   </style>
 </head>
 <body id="appBody" class="pb-28 bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
@@ -244,6 +247,9 @@
       <button onclick="startDraw()" id="drawBtn" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-sm shadow transition">
         ડ્રો શરૂ કરો
       </button>
+      <a id="adminDrawCallBtn" href="https://chat.whatsapp.com/C1kkzwpNif1LdXRiK6r5m6" target="_blank" onclick="alert('WhatsApp ગ્રુપ ખુલ્યા પછી ઉપરના Call બટનથી ગ્રુપ કૉલ શરૂ કરો.');" class="hidden w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition">
+        <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp ગ્રુપ કૉલ (ડ્રો માટે)
+      </a>
       <button type="button" onclick="undoLastDraw()" id="undoDrawBtn" class="hidden w-full mt-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 font-bold py-2 rounded-xl text-xs transition">
         <i class="fa-solid fa-rotate-left mr-1"></i> છેલ્લો ડ્રો રદ કરો (Undo)
       </button>
@@ -443,6 +449,7 @@
         document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
         document.getElementById('adminPanelBanner').classList.remove('hidden');
         document.getElementById('adminBadge').classList.remove('hidden');
+        document.getElementById('adminDrawCallBtn').classList.remove('hidden');
         if (lastDrawnMemberId) {
           document.getElementById('undoDrawBtn').classList.remove('hidden');
         }
@@ -1029,6 +1036,7 @@
         document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
         document.getElementById('adminPanelBanner').classList.add('hidden');
         document.getElementById('adminBadge').classList.add('hidden');
+        document.getElementById('adminDrawCallBtn').classList.add('hidden');
         document.getElementById('undoDrawBtn').classList.add('hidden');
       } else {
         const pin = prompt("એડમિન પિન દાખલ કરો:");
@@ -1039,6 +1047,7 @@
           document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
           document.getElementById('adminPanelBanner').classList.remove('hidden');
           document.getElementById('adminBadge').classList.remove('hidden');
+          document.getElementById('adminDrawCallBtn').classList.remove('hidden');
           if (lastDrawnMemberId) {
             document.getElementById('undoDrawBtn').classList.remove('hidden');
           }
