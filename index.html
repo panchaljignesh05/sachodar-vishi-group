@@ -268,6 +268,21 @@
       <button onclick="startDraw()" id="drawBtn" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-sm shadow transition">
         ડ્રો શરૂ કરો
       </button>
+
+      <!-- એડમિન માટે ગમે તે મહિનાની સીધી વીશી ફાળવવાનો વિકલ્પ -->
+      <div id="adminDirectWinnerBox" class="hidden mt-2.5 pt-2.5 border-t border-slate-200 dark:border-slate-700 text-left space-y-2">
+        <p class="text-[11px] font-bold text-amber-700 dark:text-amber-300">
+          <i class="fa-solid fa-hand-holding-dollar mr-1"></i> ડ્રો વિના સીધી વીશી આપો (મહિનો &amp; સભ્ય પસંદ કરો):
+        </p>
+        <select id="directMonthSelect" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></select>
+        <div class="flex gap-1.5">
+          <select id="directWinnerSelect" class="flex-1 text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></select>
+          <button type="button" onclick="assignWinnerWithoutDraw()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-3 py-2 rounded-xl text-xs shadow whitespace-nowrap transition">
+            સીધી વીશી આપો
+          </button>
+        </div>
+      </div>
+
       <a id="adminDrawCallBtn" href="https://chat.whatsapp.com/C1kkzwpNif1LdXRiK6r5m6" target="_blank" onclick="alert('WhatsApp ગ્રુપ ખુલ્યા પછી ઉપરના Call બટનથી ગ્રુપ કૉલ શરૂ કરો.');" class="hidden w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition">
         <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp ગ્રુપ કૉલ (ડ્રો માટે)
       </a>
@@ -449,6 +464,100 @@
       e.preventDefault();
       deferredInstallPrompt = e;
     });
+
+    function refreshDirectWinnerDropdown() {
+      const box = document.getElementById("adminDirectWinnerBox");
+      const mSel = document.getElementById("directMonthSelect");
+      const wSel = document.getElementById("directWinnerSelect");
+      if (!box || !mSel || !wSel) return;
+      box.classList.toggle("hidden", !isAdmin);
+      if (!isAdmin) return;
+
+      const prevMonthVal = mSel.value || "8";
+      mSel.innerHTML = "";
+      for (let i = 1; i <= 16; i++) {
+        mSel.innerHTML += `<option value="${i}">${MONTH_LABELS_2026_27[i - 1]}</option>`;
+      }
+      if (mSel.querySelector(`option[value="${prevMonthVal}"]`)) {
+        mSel.value = prevMonthVal;
+      }
+
+      const eligible = members.filter(m => !m.won);
+      wSel.innerHTML = "";
+      if (!eligible.length) {
+        wSel.innerHTML = `<option value="">તમામ સભ્યો પૂર્ણ</option>`;
+        return;
+      }
+      eligible.forEach((m) => {
+        wSel.innerHTML += `<option value="${m.id}">${m.id}. ${m.name}</option>`;
+      });
+    }
+
+    function applyWinnerSelection(winner, monthNum) {
+      // જો આ જ મહિનામાં અગાઉ કોઈ અન્ય સભ્ય સેટ થયેલ હોય તો તેનું wonMonth ક્લિયર કરો
+      members.forEach((item) => {
+        if (item.id !== winner.id && item.wonMonth === monthNum) {
+          item.won = false;
+          item.wonMonth = null;
+          item.wonLabel = "";
+        }
+      });
+
+      winner.won = true;
+      winner.wonMonth = monthNum;
+      winner.wonLabel = MONTH_LABELS_2026_27[monthNum - 1] || `વીશી ${toGujaratiDigits(monthNum)}`;
+      lastDrawnMemberId = winner.id;
+
+      activeWinnerCardData = {
+        month: monthNum,
+        name: winner.name,
+        phone: winner.phone,
+        upi: winner.upi,
+        amount: monthlyAmount,
+        drawnOnDay: 10,
+        paymentDueDay: 15
+      };
+
+      const box = document.getElementById("winnerName");
+      const btn = document.getElementById("drawBtn");
+      if (box) box.innerText = `🎉 ${winner.name} 🎉`;
+      if (btn) {
+        btn.disabled = false;
+        btn.innerText = "ડ્રો પૂર્ણ થયો";
+      }
+      document.getElementById("undoDrawBtn").classList.remove("hidden");
+      updateWinnerPaymentCardUI();
+      refreshDirectWinnerDropdown();
+      pushToCloud();
+      renderMembers();
+      renderHistory();
+      renderArchive2026();
+    }
+
+    function assignWinnerWithoutDraw() {
+      if (!isAdmin) {
+        alert("માત્ર એડમિન સીધી વીશી ફાળવી શકે છે.");
+        return;
+      }
+      const mSel = document.getElementById("directMonthSelect");
+      const wSel = document.getElementById("directWinnerSelect");
+      if (!mSel || !wSel || !wSel.value) {
+        alert("કૃપા કરીને મહિનો અને સભ્ય પસંદ કરો.");
+        return;
+      }
+      const monthNum = parseInt(mSel.value, 10);
+      const id = parseInt(wSel.value, 10);
+      const winner = members.find(m => m.id === id);
+      if (!winner) {
+        alert("પસંદ કરેલ સભ્ય મળ્યા નથી.");
+        return;
+      }
+      const mLabel = MONTH_LABELS_2026_27[monthNum - 1] || `વીશી ${toGujaratiDigits(monthNum)}`;
+      if (!confirm(`શું તમે ડ્રો કર્યા વિના "${winner.name}" ને ${mLabel} ની વીશી સીધી આપવા માંગો છો?`)) return;
+
+      applyWinnerSelection(winner, monthNum);
+      alert(`${mLabel} ની વીશી ડ્રો વિના "${winner.name}" ના નામે સેટ થઈ ગઈ છે!`);
+    }
 
     function saveNewAdminPin() {
       if (!isAdmin) return;
@@ -691,6 +800,7 @@
         if (lastDrawnMemberId) {
           document.getElementById('undoDrawBtn').classList.remove('hidden');
         }
+        refreshDirectWinnerDropdown();
         renderMembers();
         renderArchive2026();
       }
@@ -756,6 +866,7 @@
         }
         applyTheme(currentTheme);
         updateWinnerPaymentCardUI();
+        refreshDirectWinnerDropdown();
         await pushToCloud();
         renderMembers();
         renderHistory();
@@ -1112,6 +1223,7 @@
         saveAllLocalState();
         applyTheme(currentTheme);
         updateWinnerPaymentCardUI();
+        refreshDirectWinnerDropdown();
         renderMembers();
         renderHistory();
         renderArchive2026();
@@ -1355,9 +1467,15 @@
         paidContainer.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-2">હજુ સુધી કોઈ ચુકવણી નોંધાઈ નથી.</p>';
       }
 
-      document.getElementById('paidCountBadge').innerText = `${paidCount} સભ્ય પૂર્ણ`;
+      document.getElementById('paidCountBadge').innerText = `${toGujaratiDigits(paidCount)} સભ્ય પૂર્ણ`;
       document.getElementById('collectedText').innerText = `₹${(paidCount * monthlyAmount).toLocaleString()}`;
       document.getElementById('pendingText').innerText = `₹${((16 - paidCount) * monthlyAmount).toLocaleString()}`;
+
+      const wonCount = members.filter(m => m.won).length;
+      const eligibleBadge = document.getElementById('eligibleCountBadge');
+      if (eligibleBadge) {
+        eligibleBadge.innerText = `${toGujaratiDigits(16 - wonCount)} સભ્યો બાકી`;
+      }
     }
 
     function renderHistory() {
@@ -1366,7 +1484,7 @@
 
       for (let i = 1; i <= 16; i++) {
         const winner = members.find(m => m.wonMonth === i);
-        const isDone = (i <= currentMonth);
+        const isDone = (i <= currentMonth) || !!winner;
 
         h.innerHTML += `
           <div class="flex justify-between items-center p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-700">
@@ -1419,6 +1537,7 @@
           alert("ખોટો PIN! ફરી પ્રયત્ન કરો.");
         }
       }
+      refreshDirectWinnerDropdown();
       renderMembers();
       renderArchive2026();
     }
@@ -1446,31 +1565,8 @@
           clearInterval(timer);
           const winner = eligible[Math.floor(Math.random() * eligible.length)];
           const nextWonCount = members.filter(m => m.won).length + 1;
-          winner.won = true;
-          winner.wonMonth = nextWonCount;
-          winner.wonLabel = MONTH_LABELS_2026_27[nextWonCount - 1] || `વીશી ${nextWonCount}`;
-          lastDrawnMemberId = winner.id;
-
-          activeWinnerCardData = {
-            month: nextWonCount,
-            name: winner.name,
-            phone: winner.phone,
-            upi: winner.upi,
-            amount: monthlyAmount,
-            drawnOnDay: 10,
-            paymentDueDay: 15
-          };
-
-          box.innerText = `🎉 ${winner.name} 🎉`;
-          btn.disabled = false;
-          btn.innerText = "ડ્રો પૂર્ણ થયો";
-          document.getElementById('undoDrawBtn').classList.remove('hidden');
-          updateWinnerPaymentCardUI();
-          pushToCloud();
+          applyWinnerSelection(winner, nextWonCount);
           alert(`અભિનંદન! આગામી વિજેતા છે:\n${winner.name}`);
-          renderMembers();
-          renderHistory();
-          renderArchive2026();
         }
       }, 100);
     }
@@ -1479,7 +1575,7 @@
       if (!isAdmin || !lastDrawnMemberId) return;
       const target = members.find(m => m.id === lastDrawnMemberId);
       if (!target) return;
-      if (!confirm(`શું તમે "${target.name}" નો છેલ્લો ડ્રો રદ કરવા માંગો છો?`)) return;
+      if (!confirm(`શું તમે "${target.name}" નો છેલ્લો ડ્રો / વીશી ફાળવણી રદ કરવા માંગો છો?`)) return;
       target.won = false;
       target.wonMonth = null;
       target.wonLabel = "";
@@ -1502,6 +1598,7 @@
       document.getElementById('drawBtn').innerText = "ડ્રો શરૂ કરો";
       document.getElementById('undoDrawBtn').classList.add('hidden');
       updateWinnerPaymentCardUI();
+      refreshDirectWinnerDropdown();
       pushToCloud();
       renderMembers();
       renderHistory();
@@ -1511,6 +1608,7 @@
     applyLocalSavedState();
     applyTheme(currentTheme);
     updateWinnerPaymentCardUI();
+    refreshDirectWinnerDropdown();
     renderMembers();
     renderHistory();
     renderArchive2026();
