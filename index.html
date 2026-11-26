@@ -35,9 +35,11 @@
     }
     .header-more-dropdown {
       position: fixed;
-      top: 52px;
+      top: 50px;
       right: 10px;
-      width: 186px;
+      width: max-content;
+      min-width: 132px;
+      max-width: 148px;
       z-index: 60;
       display: none;
       flex-direction: column;
@@ -60,26 +62,26 @@
 
   <!-- ⋮ મેનુ ડ્રોપડાઉન -->
   <div id="headerMoreDropdown" class="header-more-dropdown bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xl">
-    <div id="menuGmailUserInfo" class="hidden px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[10px] font-semibold text-slate-700 dark:text-slate-200 break-all"></div>
-    <button type="button" onclick="handleMenuGmailAuth()" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+    <div id="menuGmailUserInfo" class="hidden px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-[10px] font-semibold text-slate-700 dark:text-slate-200 break-all"></div>
+    <button type="button" onclick="handleMenuGmailAuth()" class="w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-brands fa-google text-red-500 w-3.5 text-[11px]"></i> <span id="menuGmailLabel">Gmail લૉગિન</span>
     </button>
-    <button type="button" onclick="handleMenuLogin()" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+    <button type="button" onclick="handleMenuLogin()" class="w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-solid fa-right-to-bracket text-amber-500 w-3.5 text-[11px]"></i> <span id="menuLoginLabel">લૉગિન / એડમિન</span>
     </button>
-    <button type="button" onclick="handleMenuInstall()" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+    <button type="button" onclick="handleMenuInstall()" class="w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-solid fa-download text-emerald-600 w-3.5 text-[11px]"></i> એપ ઇન્સ્ટોલ
     </button>
-    <button type="button" onclick="handleMenuShare()" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+    <button type="button" onclick="handleMenuShare()" class="w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-solid fa-share-nodes text-blue-600 w-3.5 text-[11px]"></i> એપ શેર કરો
     </button>
-    <button type="button" onclick="handleMenuSettings()" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+    <button type="button" onclick="handleMenuSettings()" class="w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-solid fa-gear text-orange-500 w-3.5 text-[11px]"></i> સેટિંગ્સ &amp; UPI
     </button>
-    <button type="button" onclick="exportBackupJson()" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+    <button type="button" onclick="exportBackupJson()" class="w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-solid fa-floppy-disk text-slate-600 dark:text-slate-300 w-3.5 text-[11px]"></i> બેકઅપ ડાઉનલોડ
     </button>
-    <button type="button" onclick="triggerRestoreJson()" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+    <button type="button" onclick="triggerRestoreJson()" class="w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-solid fa-upload text-slate-600 dark:text-slate-300 w-3.5 text-[11px]"></i> બેકઅપ રિસ્ટોર
     </button>
     <input type="file" id="restoreJsonInput" accept=".json,application/json" class="hidden" onchange="handleRestoreJson(event)">
