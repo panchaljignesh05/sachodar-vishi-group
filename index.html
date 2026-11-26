@@ -37,7 +37,7 @@
       position: fixed;
       top: 56px;
       right: 12px;
-      width: 245px;
+      width: 255px;
       z-index: 60;
       display: none;
       flex-direction: column;
@@ -60,6 +60,10 @@
 
   <!-- ⋮ મેનુ ડ્રોપડાઉન -->
   <div id="headerMoreDropdown" class="header-more-dropdown bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xl">
+    <div id="menuGmailUserInfo" class="hidden px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-[11px] font-semibold text-slate-700 dark:text-slate-200 break-all"></div>
+    <button type="button" onclick="handleMenuGmailAuth()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+      <i class="fa-brands fa-google text-red-500 w-4"></i> <span id="menuGmailLabel">Gmail થી લૉગિન કરો</span>
+    </button>
     <button type="button" onclick="handleMenuLogin()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
       <i class="fa-solid fa-right-to-bracket text-amber-500 w-4"></i> <span id="menuLoginLabel">લૉગિન / એડમિન</span>
     </button>
@@ -291,6 +295,28 @@
       <div class="space-y-2 text-xs" id="historyList"></div>
     </div>
 
+    <!-- 🗂️ જૂનો વિસી રેકોર્ડ: સત્ર ૨૦૨૬–૨૦૨૭ -->
+    <div id="archive2026Card" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-amber-300/70 dark:border-amber-700/60 transition-colors duration-300">
+      <div class="flex justify-between items-center gap-2 mb-2">
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-box-archive text-amber-500"></i> જૂનો રેકોર્ડ: સત્ર ૨૦૨૬–૨૦૨૭
+          </h3>
+          <p id="archive2026StatusText" class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">હાલનો ૨૦૨૬–૨૦૨૭ રેકોર્ડ અહીં સુરક્ષિત જોઈ શકાય છે</p>
+        </div>
+        <button type="button" onclick="toggleArchive2026View()" id="toggleArchive2026Btn" class="text-[11px] font-bold px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/50 dark:text-amber-200 text-amber-900 transition shrink-0">
+          રેકોર્ડ જુઓ
+        </button>
+      </div>
+
+      <div id="archive2026Details" class="hidden space-y-2 text-xs pt-2 border-t border-slate-100 dark:border-slate-700">
+        <div id="archive2026List" class="space-y-1.5"></div>
+        <button type="button" id="archive2026SnapshotBtn" onclick="saveCurrentTo2026Archive()" class="hidden w-full mt-2 bg-slate-800 hover:bg-slate-900 dark:bg-amber-500 dark:text-slate-950 text-white font-bold py-2 rounded-xl text-[11px] shadow transition">
+          <i class="fa-solid fa-shield-halved mr-1"></i> ૨૦૨૬–૨૦૨૭ રેકોર્ડ આર્કાઇવમાં લોક/સેવ કરો
+        </button>
+      </div>
+    </div>
+
   </main>
 
   <!-- ⚙️ એડમિન માસ્ટર સેટિંગ્સ મોડલ -->
@@ -352,6 +378,24 @@
       accessKey: "$2a$10$L4nMCdY3KmmIsJRYlahXZOYn/Ub0Ydtx6x4mhzD8nD00j0m0BdTsi"
     };
 
+    const FIREBASE_CONFIG = {
+      apiKey: "PASTE_FIREBASE_API_KEY",
+      authDomain: "PASTE_FIREBASE_AUTH_DOMAIN",
+      projectId: "PASTE_FIREBASE_PROJECT_ID",
+      appId: "PASTE_FIREBASE_APP_ID"
+    };
+
+    const MONTH_LABELS_2026_27 = [
+      "મે ૨૦૨૬ (વીશી ૧)", "જૂન ૨૦૨૬ (વીશી ૨)", "જુલાઈ ૨૦૨૬ (વીશી ૩)", "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)",
+      "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)", "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)", "નવેમ્બર ૨૦૨૬ (વીશી ૭)", "ડિસેમ્બર ૨૦૨૬ (વીશી ૮)",
+      "જાન્યુઆરી ૨૦૨૭ (વીશી ૯)", "ફેબ્રુઆરી ૨૦૨૭ (વીશી ૧૦)", "માર્ચ ૨૦૨૭ (વીશી ૧૧)", "એપ્રિલ ૨૦૨૭ (વીશી ૧૨)",
+      "મે ૨૦૨૭ (વીશી ૧૩)", "જૂન ૨૦૨૭ (વીશી ૧૪)", "જુલાઈ ૨૦૨૭ (વીશી ૧૫)", "ઑગસ્ટ ૨૦૨૭ (વીશી ૧૬)"
+    ];
+
+    let currentGmailUser = null;
+    let firebaseAuthInstance = null;
+    let firebaseGoogleProvider = null;
+
     let isAdmin = false;
     let currentMonth = 7;
     let monthlyAmount = 1500;
@@ -359,11 +403,65 @@
     let memberFilterMode = "all";
     let lastDrawnMemberId = null;
     let deferredInstallPrompt = null;
+    let archive2026Snapshot = null;
 
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
     });
+
+    function isFirebaseConfigured() {
+      return (
+        FIREBASE_CONFIG.apiKey &&
+        FIREBASE_CONFIG.authDomain &&
+        !FIREBASE_CONFIG.apiKey.startsWith("PASTE_") &&
+        !FIREBASE_CONFIG.authDomain.startsWith("PASTE_")
+      );
+    }
+
+    function updateGmailMenuUI(user) {
+      currentGmailUser = user || null;
+      const infoEl = document.getElementById("menuGmailUserInfo");
+      const labelEl = document.getElementById("menuGmailLabel");
+      if (!infoEl || !labelEl) return;
+
+      if (currentGmailUser) {
+        infoEl.classList.remove("hidden");
+        infoEl.innerText = `✔ ${currentGmailUser.email || currentGmailUser.displayName || "Gmail લિંક થયેલ"}`;
+        labelEl.innerText = "Gmail સાઇન-આઉટ કરો";
+      } else {
+        infoEl.classList.add("hidden");
+        infoEl.innerText = "";
+        labelEl.innerText = "Gmail થી લૉગિન કરો";
+      }
+    }
+
+    async function handleMenuGmailAuth() {
+      closeMoreMenu();
+      if (!isFirebaseConfigured()) {
+        alert("Gmail લૉગિન ચાલુ કરવા માટે index.html માં FIREBASE_CONFIG ની વિગતો (apiKey, authDomain, projectId, appId) ઉમેરો.");
+        return;
+      }
+      if (!firebaseAuthInstance || !firebaseGoogleProvider) {
+        alert("Firebase Auth હજુ લોડ થઈ રહ્યું છે, થોડી સેકન્ડ પછી ફરી પ્રયત્ન કરો.");
+        return;
+      }
+      try {
+        if (currentGmailUser) {
+          await window._fbSignOut(firebaseAuthInstance);
+          updateGmailMenuUI(null);
+          alert("Gmail સાઇન-આઉટ થઈ ગયું.");
+        } else {
+          await window._fbSignInWithPopup(firebaseAuthInstance, firebaseGoogleProvider);
+        }
+      } catch (err) {
+        if (err && err.code === "auth/popup-blocked") {
+          await window._fbSignInWithRedirect(firebaseAuthInstance, firebaseGoogleProvider);
+          return;
+        }
+        alert("Gmail લૉગિન થઈ શક્યું નથી: " + (err && err.message ? err.message : "ફરી પ્રયત્ન કરો."));
+      }
+    }
 
     function closeMoreMenu() {
       const dd = document.getElementById("headerMoreDropdown");
@@ -457,6 +555,7 @@
           document.getElementById('undoDrawBtn').classList.remove('hidden');
         }
         renderMembers();
+        renderArchive2026();
       }
       openSettingsModal();
     }
@@ -469,6 +568,7 @@
         currentMonth,
         monthlyAmount,
         theme: currentTheme,
+        archive2026: archive2026Snapshot,
         members
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -510,10 +610,14 @@
         if (data.theme && THEMES[data.theme]) {
           currentTheme = data.theme;
         }
+        if (data.archive2026 && Array.isArray(data.archive2026.winners)) {
+          archive2026Snapshot = data.archive2026;
+        }
         applyTheme(currentTheme);
         await pushToCloud();
         renderMembers();
         renderHistory();
+        renderArchive2026();
         alert("બેકઅપ સફળતાપૂર્વક રિસ્ટોર થઈ ગયો.");
       } catch (_) {
         alert("બેકઅપ ફાઇલ વાંચવામાં ભૂલ આવી.");
@@ -612,6 +716,77 @@
 
     let members = defaultMembers;
 
+    function build2026SnapshotFromMembers() {
+      const winners = [];
+      for (let mNum = 1; mNum <= 16; mNum++) {
+        const w = members.find(item => item.wonMonth === mNum);
+        winners.push({
+          month: mNum,
+          monthLabel: MONTH_LABELS_2026_27[mNum - 1],
+          winnerName: w ? w.name : null,
+          amount: 16 * monthlyAmount
+        });
+      }
+      return {
+        session: "૨૦૨૬–૨૦૨૭",
+        savedAt: new Date().toISOString(),
+        winners
+      };
+    }
+
+    function renderArchive2026() {
+      const listEl = document.getElementById("archive2026List");
+      const statusEl = document.getElementById("archive2026StatusText");
+      const snapBtn = document.getElementById("archive2026SnapshotBtn");
+      if (!listEl || !statusEl) return;
+
+      if (snapBtn) {
+        snapBtn.classList.toggle("hidden", !isAdmin);
+      }
+
+      const sourceWinners = (archive2026Snapshot && Array.isArray(archive2026Snapshot.winners))
+        ? archive2026Snapshot.winners
+        : build2026SnapshotFromMembers().winners;
+
+      if (archive2026Snapshot && archive2026Snapshot.savedAt) {
+        statusEl.innerText = "૨૦૨૬–૨૦૨૭ રેકોર્ડ આર્કાઇવમાં સુરક્ષિત સાચવેલ છે";
+      } else {
+        statusEl.innerText = "હાલનો ૨૦૨૬–૨૦૨૭ રેકોર્ડ અહીં સુરક્ષિત જોઈ શકાય છે";
+      }
+
+      listEl.innerHTML = "";
+      sourceWinners.forEach((row) => {
+        const item = document.createElement("div");
+        item.className = "flex justify-between items-center p-2 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-700";
+        item.innerHTML = `
+          <span class="font-medium text-slate-700 dark:text-slate-300">${row.monthLabel}</span>
+          <span class="font-bold ${row.winnerName ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400'}">
+            ${row.winnerName ? `🏆 ${row.winnerName}` : 'બાકી / આગામી'}
+          </span>
+        `;
+        listEl.appendChild(item);
+      });
+    }
+
+    function toggleArchive2026View() {
+      const details = document.getElementById("archive2026Details");
+      const btn = document.getElementById("toggleArchive2026Btn");
+      if (!details || !btn) return;
+      const willOpen = details.classList.contains("hidden");
+      details.classList.toggle("hidden", !willOpen);
+      btn.innerText = willOpen ? "છુપાવો" : "રેકોર્ડ જુઓ";
+      if (willOpen) renderArchive2026();
+    }
+
+    function saveCurrentTo2026Archive() {
+      if (!isAdmin) return;
+      archive2026Snapshot = build2026SnapshotFromMembers();
+      localStorage.setItem("sachodar_archive_2026_2027_v1", JSON.stringify(archive2026Snapshot));
+      pushToCloud();
+      renderArchive2026();
+      alert("૨૦૨૬–૨૦૨૭ નો રેકોર્ડ આર્કાઇવમાં સુરક્ષિત સાચવી લેવામાં આવ્યો છે.");
+    }
+
     function setSyncBadge(mode, label) {
       const badge = document.getElementById("syncStatusBadge");
       const text = document.getElementById("syncStatusText");
@@ -625,6 +800,16 @@
     }
 
     function applyLocalSavedState() {
+      const savedArchive = localStorage.getItem("sachodar_archive_2026_2027_v1");
+      if (savedArchive) {
+        try {
+          const parsedArchive = JSON.parse(savedArchive);
+          if (parsedArchive && Array.isArray(parsedArchive.winners)) {
+            archive2026Snapshot = parsedArchive;
+          }
+        } catch (_) {}
+      }
+
       const savedMemberDetails = localStorage.getItem('sachodar_member_details_v1');
       if (savedMemberDetails) {
         const detailsMap = JSON.parse(savedMemberDetails);
@@ -669,6 +854,9 @@
       localStorage.setItem('sachodar_member_details_v1', JSON.stringify(detailsMap));
       localStorage.setItem('sachodar_winners_v1', JSON.stringify(winMap));
       localStorage.setItem('sachodar_theme', currentTheme);
+      if (archive2026Snapshot) {
+        localStorage.setItem('sachodar_archive_2026_2027_v1', JSON.stringify(archive2026Snapshot));
+      }
     }
 
     function isCloudConfigured() {
@@ -693,6 +881,7 @@
           body: JSON.stringify({
             updatedAt: Date.now(),
             theme: currentTheme,
+            archive2026: archive2026Snapshot,
             members: members.map(m => ({
               id: m.id,
               name: m.name,
@@ -750,10 +939,14 @@
         if (record.theme && THEMES[record.theme]) {
           currentTheme = record.theme;
         }
+        if (record.archive2026 && Array.isArray(record.archive2026.winners)) {
+          archive2026Snapshot = record.archive2026;
+        }
         saveAllLocalState();
         applyTheme(currentTheme);
         renderMembers();
         renderHistory();
+        renderArchive2026();
         setSyncBadge("live", "લાઈવ સિંક");
       } catch (_) {
         setSyncBadge("offline", "ઓફલાઈન કેશ");
@@ -996,13 +1189,6 @@
     function renderHistory() {
       const h = document.getElementById('historyList');
       h.innerHTML = '';
-      
-      const monthNames = [
-        "મે ૨૦૨૬ (વીશી ૧)", "જૂન ૨૦૨૬ (વીશી ૨)", "જુલાઈ ૨૦૨૬ (વીશી ૩)", "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)",
-        "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)", "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)", "નવેમ્બર ૨૦૨૬ (વીશી ૭)", "ડિસેમ્બર ૨૦૨૬ (વીશી ૮)",
-        "જાન્યુઆરી ૨૦૨૭ (વીશી ૯)", "ફેબ્રુઆરી ૨૦૨૭ (વીશી ૧૦)", "માર્ચ ૨૦૨૭ (વીશી ૧૧)", "એપ્રિલ ૨૦૨૭ (વીશી ૧૨)",
-        "મે ૨૦૨૭ (વીશી ૧૩)", "જૂન ૨૦૨૭ (વીશી ૧૪)", "જુલાઈ ૨૦૨૭ (વીશી ૧૫)", "ઑગસ્ટ ૨૦૨૭ (વીશી ૧૬)"
-      ];
 
       for (let i = 1; i <= 16; i++) {
         const winner = members.find(m => m.wonMonth === i);
@@ -1011,7 +1197,7 @@
         h.innerHTML += `
           <div class="flex justify-between items-center p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-700">
             <div>
-              <span class="font-medium text-slate-700 dark:text-slate-300">${monthNames[i-1]}</span>
+              <span class="font-medium text-slate-700 dark:text-slate-300">${MONTH_LABELS_2026_27[i-1]}</span>
             </div>
             <div class="text-right">
               <span class="font-bold ${isDone ? 'text-green-700 dark:text-emerald-400' : 'text-slate-400'}">
@@ -1060,6 +1246,7 @@
         }
       }
       renderMembers();
+      renderArchive2026();
     }
 
     function startDraw() {
@@ -1096,6 +1283,7 @@
           alert(`અભિનંદન! આગામી વિજેતા છે:\n${winner.name}`);
           renderMembers();
           renderHistory();
+          renderArchive2026();
         }
       }, 100);
     }
@@ -1115,14 +1303,46 @@
       pushToCloud();
       renderMembers();
       renderHistory();
+      renderArchive2026();
     }
 
     applyLocalSavedState();
     applyTheme(currentTheme);
     renderMembers();
     renderHistory();
+    renderArchive2026();
     pullFromCloud();
     setInterval(pullFromCloud, 30000);
+  </script>
+
+  <!-- Firebase Google Sign-In SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signInWithRedirect,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    window._fbSignInWithPopup = signInWithPopup;
+    window._fbSignInWithRedirect = signInWithRedirect;
+    window._fbSignOut = signOut;
+
+    if (typeof isFirebaseConfigured === "function" && isFirebaseConfigured()) {
+      const fbApp = initializeApp(FIREBASE_CONFIG);
+      firebaseAuthInstance = getAuth(fbApp);
+      firebaseGoogleProvider = new GoogleAuthProvider();
+
+      onAuthStateChanged(firebaseAuthInstance, (user) => {
+        updateGmailMenuUI(user);
+        if (user) {
+          pullFromCloud(true);
+        }
+      });
+    }
   </script>
 </body>
 </html>
