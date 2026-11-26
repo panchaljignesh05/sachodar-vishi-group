@@ -48,7 +48,10 @@
     .header-more-dropdown.open {
       display: flex;
     }
-    #adminBtn {
+    #adminBtn,
+    #syncStatusBadge,
+    #refreshSyncBtn,
+    #schoolSessionBadge {
       display: none !important;
     }
   </style>
@@ -90,7 +93,7 @@
     <p class="text-xs text-amber-100 font-medium italic mt-0.5 custom-text-shadow">“એકતા, વિશ્વાસ અને પારદર્શકતા.”</p>
     
     <div class="flex flex-wrap items-center justify-center gap-1.5 mt-2">
-      <span class="text-[10px] text-amber-200 font-bold bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-amber-300/40 shadow">
+      <span id="schoolSessionBadge" class="text-[10px] text-amber-200 font-bold bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-amber-300/40 shadow">
         <i class="fa-solid fa-school text-[9px] mr-1 text-amber-300"></i> સાચોદર શાળા સ્મૃતિ | સત્ર: ૨૦૨૬-૨૭
       </span>
       <span id="syncStatusBadge" class="text-[10px] bg-black/60 text-amber-200 font-bold px-2.5 py-1 rounded-full border border-white/20 shadow flex items-center gap-1">
