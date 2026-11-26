@@ -136,16 +136,28 @@
     <div id="winnerPayCard" class="bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 rounded-2xl p-4 shadow-lg border-2 border-amber-300 text-center space-y-3 transition-all duration-300">
       <div class="flex items-center justify-center gap-2 font-black text-sm">
         <i class="fa-solid fa-crown text-base"></i>
-        <span>મહિનો ૭ વિજેતાની ચુકવણી</span>
+        <span id="winnerPayHeaderTitle">મહિનો ૭ વિજેતાની ચુકવણી</span>
       </div>
 
-      <div class="bg-white/95 dark:bg-slate-900/95 dark:text-slate-100 backdrop-blur rounded-2xl p-4 shadow-sm text-left space-y-3">
+      <!-- ૧૬ થી આગલા મહિનાની ૯ તારીખ સુધી Coming soon + Next Draw Date & Month -->
+      <div id="winnerComingSoonBox" class="hidden bg-white/95 dark:bg-slate-900/95 dark:text-slate-100 backdrop-blur rounded-2xl p-5 shadow-sm text-center space-y-2.5">
+        <p class="text-xl font-black text-amber-600 dark:text-amber-400">Coming soon</p>
+        <div id="nextDrawDateBadge" class="inline-flex items-center gap-1.5 bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 px-3.5 py-1.5 rounded-full text-xs font-bold border border-amber-300/70">
+          <i class="fa-solid fa-calendar-days text-amber-600 dark:text-amber-300"></i>
+          <span id="nextDrawDateText">આગામી ડ્રો તારીખ: ૧૦ ડિસેમ્બર ૨૦૨૬</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
+          ચુકવણી સમય (૧૫ તારીખ) પૂર્ણ થયેલ છે. આગામી ડ્રો પછી નવા વિજેતાની QR અને પેમેન્ટ વિગતો અહીં દેખાશે.
+        </p>
+      </div>
+
+      <div id="winnerPayDetailsBox" class="bg-white/95 dark:bg-slate-900/95 dark:text-slate-100 backdrop-blur rounded-2xl p-4 shadow-sm text-left space-y-3">
         <div class="flex justify-between items-start border-b border-slate-100 dark:border-slate-800 pb-2">
           <div>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">ચુકવણી મેળવનાર વિજેતા:</p>
-            <p class="text-xl font-black text-slate-900 dark:text-white">🏆 ચિરાગ</p>
-            <p class="text-xs text-blue-700 dark:text-blue-400 font-mono font-bold mt-0.5">UPI: chirag11137-1@okhdfcbank</p>
-            <p class="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-0.5">મોબાઇલ: 9819086110</p>
+            <p id="winnerPayName" class="text-xl font-black text-slate-900 dark:text-white">🏆 ચિરાગ</p>
+            <p id="winnerPayUpiText" class="text-xs text-blue-700 dark:text-blue-400 font-mono font-bold mt-0.5 break-all">UPI: chirag11137-1@okhdfcbank</p>
+            <p id="winnerPayPhoneText" class="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-0.5">મોબાઇલ: 9819086110</p>
           </div>
           <span class="bg-emerald-100 text-emerald-800 text-sm font-black px-3 py-1 rounded-xl shadow-sm">
             ₹૧,૫૦૦
@@ -159,7 +171,7 @@
           </p>
           
           <div class="inline-block bg-white p-3 rounded-2xl shadow-md border-2 border-amber-300">
-            <img id="winnerQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=chirag11137-1@okhdfcbank%26pn=Chirag%26am=1500%26cu=INR" alt="Chirag QR Code" class="w-48 h-48 mx-auto object-contain">
+            <img id="winnerQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=chirag11137-1@okhdfcbank%26pn=Chirag%26am=1500%26cu=INR" alt="Winner QR Code" class="w-48 h-48 mx-auto object-contain">
           </div>
 
           <div class="bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-lg p-2 text-[11px] text-amber-900 dark:text-amber-200 text-left space-y-1">
@@ -171,11 +183,11 @@
 
         <!-- કૉપી બટન -->
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="navigator.clipboard.writeText('9819086110'); alert('ચિરાગભાઈનો નંબર કૉપી થઈ ગયો: 9819086110\nહવે Google Pay અથવા PhonePe માં નંબર નાખીને ચૂકવી શકો છો!');" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
+          <button type="button" onclick="copyWinnerPhone()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
             <i class="fa-solid fa-copy"></i> નંબર કૉપી કરો
           </button>
           
-          <button onclick="navigator.clipboard.writeText('chirag11137-1@okhdfcbank'); alert('ચિરાગભાઈની UPI ID કૉપી થઈ ગઈ!\nહવે GPay / PhonePe માં પેસ્ટ કરો!');" class="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
+          <button type="button" onclick="copyWinnerUpi()" class="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs py-2.5 rounded-xl shadow flex items-center justify-center gap-1.5 transition">
             <i class="fa-solid fa-at"></i> UPI કૉપી કરો
           </button>
         </div>
@@ -385,6 +397,11 @@
       appId: "PASTE_FIREBASE_APP_ID"
     };
 
+    const GUJARATI_MONTHS = [
+      "જાન્યુઆરી", "ફેબ્રુઆરી", "માર્ચ", "એપ્રિલ", "મે", "જૂન",
+      "જુલાઈ", "ઑગસ્ટ", "સપ્ટેમ્બર", "ઑક્ટોબર", "નવેમ્બર", "ડિસેમ્બર"
+    ];
+
     const MONTH_LABELS_2026_27 = [
       "મે ૨૦૨૬ (વીશી ૧)", "જૂન ૨૦૨૬ (વીશી ૨)", "જુલાઈ ૨૦૨૬ (વીશી ૩)", "ઑગસ્ટ ૨૦૨૬ (વીશી ૪)",
       "સપ્ટેમ્બર ૨૦૨૬ (વીશી ૫)", "ઑક્ટોબર ૨૦૨૬ (વીશી ૬)", "નવેમ્બર ૨૦૨૬ (વીશી ૭)", "ડિસેમ્બર ૨૦૨૬ (વીશી ૮)",
@@ -405,10 +422,102 @@
     let deferredInstallPrompt = null;
     let archive2026Snapshot = null;
 
+    let activeWinnerCardData = {
+      month: 7,
+      name: "ચિરાગ",
+      phone: "9819086110",
+      upi: "chirag11137-1@okhdfcbank",
+      amount: 1500,
+      drawnOnDay: 10,
+      paymentDueDay: 15
+    };
+
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
     });
+
+    function toGujaratiDigits(num) {
+      const guj = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+      return String(num).replace(/\d/g, d => guj[Number(d)]);
+    }
+
+    function getNextDrawDateLabel(nowDate = new Date()) {
+      const day = nowDate.getDate();
+      let targetMonth = nowDate.getMonth();
+      let targetYear = nowDate.getFullYear();
+
+      // જો ૧૬ કે તેના પછીની તારીખ હોય તો આવતા મહિનાની ૧૦ તારીખ
+      if (day >= 16) {
+        targetMonth += 1;
+        if (targetMonth > 11) {
+          targetMonth = 0;
+          targetYear += 1;
+        }
+      }
+      const mName = GUJARATI_MONTHS[targetMonth] || "";
+      return `૧૦ ${mName} ${toGujaratiDigits(targetYear)}`;
+    }
+
+    function isPaymentWindowOpen(nowDate = new Date()) {
+      const dayOfMonth = nowDate.getDate();
+      return dayOfMonth >= 10 && dayOfMonth <= 15;
+    }
+
+    function updateWinnerPaymentCardUI() {
+      const titleEl = document.getElementById("winnerPayHeaderTitle");
+      const soonBox = document.getElementById("winnerComingSoonBox");
+      const nextDrawTextEl = document.getElementById("nextDrawDateText");
+      const detailsBox = document.getElementById("winnerPayDetailsBox");
+      const nameEl = document.getElementById("winnerPayName");
+      const upiEl = document.getElementById("winnerPayUpiText");
+      const phoneEl = document.getElementById("winnerPayPhoneText");
+      const qrImg = document.getElementById("winnerQrImage");
+
+      if (!soonBox || !detailsBox) return;
+
+      const now = new Date();
+      const isOpen = isPaymentWindowOpen(now);
+
+      if (titleEl) {
+        titleEl.innerText = isOpen
+          ? `મહિનો ${toGujaratiDigits(activeWinnerCardData.month)} વિજેતાની ચુકવણી`
+          : `આગામી વિજેતાની ચુકવણી`;
+      }
+
+      if (!isOpen) {
+        soonBox.classList.remove("hidden");
+        detailsBox.classList.add("hidden");
+        if (nextDrawTextEl) {
+          nextDrawTextEl.innerText = `આગામી ડ્રો તારીખ: ${getNextDrawDateLabel(now)}`;
+        }
+        return;
+      }
+
+      soonBox.classList.add("hidden");
+      detailsBox.classList.remove("hidden");
+
+      if (nameEl) nameEl.innerText = `🏆 ${activeWinnerCardData.name}`;
+      if (upiEl) upiEl.innerText = `UPI: ${activeWinnerCardData.upi || ""}`;
+      if (phoneEl) phoneEl.innerText = `મોબાઇલ: ${activeWinnerCardData.phone || ""}`;
+
+      if (qrImg) {
+        const upiUri = `upi://pay?pa=${encodeURIComponent(activeWinnerCardData.upi || "")}&pn=${encodeURIComponent(activeWinnerCardData.name || "Winner")}&am=${activeWinnerCardData.amount || 1500}&cu=INR`;
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+      }
+    }
+
+    function copyWinnerPhone() {
+      const phone = activeWinnerCardData.phone || "";
+      navigator.clipboard.writeText(phone);
+      alert(`${activeWinnerCardData.name} નો નંબર કૉપી થઈ ગયો: ${phone}\nહવે Google Pay અથવા PhonePe માં નંબર નાખીને ચૂકવી શકો છો!`);
+    }
+
+    function copyWinnerUpi() {
+      const upi = activeWinnerCardData.upi || "";
+      navigator.clipboard.writeText(upi);
+      alert(`${activeWinnerCardData.name} ની UPI ID કૉપી થઈ ગઈ!\nહવે GPay / PhonePe માં પેસ્ટ કરો!`);
+    }
 
     function isFirebaseConfigured() {
       return (
@@ -569,6 +678,7 @@
         monthlyAmount,
         theme: currentTheme,
         archive2026: archive2026Snapshot,
+        activeWinnerCardData,
         members
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -613,7 +723,11 @@
         if (data.archive2026 && Array.isArray(data.archive2026.winners)) {
           archive2026Snapshot = data.archive2026;
         }
+        if (data.activeWinnerCardData && data.activeWinnerCardData.name) {
+          activeWinnerCardData = data.activeWinnerCardData;
+        }
         applyTheme(currentTheme);
+        updateWinnerPaymentCardUI();
         await pushToCloud();
         renderMembers();
         renderHistory();
@@ -800,6 +914,16 @@
     }
 
     function applyLocalSavedState() {
+      const savedActiveWinner = localStorage.getItem("sachodar_active_winner_v1");
+      if (savedActiveWinner) {
+        try {
+          const parsedWinner = JSON.parse(savedActiveWinner);
+          if (parsedWinner && parsedWinner.name) {
+            activeWinnerCardData = parsedWinner;
+          }
+        } catch (_) {}
+      }
+
       const savedArchive = localStorage.getItem("sachodar_archive_2026_2027_v1");
       if (savedArchive) {
         try {
@@ -854,6 +978,7 @@
       localStorage.setItem('sachodar_member_details_v1', JSON.stringify(detailsMap));
       localStorage.setItem('sachodar_winners_v1', JSON.stringify(winMap));
       localStorage.setItem('sachodar_theme', currentTheme);
+      localStorage.setItem('sachodar_active_winner_v1', JSON.stringify(activeWinnerCardData));
       if (archive2026Snapshot) {
         localStorage.setItem('sachodar_archive_2026_2027_v1', JSON.stringify(archive2026Snapshot));
       }
@@ -882,6 +1007,7 @@
             updatedAt: Date.now(),
             theme: currentTheme,
             archive2026: archive2026Snapshot,
+            activeWinnerCardData,
             members: members.map(m => ({
               id: m.id,
               name: m.name,
@@ -942,8 +1068,12 @@
         if (record.archive2026 && Array.isArray(record.archive2026.winners)) {
           archive2026Snapshot = record.archive2026;
         }
+        if (record.activeWinnerCardData && record.activeWinnerCardData.name) {
+          activeWinnerCardData = record.activeWinnerCardData;
+        }
         saveAllLocalState();
         applyTheme(currentTheme);
+        updateWinnerPaymentCardUI();
         renderMembers();
         renderHistory();
         renderArchive2026();
@@ -1069,6 +1199,12 @@
         if (newName) m.name = newName;
         if (newPhone) m.phone = newPhone;
         if (newUpi) m.upi = newUpi;
+
+        if (activeWinnerCardData && activeWinnerCardData.name === m.name) {
+          activeWinnerCardData.phone = m.phone;
+          activeWinnerCardData.upi = m.upi;
+          updateWinnerPaymentCardUI();
+        }
 
         pushToCloud();
         alert(`${m.id}. ${m.name} ની વિગતો સેવ થઈ ગઈ!`);
@@ -1271,14 +1407,27 @@
         if (count > 25) {
           clearInterval(timer);
           const winner = eligible[Math.floor(Math.random() * eligible.length)];
+          const nextWonCount = members.filter(m => m.won).length + 1;
           winner.won = true;
-          winner.wonMonth = 8;
-          winner.wonLabel = `ડિસેમ્બર ૨૦૨૬ (વીશી ૮)`;
+          winner.wonMonth = nextWonCount;
+          winner.wonLabel = MONTH_LABELS_2026_27[nextWonCount - 1] || `વીશી ${nextWonCount}`;
           lastDrawnMemberId = winner.id;
+
+          activeWinnerCardData = {
+            month: nextWonCount,
+            name: winner.name,
+            phone: winner.phone,
+            upi: winner.upi,
+            amount: monthlyAmount,
+            drawnOnDay: 10,
+            paymentDueDay: 15
+          };
+
           box.innerText = `🎉 ${winner.name} 🎉`;
           btn.disabled = false;
           btn.innerText = "ડ્રો પૂર્ણ થયો";
           document.getElementById('undoDrawBtn').classList.remove('hidden');
+          updateWinnerPaymentCardUI();
           pushToCloud();
           alert(`અભિનંદન! આગામી વિજેતા છે:\n${winner.name}`);
           renderMembers();
@@ -1297,9 +1446,24 @@
       target.wonMonth = null;
       target.wonLabel = "";
       lastDrawnMemberId = null;
+
+      const prevWinner = [...members].filter(m => m.won).sort((a, b) => (b.wonMonth || 0) - (a.wonMonth || 0))[0];
+      if (prevWinner) {
+        activeWinnerCardData = {
+          month: prevWinner.wonMonth || 7,
+          name: prevWinner.name,
+          phone: prevWinner.phone,
+          upi: prevWinner.upi,
+          amount: monthlyAmount,
+          drawnOnDay: 10,
+          paymentDueDay: 15
+        };
+      }
+
       document.getElementById('winnerName').innerText = "ડ્રો માટે તૈયાર";
       document.getElementById('drawBtn').innerText = "ડ્રો શરૂ કરો";
       document.getElementById('undoDrawBtn').classList.add('hidden');
+      updateWinnerPaymentCardUI();
       pushToCloud();
       renderMembers();
       renderHistory();
@@ -1308,11 +1472,13 @@
 
     applyLocalSavedState();
     applyTheme(currentTheme);
+    updateWinnerPaymentCardUI();
     renderMembers();
     renderHistory();
     renderArchive2026();
     pullFromCloud();
     setInterval(pullFromCloud, 30000);
+    setInterval(updateWinnerPaymentCardUI, 60000);
   </script>
 
   <!-- Firebase Google Sign-In SDK -->
