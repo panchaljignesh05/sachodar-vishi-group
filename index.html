@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-title" content="સાચોદર વિસી ગ્રુપ">
+  <meta name="application-name" content="સાચોદર વિસી ગ્રુપ">
   <title>સાચોદર વિસી ગ્રુપ</title>
   
   <link rel="icon" type="image/jpeg" href="IMG-20261031-WA9497.jpg">
@@ -31,9 +33,47 @@
     .custom-text-shadow {
       text-shadow: 0 2px 5px rgba(0, 0, 0, 0.85), 0 0 10px rgba(0, 0, 0, 0.5);
     }
+    .header-more-dropdown {
+      position: fixed;
+      top: 56px;
+      right: 12px;
+      width: 245px;
+      z-index: 60;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 6px;
+      border-radius: 14px;
+    }
+    .header-more-dropdown.open {
+      display: flex;
+    }
   </style>
 </head>
 <body id="appBody" class="pb-28 bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
+
+  <!-- ⋮ મેનુ ડ્રોપડાઉન -->
+  <div id="headerMoreDropdown" class="header-more-dropdown bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xl">
+    <button type="button" onclick="handleMenuLogin()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+      <i class="fa-solid fa-right-to-bracket text-amber-500 w-4"></i> <span id="menuLoginLabel">લૉગિન / એડમિન</span>
+    </button>
+    <button type="button" onclick="handleMenuInstall()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+      <i class="fa-solid fa-download text-emerald-600 w-4"></i> એપ ઇન્સ્ટોલ કરો
+    </button>
+    <button type="button" onclick="handleMenuShare()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+      <i class="fa-solid fa-share-nodes text-blue-600 w-4"></i> એપ શેર કરો
+    </button>
+    <button type="button" onclick="handleMenuSettings()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+      <i class="fa-solid fa-gear text-orange-500 w-4"></i> સેટિંગ્સ &amp; UPI
+    </button>
+    <button type="button" onclick="exportBackupJson()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+      <i class="fa-solid fa-floppy-disk text-slate-600 dark:text-slate-300 w-4"></i> બેકઅપ ડાઉનલોડ
+    </button>
+    <button type="button" onclick="triggerRestoreJson()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+      <i class="fa-solid fa-upload text-slate-600 dark:text-slate-300 w-4"></i> બેકઅપ રિસ્ટોર
+    </button>
+    <input type="file" id="restoreJsonInput" accept=".json,application/json" class="hidden" onchange="handleRestoreJson(event)">
+  </div>
 
   <!-- 🌅 હેડર -->
   <header id="appHeader" class="village-sunset-header text-white p-5 shadow-2xl text-center relative flex flex-col items-center justify-center border-b-2 border-amber-400/90 transition-all duration-300">
@@ -59,9 +99,14 @@
       <span id="adminBadge" class="hidden text-[10px] bg-emerald-500 text-white font-bold px-2.5 py-1 rounded-full shadow">એડમિન મોડ</span>
     </div>
     
-    <button onclick="toggleAdmin()" id="adminBtn" class="absolute right-3 top-4 bg-black/50 hover:bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition border border-white/30 shadow">
-      <i class="fa-solid fa-lock text-amber-300"></i> <span id="adminText">લૉગિન</span>
-    </button>
+    <div id="headerMoreWrap" class="absolute right-3 top-4 flex items-center gap-1.5">
+      <button type="button" onclick="toggleAdmin()" id="adminBtn" class="bg-black/50 hover:bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition border border-white/30 shadow">
+        <i class="fa-solid fa-lock text-amber-300"></i> <span id="adminText">લૉગિન</span>
+      </button>
+      <button type="button" onclick="toggleMoreMenu(event)" id="btnMoreMenu" title="મેનુ" aria-expanded="false" class="w-8 h-8 bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full text-sm font-black flex items-center justify-center transition border border-white/30 shadow">
+        ⋮
+      </button>
+    </div>
   </header>
 
   <main class="max-w-md mx-auto p-4 space-y-4">
@@ -73,7 +118,7 @@
         <span>એડમિન કંટ્રોલ સક્રિય</span>
       </div>
       <button onclick="openSettingsModal()" class="bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow flex items-center gap-1">
-        <i class="fa-solid fa-gear"></i> સેટિંગ્સ & UPI
+        <i class="fa-solid fa-gear"></i> સેટિંગ્સ &amp; UPI
       </button>
     </div>
 
@@ -209,7 +254,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-300">
       <div class="flex justify-between items-center mb-2.5">
         <div>
-          <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી & સંપર્ક</h3>
+          <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">૧૬ સભ્યોની યાદી &amp; સંપર્ક</h3>
           <p class="text-[11px] text-slate-500 dark:text-slate-400">ટેપ કરીને પેમેન્ટ અપડેટ કરો</p>
         </div>
         <span class="text-xs text-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg" id="adminNotice">જોવાની પરવાનગી</span>
@@ -245,7 +290,7 @@
       
       <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
         <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-          <i id="settingsModalIcon" class="fa-solid fa-palette text-orange-500"></i> એડમિન સેટિંગ્સ & UPI ID
+          <i id="settingsModalIcon" class="fa-solid fa-palette text-orange-500"></i> એડમિન સેટિંગ્સ &amp; UPI ID
         </h3>
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -304,6 +349,167 @@
     let isSyncingFromCloud = false;
     let memberFilterMode = "all";
     let lastDrawnMemberId = null;
+    let deferredInstallPrompt = null;
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+    });
+
+    function closeMoreMenu() {
+      const dd = document.getElementById("headerMoreDropdown");
+      const btn = document.getElementById("btnMoreMenu");
+      if (dd) dd.classList.remove("open");
+      if (btn) btn.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleMoreMenu(e) {
+      if (e) e.stopPropagation();
+      const dd = document.getElementById("headerMoreDropdown");
+      const btn = document.getElementById("btnMoreMenu");
+      if (!dd) return;
+      const isOpen = dd.classList.toggle("open");
+      if (btn) btn.setAttribute("aria-expanded", String(isOpen));
+    }
+
+    document.addEventListener("click", (e) => {
+      const wrap = document.getElementById("headerMoreWrap");
+      const dd = document.getElementById("headerMoreDropdown");
+      if (
+        dd &&
+        dd.classList.contains("open") &&
+        !dd.contains(e.target) &&
+        !(wrap && wrap.contains(e.target))
+      ) {
+        closeMoreMenu();
+      }
+    });
+
+    function handleMenuLogin() {
+      closeMoreMenu();
+      toggleAdmin();
+    }
+
+    async function handleMenuInstall() {
+      closeMoreMenu();
+      if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
+        alert("આ એપ પહેલાથી જ તમારા ફોનની હોમ સ્ક્રીન પર ઇન્સ્ટોલ થયેલી છે.");
+        return;
+      }
+      if (deferredInstallPrompt) {
+        try {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+          deferredInstallPrompt = null;
+          return;
+        } catch (_) {}
+      }
+      alert("બ્રાઉઝરના ⋮ મેનુમાં જઈ 'Add to Home Screen' અથવા 'Install App' પર ટેપ કરો.");
+    }
+
+    async function handleMenuShare() {
+      closeMoreMenu();
+      const shareUrl = location.href.split("#")[0];
+      const shareText = "સાચોદર વિસી ગ્રુપ — માસિક વિસી હિસાબ અને ડ્રો";
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: shareText, text: shareText, url: shareUrl });
+          return;
+        }
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(shareUrl);
+          alert("એપની લિંક કોપી થઈ ગઈ છે:\n" + shareUrl);
+          return;
+        }
+      } catch (_) {}
+      window.open(`https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`, "_blank");
+    }
+
+    function handleMenuSettings() {
+      closeMoreMenu();
+      if (!isAdmin) {
+        const pin = prompt("સેટિંગ્સ ખોલવા એડમિન પિન દાખલ કરો:");
+        if (pin !== "1234") {
+          alert("ખોટો પિન! સાચો પિન 1234 છે.");
+          return;
+        }
+        isAdmin = true;
+        document.getElementById('adminText').innerText = 'એડમિન મોડ';
+        document.getElementById('menuLoginLabel').innerText = 'લૉગઆઉટ (એડમિન મોડ)';
+        document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
+        document.getElementById('adminPanelBanner').classList.remove('hidden');
+        document.getElementById('adminBadge').classList.remove('hidden');
+        if (lastDrawnMemberId) {
+          document.getElementById('undoDrawBtn').classList.remove('hidden');
+        }
+        renderMembers();
+      }
+      openSettingsModal();
+    }
+
+    function exportBackupJson() {
+      closeMoreMenu();
+      const payload = {
+        app: "SACHODAR_VISHI_GROUP",
+        exportedAt: new Date().toISOString(),
+        currentMonth,
+        monthlyAmount,
+        theme: currentTheme,
+        members
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Sachodar_Vishi_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function triggerRestoreJson() {
+      closeMoreMenu();
+      document.getElementById("restoreJsonInput").click();
+    }
+
+    async function handleRestoreJson(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if (!Array.isArray(data.members) || !data.members.length) {
+          alert("અમાન્ય બેકઅપ ફાઇલ.");
+          return;
+        }
+        data.members.forEach((rm) => {
+          const lm = members.find((x) => x.id === rm.id);
+          if (lm) {
+            if (rm.name) lm.name = rm.name;
+            if (rm.phone) lm.phone = rm.phone;
+            if (rm.upi !== undefined) lm.upi = rm.upi;
+            if (rm.paid !== undefined) lm.paid = !!rm.paid;
+            if (rm.won !== undefined) lm.won = !!rm.won;
+            if (rm.wonMonth !== undefined) lm.wonMonth = rm.wonMonth;
+            if (rm.wonLabel !== undefined) lm.wonLabel = rm.wonLabel;
+          }
+        });
+        if (data.theme && THEMES[data.theme]) {
+          currentTheme = data.theme;
+        }
+        applyTheme(currentTheme);
+        await pushToCloud();
+        renderMembers();
+        renderHistory();
+        alert("બેકઅપ સફળતાપૂર્વક રિસ્ટોર થઈ ગયો.");
+      } catch (_) {
+        alert("બેકઅપ ફાઇલ વાંચવામાં ભૂલ આવી.");
+      }
+      event.target.value = "";
+    }
 
     const THEMES = {
       saffron: {
@@ -819,6 +1025,7 @@
       if (isAdmin) {
         isAdmin = false;
         document.getElementById('adminText').innerText = 'લૉગિન';
+        document.getElementById('menuLoginLabel').innerText = 'લૉગિન / એડમિન';
         document.getElementById('adminNotice').innerText = 'જોવાની પરવાનગી';
         document.getElementById('adminPanelBanner').classList.add('hidden');
         document.getElementById('adminBadge').classList.add('hidden');
@@ -828,6 +1035,7 @@
         if (pin === "1234") {
           isAdmin = true;
           document.getElementById('adminText').innerText = 'એડમિન મોડ';
+          document.getElementById('menuLoginLabel').innerText = 'લૉગઆઉટ (એડમિન મોડ)';
           document.getElementById('adminNotice').innerText = 'ફેરફાર સક્રિય';
           document.getElementById('adminPanelBanner').classList.remove('hidden');
           document.getElementById('adminBadge').classList.remove('hidden');
