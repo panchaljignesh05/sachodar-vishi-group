@@ -375,6 +375,15 @@
         </button>
       </div>
 
+      <!-- ૩. એડમિન PIN બદલો -->
+      <div class="space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3">
+        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">૩. એડમિન PIN બદલો:</label>
+        <input type="password" id="newAdminPinInput" maxlength="10" class="w-full text-xs p-2 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white" placeholder="નવો PIN દાખલ કરો (ઓછામાં ઓછા 4 અંક)">
+        <button type="button" onclick="saveNewAdminPin()" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 rounded-xl shadow transition">
+          નવો PIN સાચવો
+        </button>
+      </div>
+
       <div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex gap-2">
         <button type="button" id="closeSettingsBtn" onclick="closeSettingsModal()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow transition">
           સેટિંગ્સ બંધ કરો
@@ -409,6 +418,8 @@
       "મે ૨૦૨૭ (વીશી ૧૩)", "જૂન ૨૦૨૭ (વીશી ૧૪)", "જુલાઈ ૨૦૨૭ (વીશી ૧૫)", "ઑગસ્ટ ૨૦૨૭ (વીશી ૧૬)"
     ];
 
+    let adminPin = localStorage.getItem("sachodar_admin_pin_v1") || "1234";
+
     let currentGmailUser = null;
     let firebaseAuthInstance = null;
     let firebaseGoogleProvider = null;
@@ -437,6 +448,22 @@
       deferredInstallPrompt = e;
     });
 
+    function saveNewAdminPin() {
+      if (!isAdmin) return;
+      const inp = document.getElementById("newAdminPinInput");
+      if (!inp) return;
+      const nextPin = inp.value.trim();
+      if (nextPin.length < 4) {
+        alert("કૃપા કરીને ઓછામાં ઓછા 4 અંકનો નવો PIN દાખલ કરો.");
+        return;
+      }
+      adminPin = nextPin;
+      localStorage.setItem("sachodar_admin_pin_v1", adminPin);
+      inp.value = "";
+      pushToCloud();
+      alert("નવો એડમિન PIN સફળતાપૂર્વક સેવ થઈ ગયો છે!");
+    }
+
     function toGujaratiDigits(num) {
       const guj = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
       return String(num).replace(/\d/g, d => guj[Number(d)]);
@@ -447,7 +474,6 @@
       let targetMonth = nowDate.getMonth();
       let targetYear = nowDate.getFullYear();
 
-      // જો ૧૬ કે તેના પછીની તારીખ હોય તો આવતા મહિનાની ૧૦ તારીખ
       if (day >= 16) {
         targetMonth += 1;
         if (targetMonth > 11) {
@@ -648,9 +674,9 @@
     function handleMenuSettings() {
       closeMoreMenu();
       if (!isAdmin) {
-        const pin = prompt("સેટિંગ્સ ખોલવા એડમિન પિન દાખલ કરો:");
-        if (pin !== "1234") {
-          alert("ખોટો પિન! સાચો પિન 1234 છે.");
+        const pin = prompt("સેટિંગ્સ ખોલવા એડમિન PIN દાખલ કરો:");
+        if (pin !== adminPin) {
+          alert("ખોટો PIN! ફરી પ્રયત્ન કરો.");
           return;
         }
         isAdmin = true;
@@ -914,6 +940,11 @@
     }
 
     function applyLocalSavedState() {
+      const savedPin = localStorage.getItem("sachodar_admin_pin_v1");
+      if (savedPin && savedPin.length >= 4) {
+        adminPin = savedPin;
+      }
+
       const savedActiveWinner = localStorage.getItem("sachodar_active_winner_v1");
       if (savedActiveWinner) {
         try {
@@ -979,6 +1010,7 @@
       localStorage.setItem('sachodar_winners_v1', JSON.stringify(winMap));
       localStorage.setItem('sachodar_theme', currentTheme);
       localStorage.setItem('sachodar_active_winner_v1', JSON.stringify(activeWinnerCardData));
+      localStorage.setItem('sachodar_admin_pin_v1', adminPin);
       if (archive2026Snapshot) {
         localStorage.setItem('sachodar_archive_2026_2027_v1', JSON.stringify(archive2026Snapshot));
       }
@@ -1006,6 +1038,7 @@
           body: JSON.stringify({
             updatedAt: Date.now(),
             theme: currentTheme,
+            adminPin,
             archive2026: archive2026Snapshot,
             activeWinnerCardData,
             members: members.map(m => ({
@@ -1064,6 +1097,9 @@
         });
         if (record.theme && THEMES[record.theme]) {
           currentTheme = record.theme;
+        }
+        if (record.adminPin && String(record.adminPin).length >= 4) {
+          adminPin = String(record.adminPin);
         }
         if (record.archive2026 && Array.isArray(record.archive2026.winners)) {
           archive2026Snapshot = record.archive2026;
@@ -1364,8 +1400,8 @@
         document.getElementById('adminDrawCallBtn').classList.add('hidden');
         document.getElementById('undoDrawBtn').classList.add('hidden');
       } else {
-        const pin = prompt("એડમિન પિન દાખલ કરો:");
-        if (pin === "1234") {
+        const pin = prompt("એડમિન PIN દાખલ કરો:");
+        if (pin === adminPin) {
           isAdmin = true;
           document.getElementById('adminText').innerText = 'એડમિન મોડ';
           document.getElementById('menuLoginLabel').innerText = 'લૉગઆઉટ (એડમિન મોડ)';
@@ -1378,7 +1414,7 @@
           }
           alert("એડમિન લૉગિન સફળ!");
         } else {
-          alert("ખોટો પિન! સાચો પિન 1234 છે.");
+          alert("ખોટો PIN! ફરી પ્રયત્ન કરો.");
         }
       }
       renderMembers();
@@ -1387,7 +1423,7 @@
 
     function startDraw() {
       if (!isAdmin) {
-        alert("ડ્રો શરૂ કરવાનો અધિકાર ફક્ત એડમિન પાસે છે. કૃપા કરીને ઉપરથી એડમિન લૉગિન (પિન 1234) કરો.");
+        alert("ડ્રો શરૂ કરવાનો અધિકાર ફક્ત એડમિન પાસે છે. કૃપા કરીને ઉપરથી એડમિન લૉગિન કરો.");
         return;
       }
       const eligible = members.filter(m => !m.won);
